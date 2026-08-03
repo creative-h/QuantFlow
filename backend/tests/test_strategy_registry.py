@@ -49,9 +49,9 @@ def test_strategy_registry_metadata_nonexistent():
 
 
 def test_strategy_registry_auto_discovery():
-    discovered = StrategyRegistry.discover_strategies()
-    assert len(discovered) > 0
+    StrategyRegistry.discover_strategies()
     registered = StrategyRegistry.list_strategies()
+    assert len(registered) > 0
     assert "ema" in registered or "supertrend" in registered or "vwap" in registered
 
 

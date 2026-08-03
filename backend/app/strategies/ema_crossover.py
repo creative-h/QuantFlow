@@ -13,6 +13,8 @@ from app.strategies.base import Strategy
 class EMACrossoverStrategy(Strategy):
     """Buy when fast EMA crosses above slow EMA; exit on reverse crossover."""
 
+    name = "ema"
+
     def __init__(self, fast_period: int = 9, slow_period: int = 21) -> None:
         if fast_period >= slow_period:
             raise ValueError("fast_period must be less than slow_period")

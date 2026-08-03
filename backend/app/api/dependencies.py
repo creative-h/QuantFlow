@@ -10,7 +10,10 @@ from app.marketdata.base import MarketDataProvider
 from app.marketdata.csv_provider import CSVProvider
 from app.marketdata.parquet_provider import ParquetProvider
 from app.marketdata.yfinance_provider import YahooFinanceProvider
+from app.paper.live_engine import LivePaperEngine
 from app.services.zerodha_auth import ZerodhaAuthService
+
+_live_engine_instance: LivePaperEngine | None = None
 
 
 def get_zerodha_broker(settings: Settings = Depends(get_settings)) -> ZerodhaBroker:
@@ -36,3 +39,11 @@ def get_market_provider(provider: str = "yfinance") -> MarketDataProvider:
         return ParquetProvider(directory=data_dir)
     else:
         raise ValueError(f"Unsupported market data provider: '{provider}'")
+
+
+def get_live_paper_engine() -> LivePaperEngine:
+    """Singleton dependency provider for LivePaperEngine."""
+    global _live_engine_instance
+    if _live_engine_instance is None:
+        _live_engine_instance = LivePaperEngine()
+    return _live_engine_instance

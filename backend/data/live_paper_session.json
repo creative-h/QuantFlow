@@ -1,0 +1,16 @@
+{
+  "state": "STOPPED",
+  "config": {
+    "symbols": [
+      "AAPL"
+    ],
+    "strategy_names": [
+      "ema"
+    ],
+    "poll_interval_seconds": 10,
+    "initial_cash": 100000.0,
+    "auto_eod_report": true
+  },
+  "cash": 100000.0,
+  "saved_at": "2026-08-03T21:25:30.688443"
+}
