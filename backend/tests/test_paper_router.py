@@ -51,3 +51,19 @@ def test_paper_start_pause_resume_stop_flow():
     stop_res = client.post("/paper/stop")
     assert stop_res.status_code == 200
     assert "message" in stop_res.json()
+
+
+def test_paper_demo_order_endpoint():
+    demo_payload = {
+        "symbol": "NIFTY",
+        "side": "BUY",
+        "quantity": 10,
+        "price": 25000.0,
+    }
+    res = client.post("/paper/demo-order", json=demo_payload)
+    assert res.status_code == 200
+    data = res.json()
+    assert data["message"] == "Demo order injected successfully"
+    assert data["symbol"] == "NIFTY"
+    assert data["side"] == "BUY"
+    assert "order_id" in data

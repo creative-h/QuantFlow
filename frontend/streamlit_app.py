@@ -1,5 +1,6 @@
-"""QuantFlow Professional Quantitative Research Platform Dashboard."""
+"""QuantFlow Professional Quantitative Research & Live Trading Control Panel."""
 
+import json
 import sys
 from pathlib import Path
 
@@ -12,15 +13,15 @@ if str(backend_dir) not in sys.path:
     sys.path.insert(0, str(backend_dir))
 
 from app.analytics.reporting import HTMLReportGenerator, JSONReportGenerator
-from app.marketdata.csv_provider import CSVProvider
 from app.marketdata.yfinance_provider import YahooFinanceProvider
+from app.paper.live_engine import LivePaperEngine, LivePaperSessionConfig
 from app.research.comparison import StrategyComparisonEngine
 from app.research.optimization import OptimizationEngine
 from app.research.walk_forward import WalkForwardEngine
 from app.strategies.registry import StrategyRegistry
 
 st.set_page_config(
-    page_title="QuantFlow Research Platform",
+    page_title="QuantFlow Research & Trading Platform",
     page_icon="⚡",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -29,12 +30,20 @@ st.set_page_config(
 # Discover strategy plugins automatically
 StrategyRegistry.discover_strategies()
 
-st.sidebar.title("⚡ QuantFlow v0.3")
-st.sidebar.caption("Quant Research & Strategy Optimization Platform")
+# Persistent session state for LivePaperEngine in Streamlit
+if "live_engine" not in st.session_state:
+    st.session_state["live_engine"] = LivePaperEngine()
+    st.session_state["live_engine"].recover_session()
+
+live_engine: LivePaperEngine = st.session_state["live_engine"]
+
+st.sidebar.title("⚡ QuantFlow v0.4")
+st.sidebar.caption("Quant Research & Live Paper Trading Platform")
 
 nav = st.sidebar.radio(
     "Navigation",
     [
+        "⚡ Live Paper Control Panel",
         "📊 Overview & Market Data",
         "🧩 Strategy Explorer",
         "⚡ Parameter Optimization",
@@ -43,6 +52,7 @@ nav = st.sidebar.radio(
         "📄 Reports & Analytics",
     ],
 )
+
 
 # Helper function to get market data
 def fetch_sample_data(symbol: str = "AAPL", period: str = "1mo") -> pd.DataFrame:
@@ -68,7 +78,171 @@ def fetch_sample_data(symbol: str = "AAPL", period: str = "1mo") -> pd.DataFrame
         )
 
 
-if nav == "📊 Overview & Market Data":
+if nav == "⚡ Live Paper Control Panel":
+    st.header("⚡ Live Paper Trading Control Panel")
+
+    # Engine Status Header
+    curr_state = live_engine.state.value
+    if curr_state == "RUNNING":
+        st.success("● ENGINE STATUS: RUNNING (Real-time Polling & Order Execution Active)")
+    elif curr_state == "PAUSED":
+        st.warning("⏸️ ENGINE STATUS: PAUSED (Poller Loop Suspended)")
+    else:
+        st.error("🔴 ENGINE STATUS: STOPPED")
+
+    # Metrics Row
+    portfolio = live_engine.broker.portfolio if live_engine.broker else None
+    cash = float(portfolio.cash) if portfolio else 100000.0
+    equity = float(portfolio.total_equity) if portfolio else cash
+    realized = float(portfolio.total_realized_pnl) if portfolio else 0.0
+    unrealized = float(portfolio.total_unrealized_pnl) if portfolio else 0.0
+    drawdown = portfolio.drawdown_pct if portfolio else 0.0
+
+    col1, col2, col3, col4, col5 = st.columns(5)
+    col1.metric("Available Cash", f"${cash:,.2f}")
+    col2.metric("Total Equity", f"${equity:,.2f}")
+    col3.metric("Realized PnL", f"${realized:,.2f}")
+    col4.metric("Unrealized PnL", f"${unrealized:,.2f}")
+    col5.metric("Max Drawdown", f"{drawdown:.2f}%")
+
+    st.markdown("---")
+
+    col_ctrl, col_demo = st.columns([2, 2])
+
+    with col_ctrl:
+        st.subheader("🎮 Session Controls")
+        symbols_input = st.multiselect(
+            "Target Symbols",
+            ["NIFTY", "RELIANCE", "TCS", "INFY", "AAPL", "MSFT", "TSLA"],
+            default=["NIFTY", "AAPL"],
+        )
+        avail_strats = StrategyRegistry.list_strategies()
+        selected_strats = st.multiselect("Active Strategies", avail_strats, default=["ema", "rsi"])
+        poll_interval = st.slider("Polling Interval (Seconds)", 1, 60, 5)
+
+        btn_c1, btn_c2, btn_c3, btn_c4 = st.columns(4)
+        with btn_c1:
+            if st.button("▶️ Start", use_container_width=True):
+                cfg = LivePaperSessionConfig(
+                    symbols=symbols_input,
+                    strategy_names=selected_strats,
+                    poll_interval_seconds=poll_interval,
+                )
+                live_engine.start(cfg)
+                st.rerun()
+
+        with btn_c2:
+            if st.button("⏸️ Pause", use_container_width=True):
+                live_engine.pause()
+                st.rerun()
+
+        with btn_c3:
+            if st.button("▶️ Resume", use_container_width=True):
+                live_engine.resume()
+                st.rerun()
+
+        with btn_c4:
+            if st.button("⏹️ Stop", use_container_width=True):
+                import asyncio
+
+                asyncio.run(live_engine.stop())
+                st.rerun()
+
+    with col_demo:
+        st.subheader("⚡ Demo Mode Order Injector")
+        st.info("Inject instant paper orders to validate risk, portfolio, and trade journal execution pipeline.")
+        demo_sym = st.text_input("Symbol", value="NIFTY")
+        demo_side = st.selectbox("Side", ["BUY", "SELL"])
+        demo_qty = st.number_input("Quantity", value=10, min_value=1)
+        demo_price = st.number_input("Simulated Price ($)", value=100.0, min_value=0.1)
+
+        if st.button("⚡ Inject Demo Order", type="primary", use_container_width=True):
+            import asyncio
+
+            order = asyncio.run(
+                live_engine.inject_demo_order(
+                    symbol=demo_sym, side_str=demo_side, quantity=int(demo_qty), price=float(demo_price)
+                )
+            )
+            st.success(f"Injected {demo_side} order for {demo_qty} {demo_sym} @ ${demo_price}. Status: {order.status.value}")
+            st.rerun()
+
+    st.markdown("---")
+
+    # Positions and Orders Tabbed Table
+    t_pos, t_orders, t_alerts = st.tabs(["📊 Open Positions", "📜 Order History", "🔔 Alert Log"])
+
+    with t_pos:
+        if live_engine.broker:
+            import asyncio
+
+            pos_list = asyncio.run(live_engine.broker.positions())
+            if pos_list:
+                df_pos = pd.DataFrame(
+                    [
+                        {
+                            "Symbol": p.symbol,
+                            "Quantity": p.quantity,
+                            "Average Price": f"${float(p.average_price):,.2f}",
+                            "Last Price": f"${float(p.last_price):,.2f}",
+                            "Market Value": f"${p.market_value:,.2f}",
+                            "Unrealized PnL": f"${p.unrealized_pnl:,.2f}",
+                        }
+                        for p in pos_list
+                    ]
+                )
+                st.dataframe(df_pos, use_container_width=True)
+            else:
+                st.info("No open paper positions currently.")
+        else:
+            st.info("Engine not initialized.")
+
+    with t_orders:
+        if live_engine.broker:
+            import asyncio
+
+            orders_list = asyncio.run(live_engine.broker.orders())
+            if orders_list:
+                df_ord = pd.DataFrame(
+                    [
+                        {
+                            "ID": o.id,
+                            "Symbol": o.request.symbol,
+                            "Side": o.request.side.value,
+                            "Quantity": o.request.quantity,
+                            "Type": o.request.order_type.value,
+                            "Status": o.status.value,
+                            "Avg Price": f"${float(o.average_price):,.2f}" if o.average_price else "-",
+                            "Created At": o.created_at.strftime("%H:%M:%S") if o.created_at else "-",
+                        }
+                        for o in reversed(orders_list)
+                    ]
+                )
+                st.dataframe(df_ord, use_container_width=True)
+            else:
+                st.info("No paper orders submitted yet.")
+        else:
+            st.info("Engine not initialized.")
+
+    with t_alerts:
+        if live_engine.alert_engine.alert_history:
+            df_alt = pd.DataFrame(
+                [
+                    {
+                        "Title": a.title,
+                        "Message": a.message,
+                        "Level": a.level.value,
+                        "Channel": a.channel.value,
+                    }
+                    for a in reversed(live_engine.alert_engine.alert_history)
+                ]
+            )
+            st.dataframe(df_alt, use_container_width=True)
+        else:
+            st.info("No alerts logged in current session.")
+
+
+elif nav == "📊 Overview & Market Data":
     st.header("📊 Market Data Explorer")
     col1, col2 = st.columns([1, 3])
     with col1:

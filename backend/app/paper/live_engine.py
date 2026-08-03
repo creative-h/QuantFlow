@@ -17,8 +17,8 @@ from app.brokers.paper_broker import PaperBroker
 from app.marketdata.base import MarketDataProvider
 from app.marketdata.yfinance_provider import YahooFinanceProvider
 from app.models.dataclasses import Candle
-from app.models.trading import OrderRequest, OrderType, Side
-from app.services.alert_engine import AlertChannel, AlertEngine, AlertLevel
+from app.models.trading import Order, OrderRequest, OrderType, Side
+from app.services.alert_engine import AlertEngine, AlertLevel
 from app.strategies.base import Strategy
 from app.strategies.registry import StrategyRegistry
 
@@ -222,6 +222,36 @@ class LivePaperEngine:
                 logger.warning("Tick evaluation error for {}: {}", symbol, str(err))
 
         return placed_requests
+
+    async def inject_demo_order(
+        self, symbol: str = "NIFTY", side_str: str = "BUY", quantity: int = 10, price: Optional[float] = None
+    ) -> Order:
+        """Inject a demo paper order for instant testing of the full execution pipeline."""
+        if not self.broker:
+            self.broker = PaperBroker(initial_cash=100000.0)
+
+        side = Side.BUY if side_str.upper() == "BUY" else Side.SELL
+        order_price = Decimal(str(price)) if price is not None else Decimal("100.0")
+
+        # Update last price in broker
+        self.broker.set_last_price(symbol, order_price)
+
+        req = OrderRequest(
+            symbol=symbol.upper(),
+            quantity=quantity,
+            side=side,
+            order_type=OrderType.MARKET,
+            price=order_price,
+        )
+
+        executed_order = await self.broker.place_order(req)
+        self.alert_engine.send_alert(
+            title=f"DEMO ORDER INJECTED: {side.value} {symbol.upper()}",
+            message=f"Injected demo {side.value} order for {quantity} {symbol.upper()} @ ${order_price:,.2f}. Status: {executed_order.status.value}",
+            level=AlertLevel.INFO,
+        )
+        self.save_session()
+        return executed_order
 
     def save_session(self) -> None:
         """Persist current session state and portfolio snapshot to JSON file."""

@@ -4,7 +4,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from app.api.dependencies import get_live_paper_engine
-from app.api.routers.paper import StartPaperSessionRequest
+from app.api.routers.paper import DemoOrderRequest, StartPaperSessionRequest
 from app.main import app
 from app.paper.live_engine import (
     LivePaperEngine,
@@ -98,6 +98,14 @@ def test_start_paper_session_request_schema():
     assert req.initial_cash == 100000.0
 
 
+def test_demo_order_request_schema_defaults():
+    req = DemoOrderRequest()
+    assert req.symbol == "NIFTY"
+    assert req.side == "BUY"
+    assert req.quantity == 10
+    assert req.price == 100.0
+
+
 @pytest.mark.asyncio
 async def test_live_paper_engine_pause_resume_edge_cases():
     engine = LivePaperEngine()
@@ -124,6 +132,24 @@ async def test_live_paper_engine_empty_symbols_process_tick():
     placed = await engine.process_tick()
     assert placed == []
     await engine.stop()
+
+
+@pytest.mark.asyncio
+async def test_live_paper_engine_inject_demo_order_direct():
+    engine = LivePaperEngine()
+    order = await engine.inject_demo_order(symbol="INFY", side_str="BUY", quantity=25, price=1500.0)
+    assert order.request.symbol == "INFY"
+    assert order.request.quantity == 25
+    assert engine.broker is not None
+    assert float(engine.broker.portfolio.total_equity) > 0.0
+
+
+@pytest.mark.asyncio
+async def test_live_paper_engine_inject_demo_order_sell_side():
+    engine = LivePaperEngine()
+    order = await engine.inject_demo_order(symbol="TCS", side_str="SELL", quantity=10, price=3200.0)
+    assert order.request.symbol == "TCS"
+    assert order.request.side.value == "SELL"
 
 
 def test_paper_router_full_control_flow():

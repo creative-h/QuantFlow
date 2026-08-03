@@ -1,6 +1,6 @@
 """FastAPI Router managing Live Paper Trading Engine lifecycle and telemetry."""
 
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from fastapi import APIRouter, Depends, status
 from pydantic import BaseModel, Field
@@ -17,6 +17,13 @@ class StartPaperSessionRequest(BaseModel):
     poll_interval_seconds: int = 5
     initial_cash: float = 100000.0
     auto_eod_report: bool = True
+
+
+class DemoOrderRequest(BaseModel):
+    symbol: str = "NIFTY"
+    side: str = "BUY"
+    quantity: int = 10
+    price: Optional[float] = 100.0
 
 
 @router.get("/status")
@@ -125,3 +132,22 @@ async def resume_paper_session(
     """Resume paused live paper session poller loop."""
     engine.resume()
     return {"message": "Live paper session resumed", "state": engine.state.value}
+
+
+@router.post("/demo-order")
+async def inject_demo_order(
+    body: DemoOrderRequest,
+    engine: LivePaperEngine = Depends(get_live_paper_engine),
+) -> Dict[str, Any]:
+    """Inject a demo paper order to test full execution pipeline instantly."""
+    order = await engine.inject_demo_order(
+        symbol=body.symbol, side_str=body.side, quantity=body.quantity, price=body.price
+    )
+    return {
+        "message": "Demo order injected successfully",
+        "order_id": order.id,
+        "symbol": order.request.symbol,
+        "side": order.request.side.value,
+        "status": order.status.value,
+        "average_price": float(order.average_price) if order.average_price else None,
+    }
