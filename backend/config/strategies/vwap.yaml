@@ -1,0 +1,8 @@
+name: "vwap"
+version: "1.0.0"
+description: "VWAP Mean Reversion Strategy"
+parameters:
+  deviation_pct: 1.5
+timeframes:
+  - "15m"
+  - "5m"

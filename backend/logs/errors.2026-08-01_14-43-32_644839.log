@@ -1,0 +1,382 @@
+2026-08-01 14:43:32.490 | ERROR    | app.api.routers.auth:callback:50 - Kite login callback failed during token exchange
+Traceback (most recent call last):
+
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\threading.py", line 1032, in _bootstrap
+    self._bootstrap_inner()
+    │    └ <function Thread._bootstrap_inner at 0x000001AC67A52E80>
+    └ <Thread(asyncio-portal-1ac0d3d0b90, started daemon 28372)>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\threading.py", line 1075, in _bootstrap_inner
+    self.run()
+    │    └ <function Thread.run at 0x000001AC67A52B60>
+    └ <Thread(asyncio-portal-1ac0d3d0b90, started daemon 28372)>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\threading.py", line 1012, in run
+    self._target(*self._args, **self._kwargs)
+    │    │        │    │        │    └ {}
+    │    │        │    │        └ <Thread(asyncio-portal-1ac0d3d0b90, started daemon 28372)>
+    │    │        │    └ ()
+    │    │        └ <Thread(asyncio-portal-1ac0d3d0b90, started daemon 28372)>
+    │    └ <function start_blocking_portal.<locals>.run_blocking_portal at 0x000001AC0D346340>
+    └ <Thread(asyncio-portal-1ac0d3d0b90, started daemon 28372)>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\anyio\from_thread.py", line 536, in run_blocking_portal
+    run_eventloop(
+    └ <function run at 0x000001AC68546FC0>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\anyio\_core\_eventloop.py", line 83, in run
+    return async_backend.run(func, args, {}, backend_options)
+           │             │   │     │         └ {}
+           │             │   │     └ ()
+           │             │   └ <function start_blocking_portal.<locals>.run_portal at 0x000001AC0D346CA0>
+           │             └ <classmethod(<function AsyncIOBackend.run at 0x000001AC6AD03240>)>
+           └ <class 'anyio._backends._asyncio.AsyncIOBackend'>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2481, in run
+    return runner.run(wrapper())
+           │      │   └ <function start_blocking_portal.<locals>.run_portal at 0x000001AC0D346520>
+           │      └ <function Runner.run at 0x000001AC6ACC23E0>
+           └ <asyncio.runners.Runner object at 0x000001AC0D3D0C50>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           │    │     │                  └ <Task pending name='anyio.from_thread.start_blocking_portal.<locals>.run_portal' coro=<start_blocking_portal.<locals>.run_por...
+           │    │     └ <function BaseEventLoop.run_until_complete at 0x000001AC6ACC0040>
+           │    └ <ProactorEventLoop running=True closed=False debug=False>
+           └ <asyncio.runners.Runner object at 0x000001AC0D3D0C50>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\asyncio\base_events.py", line 678, in run_until_complete
+    self.run_forever()
+    │    └ <function ProactorEventLoop.run_forever at 0x000001AC6ACF5300>
+    └ <ProactorEventLoop running=True closed=False debug=False>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\asyncio\windows_events.py", line 322, in run_forever
+    super().run_forever()
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\asyncio\base_events.py", line 645, in run_forever
+    self._run_once()
+    │    └ <function BaseEventLoop._run_once at 0x000001AC6ACC1DA0>
+    └ <ProactorEventLoop running=True closed=False debug=False>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\asyncio\base_events.py", line 1999, in _run_once
+    handle._run()
+    │      └ <function Handle._run at 0x000001AC6AC9A2A0>
+    └ <Handle Task.task_wakeup(<Future finis...38467787488'>>)>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\asyncio\events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+    │    │            │    │           │    └ <member '_args' of 'Handle' objects>
+    │    │            │    │           └ <Handle Task.task_wakeup(<Future finis...38467787488'>>)>
+    │    │            │    └ <member '_callback' of 'Handle' objects>
+    │    │            └ <Handle Task.task_wakeup(<Future finis...38467787488'>>)>
+    │    └ <member '_context' of 'Handle' objects>
+    └ <Handle Task.task_wakeup(<Future finis...38467787488'>>)>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\anyio\_core\_tasks.py", line 275, in _run_coro
+    retval = await self._coro
+                   │    └ <member '_coro' of 'TaskHandle' objects>
+                   └ <TaskHandle pending name='anyio.from_thread.BlockingPortal._call_func' coro=<coroutine object BlockingPortal._call_func at 0x...
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\anyio\from_thread.py", line 263, in _call_func
+    retval = await retval_or_awaitable
+                   └ <coroutine object FastAPI.__call__ at 0x000001AC0D396980>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\applications.py", line 1163, in __call__
+    await super().__call__(scope, receive, send)
+                           │      │        └ <function _TestClientTransport.handle_request.<locals>.send at 0x000001AC0D3793A0>
+                           │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001AC0D379B20>
+                           └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\starlette\applications.py", line 90, in __call__
+    await self.middleware_stack(scope, receive, send)
+          │    │                │      │        └ <function _TestClientTransport.handle_request.<locals>.send at 0x000001AC0D3793A0>
+          │    │                │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001AC0D379B20>
+          │    │                └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │    └ <starlette.middleware.errors.ServerErrorMiddleware object at 0x000001AC0D332F60>
+          └ <fastapi.applications.FastAPI object at 0x000001AC6AD51520>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+          │    │   │      │        └ <function ServerErrorMiddleware.__call__.<locals>._send at 0x000001AC0D37A520>
+          │    │   │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001AC0D379B20>
+          │    │   └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │    └ <starlette.middleware.exceptions.ExceptionMiddleware object at 0x000001AC0D332F30>
+          └ <starlette.middleware.errors.ServerErrorMiddleware object at 0x000001AC0D332F60>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+          │                            │    │    │     │      │        └ <function ServerErrorMiddleware.__call__.<locals>._send at 0x000001AC0D37A520>
+          │                            │    │    │     │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001AC0D379B20>
+          │                            │    │    │     └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │                            │    │    └ <starlette.requests.Request object at 0x000001AC0D3D3740>
+          │                            │    └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x000001AC0D332F00>
+          │                            └ <starlette.middleware.exceptions.ExceptionMiddleware object at 0x000001AC0D332F30>
+          └ <function wrap_app_handling_exceptions at 0x000001AC6AF340E0>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001AC0D37A660>
+          │   │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001AC0D379B20>
+          │   └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x000001AC0D332F00>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+          │    │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001AC0D37A660>
+          │    │   │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001AC0D379B20>
+          │    │   └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │    └ <fastapi.routing.APIRouter object at 0x000001AC6C594470>
+          └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x000001AC0D332F00>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+          │    │                │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001AC0D37A660>
+          │    │                │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001AC0D379B20>
+          │    │                └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │    └ <bound method APIRouter.app of <fastapi.routing.APIRouter object at 0x000001AC6C594470>>
+          └ <fastapi.routing.APIRouter object at 0x000001AC6C594470>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 2734, in app
+    await route.handle(scope, receive, send)
+          │     │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001AC0D37A660>
+          │     │      │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001AC0D379B20>
+          │     │      └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │     └ <function _IncludedRouter.handle at 0x000001AC6AF4A8E0>
+          └ _IncludedRouter(original_router=<fastapi.routing.APIRouter object at 0x000001AC6C44A780>, include_context=_RouterIncludeConte...
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 1780, in handle
+    await self.original_router.handle(scope, receive, send)
+          │    │               │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001AC0D37A660>
+          │    │               │      │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001AC0D379B20>
+          │    │               │      └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │    │               └ <function APIRouter.handle at 0x000001AC6AF689A0>
+          │    └ <fastapi.routing.APIRouter object at 0x000001AC6C44A780>
+          └ _IncludedRouter(original_router=<fastapi.routing.APIRouter object at 0x000001AC6C44A780>, include_context=_RouterIncludeConte...
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 2789, in handle
+    await included_router._handle_selected(scope, receive, send)
+          │               │                │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001AC0D37A660>
+          │               │                │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001AC0D379B20>
+          │               │                └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │               └ <function _IncludedRouter._handle_selected at 0x000001AC6AF4A980>
+          └ _IncludedRouter(original_router=<fastapi.routing.APIRouter object at 0x000001AC6C44A780>, include_context=_RouterIncludeConte...
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 1800, in _handle_selected
+    await original_route.handle(scope, receive, send)
+          │              │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001AC0D37A660>
+          │              │      │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001AC0D379B20>
+          │              │      └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │              └ <function APIRoute.handle at 0x000001AC6AF48A40>
+          └ APIRoute(path='/auth/callback', name='callback', methods=['GET'])
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 1279, in handle
+    await app(scope, receive, send)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001AC0D37A660>
+          │   │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001AC0D379B20>
+          │   └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          └ <function request_response.<locals>.app at 0x000001AC0D37A7A0>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 158, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+          │                            │    │        │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001AC0D37A660>
+          │                            │    │        │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001AC0D379B20>
+          │                            │    │        └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │                            │    └ <starlette.requests.Request object at 0x000001AC0D3D3CE0>
+          │                            └ <function request_response.<locals>.app.<locals>.app at 0x000001AC0D37A840>
+          └ <function wrap_app_handling_exceptions at 0x000001AC6AF340E0>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001AC0D379760>
+          │   │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001AC0D379B20>
+          │   └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          └ <function request_response.<locals>.app.<locals>.app at 0x000001AC0D37A840>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 144, in app
+    response = await f(request)
+                     │ └ <starlette.requests.Request object at 0x000001AC0D3D3CE0>
+                     └ <function get_request_handler.<locals>.app at 0x000001AC0D37A700>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 706, in app
+    raw_response = await run_endpoint_function(
+                         └ <function run_endpoint_function at 0x000001AC6AF37D80>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 352, in run_endpoint_function
+    return await dependant.call(**values)
+                 │         │      └ {'auth_service': <MagicMock spec='ZerodhaAuthService' id='1838467787488'>, 'request_token': 'invalid_req_token', 'status': None}
+                 │         └ <member 'call' of 'Dependant' objects>
+                 └ Dependant(path_params=[], query_params=[ModelField(field_info=Query(None), name='request_token', mode='validation', config=No...
+
+> File "D:\excersis_file\Agentic_AI\QuantFlow\backend\app\api\routers\auth.py", line 42, in callback
+    session_data = await auth_service.exchange_token(request_token)
+                         │            │              └ 'invalid_req_token'
+                         │            └ <AsyncMock name='mock.exchange_token' id='1838467787440'>
+                         └ <MagicMock spec='ZerodhaAuthService' id='1838467787488'>
+
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\unittest\mock.py", line 2291, in _execute_mock_call
+    raise effect
+          └ RuntimeError('Token exchange failed')
+
+RuntimeError: Token exchange failed
+2026-08-01 14:43:32.731 | ERROR    | app.services.zerodha_auth:exchange_token:70 - Token exchange failed with HTTP status 400
+2026-08-01 14:45:13.944 | ERROR    | app.api.routers.auth:callback:50 - Kite login callback failed during token exchange
+Traceback (most recent call last):
+
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\threading.py", line 1032, in _bootstrap
+    self._bootstrap_inner()
+    │    └ <function Thread._bootstrap_inner at 0x00000236B1262E80>
+    └ <Thread(asyncio-portal-236d55a7050, started daemon 24816)>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\threading.py", line 1075, in _bootstrap_inner
+    self.run()
+    │    └ <function Thread.run at 0x00000236B1262B60>
+    └ <Thread(asyncio-portal-236d55a7050, started daemon 24816)>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\threading.py", line 1012, in run
+    self._target(*self._args, **self._kwargs)
+    │    │        │    │        │    └ {}
+    │    │        │    │        └ <Thread(asyncio-portal-236d55a7050, started daemon 24816)>
+    │    │        │    └ ()
+    │    │        └ <Thread(asyncio-portal-236d55a7050, started daemon 24816)>
+    │    └ <function start_blocking_portal.<locals>.run_blocking_portal at 0x00000236D55385E0>
+    └ <Thread(asyncio-portal-236d55a7050, started daemon 24816)>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\anyio\from_thread.py", line 536, in run_blocking_portal
+    run_eventloop(
+    └ <function run at 0x00000236B1D37060>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\anyio\_core\_eventloop.py", line 83, in run
+    return async_backend.run(func, args, {}, backend_options)
+           │             │   │     │         └ {}
+           │             │   │     └ ()
+           │             │   └ <function start_blocking_portal.<locals>.run_portal at 0x00000236D5538D60>
+           │             └ <classmethod(<function AsyncIOBackend.run at 0x00000236B384DDA0>)>
+           └ <class 'anyio._backends._asyncio.AsyncIOBackend'>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2481, in run
+    return runner.run(wrapper())
+           │      │   └ <function start_blocking_portal.<locals>.run_portal at 0x00000236D5538A40>
+           │      └ <function Runner.run at 0x00000236B37C8E00>
+           └ <asyncio.runners.Runner object at 0x00000236D55A6E70>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           │    │     │                  └ <Task pending name='anyio.from_thread.start_blocking_portal.<locals>.run_portal' coro=<start_blocking_portal.<locals>.run_por...
+           │    │     └ <function BaseEventLoop.run_until_complete at 0x00000236B37BE980>
+           │    └ <ProactorEventLoop running=True closed=False debug=False>
+           └ <asyncio.runners.Runner object at 0x00000236D55A6E70>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\asyncio\base_events.py", line 678, in run_until_complete
+    self.run_forever()
+    │    └ <function ProactorEventLoop.run_forever at 0x00000236B3833E20>
+    └ <ProactorEventLoop running=True closed=False debug=False>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\asyncio\windows_events.py", line 322, in run_forever
+    super().run_forever()
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\asyncio\base_events.py", line 645, in run_forever
+    self._run_once()
+    │    └ <function BaseEventLoop._run_once at 0x00000236B37C8720>
+    └ <ProactorEventLoop running=True closed=False debug=False>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\asyncio\base_events.py", line 1999, in _run_once
+    handle._run()
+    │      └ <function Handle._run at 0x00000236B375C900>
+    └ <Handle Task.task_wakeup(<Future finis...34530667616'>>)>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\asyncio\events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+    │    │            │    │           │    └ <member '_args' of 'Handle' objects>
+    │    │            │    │           └ <Handle Task.task_wakeup(<Future finis...34530667616'>>)>
+    │    │            │    └ <member '_callback' of 'Handle' objects>
+    │    │            └ <Handle Task.task_wakeup(<Future finis...34530667616'>>)>
+    │    └ <member '_context' of 'Handle' objects>
+    └ <Handle Task.task_wakeup(<Future finis...34530667616'>>)>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\anyio\_core\_tasks.py", line 275, in _run_coro
+    retval = await self._coro
+                   │    └ <member '_coro' of 'TaskHandle' objects>
+                   └ <TaskHandle pending name='anyio.from_thread.BlockingPortal._call_func' coro=<coroutine object BlockingPortal._call_func at 0x...
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\anyio\from_thread.py", line 263, in _call_func
+    retval = await retval_or_awaitable
+                   └ <coroutine object FastAPI.__call__ at 0x00000236D55727A0>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\applications.py", line 1163, in __call__
+    await super().__call__(scope, receive, send)
+                           │      │        └ <function _TestClientTransport.handle_request.<locals>.send at 0x00000236D5538360>
+                           │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000236D553BD80>
+                           └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\starlette\applications.py", line 90, in __call__
+    await self.middleware_stack(scope, receive, send)
+          │    │                │      │        └ <function _TestClientTransport.handle_request.<locals>.send at 0x00000236D5538360>
+          │    │                │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000236D553BD80>
+          │    │                └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │    └ <starlette.middleware.errors.ServerErrorMiddleware object at 0x00000236D5540290>
+          └ <fastapi.applications.FastAPI object at 0x00000236B5D48860>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+          │    │   │      │        └ <function ServerErrorMiddleware.__call__.<locals>._send at 0x00000236D55A8900>
+          │    │   │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000236D553BD80>
+          │    │   └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │    └ <starlette.middleware.exceptions.ExceptionMiddleware object at 0x00000236D5540260>
+          └ <starlette.middleware.errors.ServerErrorMiddleware object at 0x00000236D5540290>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+          │                            │    │    │     │      │        └ <function ServerErrorMiddleware.__call__.<locals>._send at 0x00000236D55A8900>
+          │                            │    │    │     │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000236D553BD80>
+          │                            │    │    │     └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │                            │    │    └ <starlette.requests.Request object at 0x00000236D55B9C40>
+          │                            │    └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x00000236D5540230>
+          │                            └ <starlette.middleware.exceptions.ExceptionMiddleware object at 0x00000236D5540260>
+          └ <function wrap_app_handling_exceptions at 0x00000236B46BA480>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x00000236D55A8AE0>
+          │   │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000236D553BD80>
+          │   └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x00000236D5540230>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+          │    │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x00000236D55A8AE0>
+          │    │   │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000236D553BD80>
+          │    │   └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │    └ <fastapi.routing.APIRouter object at 0x00000236B4C44170>
+          └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x00000236D5540230>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+          │    │                │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x00000236D55A8AE0>
+          │    │                │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000236D553BD80>
+          │    │                └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │    └ <bound method APIRouter.app of <fastapi.routing.APIRouter object at 0x00000236B4C44170>>
+          └ <fastapi.routing.APIRouter object at 0x00000236B4C44170>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 2734, in app
+    await route.handle(scope, receive, send)
+          │     │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x00000236D55A8AE0>
+          │     │      │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000236D553BD80>
+          │     │      └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │     └ <function _IncludedRouter.handle at 0x00000236B4700CC0>
+          └ _IncludedRouter(original_router=<fastapi.routing.APIRouter object at 0x00000236B4C446E0>, include_context=_RouterIncludeConte...
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 1780, in handle
+    await self.original_router.handle(scope, receive, send)
+          │    │               │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x00000236D55A8AE0>
+          │    │               │      │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000236D553BD80>
+          │    │               │      └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │    │               └ <function APIRouter.handle at 0x00000236B4702D40>
+          │    └ <fastapi.routing.APIRouter object at 0x00000236B4C446E0>
+          └ _IncludedRouter(original_router=<fastapi.routing.APIRouter object at 0x00000236B4C446E0>, include_context=_RouterIncludeConte...
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 2789, in handle
+    await included_router._handle_selected(scope, receive, send)
+          │               │                │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x00000236D55A8AE0>
+          │               │                │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000236D553BD80>
+          │               │                └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │               └ <function _IncludedRouter._handle_selected at 0x00000236B4700D60>
+          └ _IncludedRouter(original_router=<fastapi.routing.APIRouter object at 0x00000236B4C446E0>, include_context=_RouterIncludeConte...
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 1800, in _handle_selected
+    await original_route.handle(scope, receive, send)
+          │              │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x00000236D55A8AE0>
+          │              │      │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000236D553BD80>
+          │              │      └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │              └ <function APIRoute.handle at 0x00000236B46DADE0>
+          └ APIRoute(path='/auth/callback', name='callback', methods=['GET'])
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 1279, in handle
+    await app(scope, receive, send)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x00000236D55A8AE0>
+          │   │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000236D553BD80>
+          │   └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          └ <function request_response.<locals>.app at 0x00000236D55A8C20>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 158, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+          │                            │    │        │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x00000236D55A8AE0>
+          │                            │    │        │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000236D553BD80>
+          │                            │    │        └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │                            │    └ <starlette.requests.Request object at 0x00000236D55BA210>
+          │                            └ <function request_response.<locals>.app.<locals>.app at 0x00000236D55A8CC0>
+          └ <function wrap_app_handling_exceptions at 0x00000236B46BA480>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x00000236D55A8E00>
+          │   │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000236D553BD80>
+          │   └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          └ <function request_response.<locals>.app.<locals>.app at 0x00000236D55A8CC0>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 144, in app
+    response = await f(request)
+                     │ └ <starlette.requests.Request object at 0x00000236D55BA210>
+                     └ <function get_request_handler.<locals>.app at 0x00000236D55A8B80>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 706, in app
+    raw_response = await run_endpoint_function(
+                         └ <function run_endpoint_function at 0x00000236B46DA160>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 352, in run_endpoint_function
+    return await dependant.call(**values)
+                 │         │      └ {'auth_service': <MagicMock spec='ZerodhaAuthService' id='2434530667616'>, 'request_token': 'invalid_req_token', 'status': None}
+                 │         └ <member 'call' of 'Dependant' objects>
+                 └ Dependant(path_params=[], query_params=[ModelField(field_info=Query(None), name='request_token', mode='validation', config=No...
+
+> File "D:\excersis_file\Agentic_AI\QuantFlow\backend\app\api\routers\auth.py", line 42, in callback
+    session_data = await auth_service.exchange_token(request_token)
+                         │            │              └ 'invalid_req_token'
+                         │            └ <AsyncMock name='mock.exchange_token' id='2434520864464'>
+                         └ <MagicMock spec='ZerodhaAuthService' id='2434530667616'>
+
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\unittest\mock.py", line 2291, in _execute_mock_call
+    raise effect
+          └ RuntimeError('Token exchange failed')
+
+RuntimeError: Token exchange failed
+2026-08-01 14:45:14.024 | ERROR    | app.services.zerodha_auth:exchange_token:70 - Token exchange failed with HTTP status 400

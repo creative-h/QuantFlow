@@ -1,0 +1,9 @@
+name: "mean_reversion"
+version: "1.0.0"
+description: "Bollinger Bands Mean Reversion Strategy"
+parameters:
+  period: 20
+  std_dev: 2.0
+timeframes:
+  - "1d"
+  - "1h"

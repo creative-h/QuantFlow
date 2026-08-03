@@ -1,0 +1,10 @@
+name: "ema"
+version: "1.0.0"
+description: "Dual EMA Crossover Strategy"
+parameters:
+  fast_period: 9
+  slow_period: 21
+timeframes:
+  - "1d"
+  - "1h"
+  - "15m"

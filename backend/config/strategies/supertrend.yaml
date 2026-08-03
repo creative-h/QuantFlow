@@ -1,0 +1,9 @@
+name: "supertrend"
+version: "1.0.0"
+description: "Supertrend Trend Following Strategy"
+parameters:
+  period: 10
+  multiplier: 3.0
+timeframes:
+  - "1d"
+  - "1h"

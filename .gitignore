@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.env
+backend/.env
+logs/*.log
+data/*.csv
+data/*.parquet
+*.db
+tools/python312/
+.pip-install.*.log
+.uvicorn.*.log

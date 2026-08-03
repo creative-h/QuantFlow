@@ -1,0 +1,41 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-quantflow}
+      POSTGRES_USER: ${POSTGRES_USER:-quantflow}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-quantflow}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-quantflow} -d ${POSTGRES_DB:-quantflow}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    env_file: ./backend/.env
+    environment:
+      DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER:-quantflow}:${POSTGRES_PASSWORD:-quantflow}@db:5432/${POSTGRES_DB:-quantflow}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./logs:/app/logs
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    image: python:3.12-slim
+    working_dir: /workspace
+    command: sh -c "pip install --no-cache-dir streamlit && streamlit run frontend/streamlit_app.py --server.address 0.0.0.0"
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./:/workspace
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:

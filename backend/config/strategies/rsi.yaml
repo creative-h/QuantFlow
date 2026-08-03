@@ -1,0 +1,10 @@
+name: "rsi"
+version: "1.0.0"
+description: "RSI Pullback Strategy"
+parameters:
+  period: 14
+  oversold: 30.0
+  overbought: 70.0
+timeframes:
+  - "1d"
+  - "1h"
