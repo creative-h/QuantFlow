@@ -83,3 +83,10 @@ def test_ai_explanation_option_recommendation_fields(sample_candle, sample_histo
     assert rec.entry_price > 0.0
     assert rec.stop_loss < rec.entry_price
     assert rec.target_price > rec.entry_price
+
+
+def test_ai_reasoner_recommend_trade_api(sample_candle, sample_history):
+    rec = AIReasoner.recommend_trade("NIFTY", sample_candle, sample_history)
+    assert isinstance(rec, OptionTradeRecommendation)
+    assert rec.strike == 24900.0
+    assert rec.contract_symbol == "NIFTY 24900 CE"

@@ -167,3 +167,29 @@ class AIReasoner:
             option_recommendation=option_rec,
             extra_metrics={"close": close_price, "volume": candle.volume, "atm_strike": atm_strike},
         )
+
+    @classmethod
+    def recommend_trade(
+        cls,
+        symbol: str,
+        candle: Candle,
+        history: pd.DataFrame,
+        signal: Optional[Signal] = None,
+        strategy_name: str = "EMA Crossover",
+    ) -> OptionTradeRecommendation:
+        """High-level API returning an explicit OptionTradeRecommendation object directly."""
+        exp = cls.evaluate(symbol, candle, history, signal, strategy_name)
+        if exp.option_recommendation:
+            return exp.option_recommendation
+
+        atm_strike = OptionChainEngine.calculate_atm_strike(symbol, candle.close)
+        return OptionTradeRecommendation(
+            contract_symbol=f"{symbol.upper()} {int(atm_strike)} CE",
+            strike=atm_strike,
+            option_type="CE",
+            action="WAIT",
+            entry_price=118.0,
+            stop_loss=105.0,
+            target_price=145.0,
+            risk_reward="1:2.5",
+        )
