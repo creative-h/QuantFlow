@@ -2,6 +2,7 @@
 
 from datetime import date
 from pathlib import Path
+from typing import Optional
 
 import pandas as pd
 from loguru import logger
@@ -18,11 +19,20 @@ class ParquetProvider(MarketDataProvider):
         self._directory = Path(directory)
 
     async def get_candles(
-        self, symbol: str, start: date, end: date, interval: str = "1d"
+        self,
+        symbol: str,
+        start: Optional[date] = None,
+        end: Optional[date] = None,
+        period: Optional[str] = "1mo",
+        interval: str = "1d",
     ) -> pd.DataFrame:
         """Load, filter, and validate OHLCV data from Parquet."""
         logger.info("Reading Parquet market data for '{}' from {}", symbol, self._directory)
-        data = self._storage.load(symbol, start=start, end=end)
+        if start is not None and end is not None:
+            data = self._storage.load(symbol, start=start, end=end)
+        else:
+            data = self._storage.load(symbol)
+
         if data.empty:
             logger.warning("No Parquet candles found for '{}' in date range", symbol)
             return pd.DataFrame(columns=["open", "high", "low", "close", "volume"])

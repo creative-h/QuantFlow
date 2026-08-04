@@ -195,8 +195,8 @@ class LivePaperEngine:
         for symbol in self.config.symbols:
             try:
                 # 1. Fetch market candles
-                candles_df = self.data_provider.get_candles(symbol, period="5d")
-                if candles_df.empty:
+                candles_df = await self.data_provider.get_candles(symbol, period="5d")
+                if candles_df is None or candles_df.empty:
                     continue
 
                 self._market_history[symbol.upper()] = candles_df

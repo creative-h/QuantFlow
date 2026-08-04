@@ -15,19 +15,35 @@ from app.marketdata.validator import validate_ohlcv
 class YahooFinanceProvider(MarketDataProvider):
     """Fetch adjusted historical candles from Yahoo Finance with retries and validation."""
 
+    SYMBOL_MAP = {
+        "NIFTY": "^NSEI",
+        "NIFTY 50": "^NSEI",
+        "BANKNIFTY": "^NSEBANK",
+        "NIFTYBANK": "^NSEBANK",
+        "SENSEX": "^BSESN",
+        "INDIAVIX": "^INDIAVIX",
+        "INDIA VIX": "^INDIAVIX",
+    }
+
     def __init__(self, max_retries: int = 3, retry_delay: float = 0.5) -> None:
         self.max_retries = max_retries
         self.retry_delay = retry_delay
 
     async def get_candles(
-        self, symbol: str, start: date, end: date, interval: str = "1d"
+        self,
+        symbol: str,
+        start: Optional[date] = None,
+        end: Optional[date] = None,
+        period: Optional[str] = "1mo",
+        interval: str = "1d",
     ) -> pd.DataFrame:
-        """Fetch historical candles with retry logic and validate schema."""
+        """Fetch historical candles with symbol mapping, retry logic, and schema validation."""
+        target_symbol = self.SYMBOL_MAP.get(symbol.upper(), symbol)
         logger.info(
-            "Fetching Yahoo Finance candles for symbol '{}' from {} to {} (interval: {})",
+            "Fetching Yahoo Finance candles for symbol '{}' (mapped: '{}') [period: {}, interval: {}]",
             symbol,
-            start,
-            end,
+            target_symbol,
+            period,
             interval,
         )
 
@@ -36,15 +52,16 @@ class YahooFinanceProvider(MarketDataProvider):
             try:
                 data = await asyncio.to_thread(
                     yf.download,
-                    symbol,
+                    target_symbol,
                     start=start,
                     end=end,
+                    period=period if (start is None and end is None) else None,
                     interval=interval,
                     auto_adjust=True,
                     progress=False,
                 )
                 if data is None or data.empty:
-                    raise ValueError(f"No Yahoo Finance data returned for symbol '{symbol}'")
+                    raise ValueError(f"No Yahoo Finance data returned for symbol '{target_symbol}'")
 
                 validated = validate_ohlcv(data)
                 logger.info(

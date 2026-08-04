@@ -1,5 +1,6 @@
 """QuantFlow Professional AI Trading Terminal & Research Platform."""
 
+from datetime import datetime
 import json
 import sys
 import time
@@ -19,6 +20,7 @@ from app.analytics.ai_reasoner import AIExplanation, AIReasoner, MarketRegime
 from app.analytics.reporting import HTMLReportGenerator, JSONReportGenerator
 from app.indicators.engine import IndicatorEngine
 from app.marketdata.yfinance_provider import YahooFinanceProvider
+from app.models.dataclasses import Candle
 from app.paper.live_engine import LivePaperEngine, LivePaperSessionConfig
 from app.research.comparison import StrategyComparisonEngine
 from app.research.optimization import OptimizationEngine
@@ -116,7 +118,13 @@ nav = st.sidebar.radio(
 def fetch_sample_data(symbol: str = "AAPL", period: str = "1mo") -> pd.DataFrame:
     try:
         provider = YahooFinanceProvider()
-        return provider.get_candles(symbol, period=period)
+        # Call provider asynchronously via event loop or sync fallback
+        try:
+            loop = asyncio.get_event_loop()
+            return loop.run_until_complete(provider.get_candles(symbol, period=period))
+        except Exception:
+            import asyncio
+            return asyncio.run(provider.get_candles(symbol, period=period))
     except Exception:
         # Fallback synthetic generator
         dates = pd.date_range("2024-01-01", periods=100, freq="D")
@@ -266,35 +274,35 @@ if nav == "🖥️ AI Trading Terminal":
             paper_bgcolor="#0b0e14",
             plot_bgcolor="#0b0e14",
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
         # Session Controls Bar
         st.subheader("🎮 Live Trading Controls")
         ctrl_c1, ctrl_c2, ctrl_c3, ctrl_c4, ctrl_c5 = st.columns([1, 1, 1, 1, 1.5])
 
         with ctrl_c1:
-            if st.button("▶️ Start Session", use_container_width=True):
+            if st.button("▶️ Start Session", width="stretch"):
                 cfg = LivePaperSessionConfig(symbols=[target_symbol], strategy_names=["ema"])
                 live_engine.start(cfg)
                 st.rerun()
 
         with ctrl_c2:
-            if st.button("⏸️ Pause", use_container_width=True):
+            if st.button("⏸️ Pause", width="stretch"):
                 live_engine.pause()
                 st.rerun()
 
         with ctrl_c3:
-            if st.button("▶️ Resume", use_container_width=True):
+            if st.button("▶️ Resume", width="stretch"):
                 live_engine.resume()
                 st.rerun()
 
         with ctrl_c4:
-            if st.button("⏹️ Stop", use_container_width=True):
+            if st.button("⏹️ Stop", width="stretch"):
                 live_engine.stop_sync()
                 st.rerun()
 
         with ctrl_c5:
-            if st.button("⚡ Inject Demo Signal", type="primary", use_container_width=True):
+            if st.button("⚡ Inject Demo Signal", type="primary", width="stretch"):
                 order = live_engine.inject_demo_order_sync(
                     symbol=target_symbol, side_str="BUY", quantity=10, price=float(df_chart["close"].iloc[-1])
                 )
@@ -381,7 +389,7 @@ if nav == "🖥️ AI Trading Terminal":
                         for o in reversed(orders_list)
                     ]
                 )
-                st.dataframe(df_ord, use_container_width=True)
+                st.dataframe(df_ord, width="stretch")
             else:
                 st.info("No orders executed yet.")
 
@@ -398,7 +406,7 @@ if nav == "🖥️ AI Trading Terminal":
                     for a in reversed(live_engine.alert_engine.alert_history)
                 ]
             )
-            st.dataframe(df_alt, use_container_width=True)
+            st.dataframe(df_alt, width="stretch")
         else:
             st.info("No alerts logged.")
 
@@ -441,7 +449,7 @@ elif nav == "🎞️ Trade Replay Engine":
             ]
         )
         fig_rep.update_layout(template="plotly_dark", height=450, margin=dict(l=10, r=10, t=10, b=10))
-        st.plotly_chart(fig_rep, use_container_width=True)
+        st.plotly_chart(fig_rep, width="stretch")
 
     with col_rep_ai:
         st.markdown(f"### Replay Bar: {sub_df.index[-1]}")
@@ -466,7 +474,7 @@ elif nav == "📊 Market Data Explorer":
     st.subheader(f"Historical Candle Data for {symbol}")
     st.line_chart(df["close"])
     with st.expander("Raw Data Table"):
-        st.dataframe(df, use_container_width=True)
+        st.dataframe(df, width="stretch")
 
 elif nav == "🧩 Strategy Explorer":
     st.header("🧩 Strategy Registry & Plugins")
@@ -518,7 +526,7 @@ elif nav == "⚡ Parameter Optimization":
 
         res_df = pd.DataFrame([r.to_dict() for r in results])
         st.subheader("Top Optimization Results")
-        st.dataframe(res_df, use_container_width=True)
+        st.dataframe(res_df, width="stretch")
 
 elif nav == "🔄 Walk Forward Testing":
     st.header("🔄 Walk-Forward Optimization & Testing")
@@ -546,7 +554,7 @@ elif nav == "🔄 Walk Forward Testing":
             col4.metric("Max Drawdown", f"{wf_res.consolidated_max_drawdown:.2f}%")
 
             st.subheader("Window-by-Window Results")
-            st.dataframe(pd.DataFrame([w.__dict__ for w in wf_res.windows]), use_container_width=True)
+            st.dataframe(pd.DataFrame([w.__dict__ for w in wf_res.windows]), width="stretch")
         except Exception as e:
             st.error(f"Walk Forward execution error: {e}")
 
@@ -563,7 +571,7 @@ elif nav == "⚔️ Strategy Comparison":
         comp_report = engine.compare(instances, df)
 
         st.subheader("Strategy Comparison Ranking Table")
-        st.dataframe(comp_report.to_dataframe(), use_container_width=True)
+        st.dataframe(comp_report.to_dataframe(), width="stretch")
 
 elif nav == "📄 Reports & Analytics":
     st.header("📄 Performance Reports & HTML Export")
