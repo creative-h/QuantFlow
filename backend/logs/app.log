@@ -2666,3 +2666,1317 @@ RuntimeError: Yahoo API connection timeout
 2026-08-04 13:21:33.189 | INFO     | app.services.zerodha_auth:save_session:98 - Saved Zerodha session securely to C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-32\test_get_profile_success0\data\session.json
 2026-08-04 13:21:33.190 | INFO     | app.services.zerodha_auth:load_session:108 - Loaded active Zerodha session for user_id: AB1234
 2026-08-04 13:21:33.191 | INFO     | app.services.zerodha_auth:get_profile:167 - Successfully fetched user profile for user_id: AB1234
+2026-08-04 13:24:08.402 | INFO     | app.services.tasks:heartbeat:9 - QuantFlow scheduler heartbeat
+2026-08-04 13:29:08.407 | INFO     | app.services.tasks:heartbeat:9 - QuantFlow scheduler heartbeat
+2026-08-04 13:34:08.412 | INFO     | app.services.tasks:heartbeat:9 - QuantFlow scheduler heartbeat
+2026-08-04 13:39:08.395 | INFO     | app.services.tasks:heartbeat:9 - QuantFlow scheduler heartbeat
+2026-08-04 13:39:16.814 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-04 13:39:18.692 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'ema' (EMACrossoverStrategy)
+2026-08-04 13:39:18.694 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'mean_reversion' (MeanReversionStrategy)
+2026-08-04 13:39:18.695 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'orb' (ORBStrategy)
+2026-08-04 13:39:18.695 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'rsi' (RSIPullbackStrategy)
+2026-08-04 13:39:18.696 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'supertrend' (SupertrendStrategy)
+2026-08-04 13:39:18.697 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'vwapreversal' (VWAPReversalStrategy)
+2026-08-04 13:39:18.699 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'vwap' (VWAPStrategy)
+2026-08-04 13:39:18.699 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: RUNNING
+2026-08-04 13:39:18.699 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-04 13:39:18.699 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-04 13:39:23.987 | INFO     | app.paper.live_engine:stop:147 - LivePaperEngine session stopped
+2026-08-04 13:39:23.993 | INFO     | app.analytics.reporting:generate:197 - HTML performance report written to D:\excersis_file\Agentic_AI\QuantFlow\backend\data\eod_report.html
+2026-08-04 13:39:23.994 | INFO     | app.analytics.reporting:generate:47 - JSON performance report written to D:\excersis_file\Agentic_AI\QuantFlow\backend\data\eod_report.json
+2026-08-04 13:39:23.994 | INFO     | app.services.alert_engine:send_alert:59 - [ALERT - INFO] Live Paper Session Stopped: Session ended. Total Equity: $100,000.00
+2026-08-04 13:39:23.994 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-04 13:39:26.946 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'ema' (EMACrossoverStrategy)
+2026-08-04 13:39:26.950 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'mean_reversion' (MeanReversionStrategy)
+2026-08-04 13:39:26.950 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'orb' (ORBStrategy)
+2026-08-04 13:39:26.951 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'rsi' (RSIPullbackStrategy)
+2026-08-04 13:39:26.953 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'supertrend' (SupertrendStrategy)
+2026-08-04 13:39:26.955 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'vwapreversal' (VWAPReversalStrategy)
+2026-08-04 13:39:26.957 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'vwap' (VWAPStrategy)
+2026-08-04 13:39:26.957 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:39:26.957 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-04 13:39:26.958 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-04 13:39:32.251 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-04 13:39:33.685 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'ema' (EMACrossoverStrategy)
+2026-08-04 13:39:33.687 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'mean_reversion' (MeanReversionStrategy)
+2026-08-04 13:39:33.687 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'orb' (ORBStrategy)
+2026-08-04 13:39:33.687 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'rsi' (RSIPullbackStrategy)
+2026-08-04 13:39:33.689 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'supertrend' (SupertrendStrategy)
+2026-08-04 13:39:33.690 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'vwapreversal' (VWAPReversalStrategy)
+2026-08-04 13:39:33.691 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'vwap' (VWAPStrategy)
+2026-08-04 13:39:33.691 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:39:33.691 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-04 13:39:33.691 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-04 13:39:49.406 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-04 13:39:51.775 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'ema' (EMACrossoverStrategy)
+2026-08-04 13:39:51.777 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'mean_reversion' (MeanReversionStrategy)
+2026-08-04 13:39:51.778 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'orb' (ORBStrategy)
+2026-08-04 13:39:51.780 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'rsi' (RSIPullbackStrategy)
+2026-08-04 13:39:51.781 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'supertrend' (SupertrendStrategy)
+2026-08-04 13:39:51.781 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'vwapreversal' (VWAPReversalStrategy)
+2026-08-04 13:39:51.782 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'vwap' (VWAPStrategy)
+2026-08-04 13:39:51.782 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:39:51.782 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-04 13:39:51.782 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-04 13:39:55.424 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-04 13:39:56.876 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'ema' (EMACrossoverStrategy)
+2026-08-04 13:39:56.877 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'mean_reversion' (MeanReversionStrategy)
+2026-08-04 13:39:56.878 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'orb' (ORBStrategy)
+2026-08-04 13:39:56.880 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'rsi' (RSIPullbackStrategy)
+2026-08-04 13:39:56.882 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'supertrend' (SupertrendStrategy)
+2026-08-04 13:39:56.883 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'vwapreversal' (VWAPReversalStrategy)
+2026-08-04 13:39:56.885 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'vwap' (VWAPStrategy)
+2026-08-04 13:39:56.885 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:39:56.885 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-04 13:39:56.885 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-04 13:40:18.109 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'ema' (EMACrossoverStrategy)
+2026-08-04 13:40:18.109 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'mean_reversion' (MeanReversionStrategy)
+2026-08-04 13:40:18.109 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'orb' (ORBStrategy)
+2026-08-04 13:40:18.109 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'rsi' (RSIPullbackStrategy)
+2026-08-04 13:40:18.109 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'supertrend' (SupertrendStrategy)
+2026-08-04 13:40:18.110 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'vwapreversal' (VWAPReversalStrategy)
+2026-08-04 13:40:18.110 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'vwap' (VWAPStrategy)
+2026-08-04 13:40:18.110 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:40:18.110 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-04 13:40:18.110 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-04 13:40:18.116 | INFO     | app.api.routers.auth:login:19 - Handling GET /auth/login request
+2026-08-04 13:40:18.119 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-04 13:40:18.125 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:40:18.126 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-04 13:40:18.126 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-04 13:40:18.136 | INFO     | app.api.routers.auth:callback:31 - Handling GET /auth/callback request
+2026-08-04 13:40:18.137 | WARNING  | app.api.routers.auth:callback:38 - Callback missing request_token parameter
+2026-08-04 13:40:18.138 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-04 13:40:18.150 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:40:18.151 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-04 13:40:18.151 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-04 13:40:18.155 | INFO     | app.api.routers.auth:callback:31 - Handling GET /auth/callback request
+2026-08-04 13:40:18.155 | WARNING  | app.api.routers.auth:callback:34 - Callback received non-success status: error
+2026-08-04 13:40:18.157 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-04 13:40:18.164 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:40:18.164 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-04 13:40:18.164 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-04 13:40:18.167 | INFO     | app.api.routers.auth:callback:31 - Handling GET /auth/callback request
+2026-08-04 13:40:18.168 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-04 13:40:18.175 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:40:18.176 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-04 13:40:18.176 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-04 13:40:18.178 | INFO     | app.api.routers.auth:callback:31 - Handling GET /auth/callback request
+2026-08-04 13:40:18.178 | ERROR    | app.api.routers.auth:callback:50 - Kite login callback failed during token exchange
+Traceback (most recent call last):
+
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\threading.py", line 1032, in _bootstrap
+    self._bootstrap_inner()
+    │    └ <function Thread._bootstrap_inner at 0x00000149A6302E80>
+    └ <Thread(asyncio-portal-149cc4c16a0, started daemon 12812)>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\threading.py", line 1075, in _bootstrap_inner
+    self.run()
+    │    └ <function Thread.run at 0x00000149A6302B60>
+    └ <Thread(asyncio-portal-149cc4c16a0, started daemon 12812)>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\threading.py", line 1012, in run
+    self._target(*self._args, **self._kwargs)
+    │    │        │    │        │    └ {}
+    │    │        │    │        └ <Thread(asyncio-portal-149cc4c16a0, started daemon 12812)>
+    │    │        │    └ ()
+    │    │        └ <Thread(asyncio-portal-149cc4c16a0, started daemon 12812)>
+    │    └ <function start_blocking_portal.<locals>.run_blocking_portal at 0x00000149CC42F740>
+    └ <Thread(asyncio-portal-149cc4c16a0, started daemon 12812)>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\anyio\from_thread.py", line 536, in run_blocking_portal
+    run_eventloop(
+    └ <function run at 0x00000149A6E67060>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\anyio\_core\_eventloop.py", line 83, in run
+    return async_backend.run(func, args, {}, backend_options)
+           │             │   │     │         └ {}
+           │             │   │     └ ()
+           │             │   └ <function start_blocking_portal.<locals>.run_portal at 0x00000149CC42FE20>
+           │             └ <classmethod(<function AsyncIOBackend.run at 0x00000149A898DDA0>)>
+           └ <class 'anyio._backends._asyncio.AsyncIOBackend'>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2481, in run
+    return runner.run(wrapper())
+           │      │   └ <function start_blocking_portal.<locals>.run_portal at 0x00000149CC499C60>
+           │      └ <function Runner.run at 0x00000149A8908E00>
+           └ <asyncio.runners.Runner object at 0x00000149CC4C13D0>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           │    │     │                  └ <Task pending name='anyio.from_thread.start_blocking_portal.<locals>.run_portal' coro=<start_blocking_portal.<locals>.run_por...
+           │    │     └ <function BaseEventLoop.run_until_complete at 0x00000149A88FE980>
+           │    └ <ProactorEventLoop running=True closed=False debug=False>
+           └ <asyncio.runners.Runner object at 0x00000149CC4C13D0>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\asyncio\base_events.py", line 678, in run_until_complete
+    self.run_forever()
+    │    └ <function ProactorEventLoop.run_forever at 0x00000149A8973E20>
+    └ <ProactorEventLoop running=True closed=False debug=False>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\asyncio\windows_events.py", line 322, in run_forever
+    super().run_forever()
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\asyncio\base_events.py", line 645, in run_forever
+    self._run_once()
+    │    └ <function BaseEventLoop._run_once at 0x00000149A8908720>
+    └ <ProactorEventLoop running=True closed=False debug=False>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\asyncio\base_events.py", line 1999, in _run_once
+    handle._run()
+    │      └ <function Handle._run at 0x00000149A889C900>
+    └ <Handle Task.task_wakeup(<Future finis...16471717376'>>)>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\asyncio\events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+    │    │            │    │           │    └ <member '_args' of 'Handle' objects>
+    │    │            │    │           └ <Handle Task.task_wakeup(<Future finis...16471717376'>>)>
+    │    │            │    └ <member '_callback' of 'Handle' objects>
+    │    │            └ <Handle Task.task_wakeup(<Future finis...16471717376'>>)>
+    │    └ <member '_context' of 'Handle' objects>
+    └ <Handle Task.task_wakeup(<Future finis...16471717376'>>)>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\anyio\_core\_tasks.py", line 275, in _run_coro
+    retval = await self._coro
+                   │    └ <member '_coro' of 'TaskHandle' objects>
+                   └ <TaskHandle pending name='anyio.from_thread.BlockingPortal._call_func' coro=<coroutine object BlockingPortal._call_func at 0x...
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\anyio\from_thread.py", line 263, in _call_func
+    retval = await retval_or_awaitable
+                   └ <coroutine object FastAPI.__call__ at 0x00000149CC4AA7A0>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\applications.py", line 1163, in __call__
+    await super().__call__(scope, receive, send)
+                           │      │        └ <function _TestClientTransport.handle_request.<locals>.send at 0x00000149CC49A980>
+                           │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000149CC42F600>
+                           └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\starlette\applications.py", line 90, in __call__
+    await self.middleware_stack(scope, receive, send)
+          │    │                │      │        └ <function _TestClientTransport.handle_request.<locals>.send at 0x00000149CC49A980>
+          │    │                │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000149CC42F600>
+          │    │                └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │    └ <starlette.middleware.errors.ServerErrorMiddleware object at 0x00000149CC3DB830>
+          └ <fastapi.applications.FastAPI object at 0x00000149CC12BE90>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+          │    │   │      │        └ <function ServerErrorMiddleware.__call__.<locals>._send at 0x00000149CC49AFC0>
+          │    │   │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000149CC42F600>
+          │    │   └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │    └ <starlette.middleware.exceptions.ExceptionMiddleware object at 0x00000149CC3DB7D0>
+          └ <starlette.middleware.errors.ServerErrorMiddleware object at 0x00000149CC3DB830>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+          │                            │    │    │     │      │        └ <function ServerErrorMiddleware.__call__.<locals>._send at 0x00000149CC49AFC0>
+          │                            │    │    │     │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000149CC42F600>
+          │                            │    │    │     └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │                            │    │    └ <starlette.requests.Request object at 0x00000149CC4C8080>
+          │                            │    └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x00000149CC3DB8F0>
+          │                            └ <starlette.middleware.exceptions.ExceptionMiddleware object at 0x00000149CC3DB7D0>
+          └ <function wrap_app_handling_exceptions at 0x00000149CA048040>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x00000149CC49B100>
+          │   │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000149CC42F600>
+          │   └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x00000149CC3DB8F0>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+          │    │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x00000149CC49B100>
+          │    │   │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000149CC42F600>
+          │    │   └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │    └ <fastapi.routing.APIRouter object at 0x00000149CB83D3A0>
+          └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x00000149CC3DB8F0>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+          │    │                │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x00000149CC49B100>
+          │    │                │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000149CC42F600>
+          │    │                └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │    └ <bound method APIRouter.app of <fastapi.routing.APIRouter object at 0x00000149CB83D3A0>>
+          └ <fastapi.routing.APIRouter object at 0x00000149CB83D3A0>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 2734, in app
+    await route.handle(scope, receive, send)
+          │     │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x00000149CC49B100>
+          │     │      │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000149CC42F600>
+          │     │      └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │     └ <function _IncludedRouter.handle at 0x00000149CA05E840>
+          └ _IncludedRouter(original_router=<fastapi.routing.APIRouter object at 0x00000149CC060770>, include_context=_RouterIncludeConte...
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 1780, in handle
+    await self.original_router.handle(scope, receive, send)
+          │    │               │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x00000149CC49B100>
+          │    │               │      │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000149CC42F600>
+          │    │               │      └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │    │               └ <function APIRouter.handle at 0x00000149CA080900>
+          │    └ <fastapi.routing.APIRouter object at 0x00000149CC060770>
+          └ _IncludedRouter(original_router=<fastapi.routing.APIRouter object at 0x00000149CC060770>, include_context=_RouterIncludeConte...
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 2789, in handle
+    await included_router._handle_selected(scope, receive, send)
+          │               │                │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x00000149CC49B100>
+          │               │                │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000149CC42F600>
+          │               │                └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │               └ <function _IncludedRouter._handle_selected at 0x00000149CA05E8E0>
+          └ _IncludedRouter(original_router=<fastapi.routing.APIRouter object at 0x00000149CC060770>, include_context=_RouterIncludeConte...
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 1800, in _handle_selected
+    await original_route.handle(scope, receive, send)
+          │              │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x00000149CC49B100>
+          │              │      │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000149CC42F600>
+          │              │      └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │              └ <function APIRoute.handle at 0x00000149CA05C9A0>
+          └ APIRoute(path='/auth/callback', name='callback', methods=['GET'])
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 1279, in handle
+    await app(scope, receive, send)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x00000149CC49B100>
+          │   │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000149CC42F600>
+          │   └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          └ <function request_response.<locals>.app at 0x00000149CC4998A0>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 158, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+          │                            │    │        │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x00000149CC49B100>
+          │                            │    │        │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000149CC42F600>
+          │                            │    │        └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │                            │    └ <starlette.requests.Request object at 0x00000149CC4C8650>
+          │                            └ <function request_response.<locals>.app.<locals>.app at 0x00000149CC49B380>
+          └ <function wrap_app_handling_exceptions at 0x00000149CA048040>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x00000149CC49B4C0>
+          │   │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000149CC42F600>
+          │   └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          └ <function request_response.<locals>.app.<locals>.app at 0x00000149CC49B380>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 144, in app
+    response = await f(request)
+                     │ └ <starlette.requests.Request object at 0x00000149CC4C8650>
+                     └ <function get_request_handler.<locals>.app at 0x00000149CC49B240>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 706, in app
+    raw_response = await run_endpoint_function(
+                         └ <function run_endpoint_function at 0x00000149CA04BCE0>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 352, in run_endpoint_function
+    return await dependant.call(**values)
+                 │         │      └ {'auth_service': <MagicMock spec='ZerodhaAuthService' id='1416471717376'>, 'request_token': 'invalid_req_token', 'status': None}
+                 │         └ <member 'call' of 'Dependant' objects>
+                 └ Dependant(path_params=[], query_params=[ModelField(field_info=Query(None), name='request_token', mode='validation', config=No...
+
+> File "D:\excersis_file\Agentic_AI\QuantFlow\backend\app\api\routers\auth.py", line 42, in callback
+    session_data = await auth_service.exchange_token(request_token)
+                         │            │              └ 'invalid_req_token'
+                         │            └ <AsyncMock name='mock.exchange_token' id='1416471717280'>
+                         └ <MagicMock spec='ZerodhaAuthService' id='1416471717376'>
+
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\unittest\mock.py", line 2291, in _execute_mock_call
+    raise effect
+          └ RuntimeError('Token exchange failed')
+
+RuntimeError: Token exchange failed
+2026-08-04 13:40:18.211 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-04 13:40:18.217 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:40:18.218 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-04 13:40:18.218 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-04 13:40:18.221 | INFO     | app.api.routers.auth:profile:61 - Handling GET /auth/profile request
+2026-08-04 13:40:18.221 | WARNING  | app.api.routers.auth:profile:66 - Profile request unauthenticated: No active Zerodha session found. Please log in.
+2026-08-04 13:40:18.222 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-04 13:40:18.227 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:40:18.228 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-04 13:40:18.228 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-04 13:40:18.230 | INFO     | app.api.routers.auth:profile:61 - Handling GET /auth/profile request
+2026-08-04 13:40:18.232 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-04 13:40:18.237 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:40:18.238 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-04 13:40:18.238 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-04 13:40:18.240 | INFO     | app.api.routers.auth:logout:80 - Handling POST /auth/logout request
+2026-08-04 13:40:18.241 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-04 13:40:18.361 | INFO     | app.brokers.paper_broker:login:62 - PaperBroker session initiated for user TEST_TRADER
+2026-08-04 13:40:18.422 | INFO     | app.paper.execution.execution_engine:submit_order:65 - Submitted order dac4440f-d3d2-40ed-839d-c4117da81cda for 10 x RELIANCE
+2026-08-04 13:40:18.472 | INFO     | app.paper.portfolio.portfolio:record_fill:110 - Portfolio recorded fill for 10 x RELIANCE @ 2501.25. Realized PnL: 0
+2026-08-04 13:40:18.472 | INFO     | app.paper.journal.trade_journal:log_trade:56 - Trade logged in journal: BUY 10 x RELIANCE @ 2501.25
+2026-08-04 13:40:18.476 | INFO     | app.paper.execution.execution_engine:submit_order:65 - Submitted order 4fd003b6-6fea-4799-8491-ab1ca015f3cd for 5 x TCS
+2026-08-04 13:40:18.476 | INFO     | app.paper.portfolio.portfolio:record_fill:110 - Portfolio recorded fill for 5 x TCS @ 3501.75. Realized PnL: 0
+2026-08-04 13:40:18.476 | INFO     | app.paper.journal.trade_journal:log_trade:56 - Trade logged in journal: BUY 5 x TCS @ 3501.75
+2026-08-04 13:40:18.480 | INFO     | app.paper.execution.execution_engine:submit_order:65 - Submitted order c6f314fc-57cb-4905-bfe5-a38418e308d0 for 10 x MSFT
+2026-08-04 13:40:18.480 | INFO     | app.paper.execution.execution_engine:submit_order:65 - Submitted order 589c5ba2-adde-406c-8739-428812d619ea for 10 x MSFT
+2026-08-04 13:40:18.564 | INFO     | app.paper.live_engine:start:87 - Loaded active strategy for live paper trading: ema
+2026-08-04 13:40:18.564 | INFO     | app.services.alert_engine:send_alert:59 - [ALERT - INFO] Live Paper Session Started: Started paper session for symbols ['AAPL'] with 1 strategies
+2026-08-04 13:40:18.565 | WARNING  | app.paper.live_engine:process_tick:256 - Tick evaluation error for AAPL: EMACrossoverStrategy.on_candle() takes 2 positional arguments but 3 were given
+2026-08-04 13:40:18.566 | WARNING  | app.services.alert_engine:send_alert:57 - [ALERT - WARNING] Live Paper Session Paused: Trading scheduler loop paused
+2026-08-04 13:40:18.566 | INFO     | app.services.alert_engine:send_alert:59 - [ALERT - INFO] Live Paper Session Resumed: Trading scheduler loop resumed
+2026-08-04 13:40:18.566 | INFO     | app.paper.live_engine:stop:147 - LivePaperEngine session stopped
+2026-08-04 13:40:18.568 | INFO     | app.analytics.reporting:generate:197 - HTML performance report written to C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-33\test_live_paper_engine_lifecyc0\eod_report.html
+2026-08-04 13:40:18.569 | INFO     | app.analytics.reporting:generate:47 - JSON performance report written to C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-33\test_live_paper_engine_lifecyc0\eod_report.json
+2026-08-04 13:40:18.569 | INFO     | app.services.alert_engine:send_alert:59 - [ALERT - INFO] Live Paper Session Stopped: Session ended. Total Equity: $50,000.00
+2026-08-04 13:40:18.577 | INFO     | app.paper.live_engine:start:87 - Loaded active strategy for live paper trading: rsi
+2026-08-04 13:40:18.577 | INFO     | app.services.alert_engine:send_alert:59 - [ALERT - INFO] Live Paper Session Started: Started paper session for symbols ['MSFT'] with 1 strategies
+2026-08-04 13:40:18.577 | INFO     | app.paper.live_engine:stop:147 - LivePaperEngine session stopped
+2026-08-04 13:40:18.578 | INFO     | app.analytics.reporting:generate:197 - HTML performance report written to C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-33\test_live_paper_session_save_a0\eod_report.html
+2026-08-04 13:40:18.581 | INFO     | app.analytics.reporting:generate:47 - JSON performance report written to C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-33\test_live_paper_session_save_a0\eod_report.json
+2026-08-04 13:40:18.581 | INFO     | app.services.alert_engine:send_alert:59 - [ALERT - INFO] Live Paper Session Stopped: Session ended. Total Equity: $100,000.00
+2026-08-04 13:40:18.591 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:40:18.601 | WARNING  | app.services.alert_engine:send_alert:57 - [ALERT - WARNING] Position Warning: Position size limit reached for SBIN
+2026-08-04 13:40:18.602 | ERROR    | app.services.alert_engine:send_alert:55 - [ALERT - CRITICAL] Emergency Stop: Account drawdown threshold breached
+2026-08-04 13:40:18.610 | INFO     | app.paper.live_engine:start:87 - Loaded active strategy for live paper trading: ema
+2026-08-04 13:40:18.610 | INFO     | app.services.alert_engine:send_alert:59 - [ALERT - INFO] Live Paper Session Started: Started paper session for symbols [] with 1 strategies
+2026-08-04 13:40:18.611 | INFO     | app.paper.live_engine:stop:147 - LivePaperEngine session stopped
+2026-08-04 13:40:18.612 | INFO     | app.analytics.reporting:generate:197 - HTML performance report written to D:\excersis_file\Agentic_AI\QuantFlow\backend\data\eod_report.html
+2026-08-04 13:40:18.613 | INFO     | app.analytics.reporting:generate:47 - JSON performance report written to D:\excersis_file\Agentic_AI\QuantFlow\backend\data\eod_report.json
+2026-08-04 13:40:18.614 | INFO     | app.services.alert_engine:send_alert:59 - [ALERT - INFO] Live Paper Session Stopped: Session ended. Total Equity: $100,000.00
+2026-08-04 13:40:18.616 | INFO     | app.paper.execution.execution_engine:submit_order:65 - Submitted order 105a6049-9f2c-4a41-bd3f-eedce532aa1e for 25 x INFY
+2026-08-04 13:40:18.616 | INFO     | app.paper.portfolio.portfolio:record_fill:110 - Portfolio recorded fill for 25 x INFY @ 1500.75. Realized PnL: 0
+2026-08-04 13:40:18.616 | INFO     | app.paper.journal.trade_journal:log_trade:56 - Trade logged in journal: BUY 25 x INFY @ 1500.75
+2026-08-04 13:40:18.616 | INFO     | app.services.alert_engine:send_alert:59 - [ALERT - INFO] DEMO ORDER INJECTED: BUY INFY: Injected demo BUY order for 25 INFY @ $1,500.00. Status: FILLED
+2026-08-04 13:40:18.619 | INFO     | app.paper.execution.execution_engine:submit_order:65 - Submitted order e6e69c07-72dd-4f07-9d3f-cc80ee1f5c87 for 10 x TCS
+2026-08-04 13:40:18.619 | INFO     | app.paper.portfolio.portfolio:record_fill:110 - Portfolio recorded fill for 10 x TCS @ 3198.4. Realized PnL: 0
+2026-08-04 13:40:18.619 | INFO     | app.paper.journal.trade_journal:log_trade:56 - Trade logged in journal: SELL 10 x TCS @ 3198.4
+2026-08-04 13:40:18.619 | INFO     | app.services.alert_engine:send_alert:59 - [ALERT - INFO] DEMO ORDER INJECTED: SELL TCS: Injected demo SELL order for 10 TCS @ $3,200.00. Status: FILLED
+2026-08-04 13:40:18.630 | INFO     | app.paper.live_engine:start:87 - Loaded active strategy for live paper trading: rsi
+2026-08-04 13:40:18.631 | INFO     | app.services.alert_engine:send_alert:59 - [ALERT - INFO] Live Paper Session Started: Started paper session for symbols ['MSFT'] with 1 strategies
+2026-08-04 13:40:18.631 | INFO     | app.marketdata.yfinance_provider:get_candles:44 - Fetching Yahoo Finance candles for symbol 'MSFT' (mapped: 'MSFT') [period: 5d, interval: 1d]
+2026-08-04 13:40:20.280 | WARNING  | app.services.alert_engine:send_alert:57 - [ALERT - WARNING] Live Paper Session Paused: Trading scheduler loop paused
+2026-08-04 13:40:20.303 | INFO     | app.services.alert_engine:send_alert:59 - [ALERT - INFO] Live Paper Session Resumed: Trading scheduler loop resumed
+2026-08-04 13:40:20.307 | INFO     | app.paper.live_engine:stop:147 - LivePaperEngine session stopped
+2026-08-04 13:40:20.307 | INFO     | app.services.alert_engine:send_alert:59 - [ALERT - INFO] Live Paper Session Stopped: Session ended. Total Equity: $75,000.00
+2026-08-04 13:40:20.311 | INFO     | app.marketdata.yfinance_provider:get_candles:44 - Fetching Yahoo Finance candles for symbol 'AAPL' (mapped: 'AAPL') [period: 1mo, interval: 1d]
+2026-08-04 13:40:20.314 | INFO     | app.marketdata.validator:validate_ohlcv:119 - Market data validation passed successfully (5 candles)
+2026-08-04 13:40:20.314 | INFO     | app.marketdata.yfinance_provider:get_candles:81 - Successfully fetched and validated 5 candles for 'AAPL'
+2026-08-04 13:40:20.317 | INFO     | app.marketdata.yfinance_provider:get_candles:44 - Fetching Yahoo Finance candles for symbol 'AAPL' (mapped: 'AAPL') [period: 1mo, interval: 1d]
+2026-08-04 13:40:20.318 | WARNING  | app.marketdata.yfinance_provider:get_candles:90 - Attempt 1/3 failed fetching Yahoo Finance data for 'AAPL': Network error
+2026-08-04 13:40:20.334 | INFO     | app.marketdata.validator:validate_ohlcv:119 - Market data validation passed successfully (5 candles)
+2026-08-04 13:40:20.334 | INFO     | app.marketdata.yfinance_provider:get_candles:81 - Successfully fetched and validated 5 candles for 'AAPL'
+2026-08-04 13:40:20.337 | INFO     | app.marketdata.yfinance_provider:get_candles:44 - Fetching Yahoo Finance candles for symbol 'INVALID' (mapped: 'INVALID') [period: 1mo, interval: 1d]
+2026-08-04 13:40:20.338 | WARNING  | app.marketdata.yfinance_provider:get_candles:90 - Attempt 1/2 failed fetching Yahoo Finance data for 'INVALID': API down
+2026-08-04 13:40:20.361 | WARNING  | app.marketdata.yfinance_provider:get_candles:90 - Attempt 2/2 failed fetching Yahoo Finance data for 'INVALID': API down
+2026-08-04 13:40:20.362 | ERROR    | app.marketdata.yfinance_provider:get_candles:100 - Failed all 2 attempts to fetch Yahoo Finance data for 'INVALID'
+2026-08-04 13:40:20.377 | INFO     | app.marketdata.csv_provider:get_candles:36 - Reading CSV market data for 'AAPL' from C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-33\test_csv_provider_success0\aapl.csv
+2026-08-04 13:40:20.388 | INFO     | app.marketdata.validator:validate_ohlcv:119 - Market data validation passed successfully (5 candles)
+2026-08-04 13:40:20.389 | INFO     | app.marketdata.csv_provider:get_candles:51 - Retrieved 3 candles for 'AAPL' from CSV
+2026-08-04 13:40:20.394 | ERROR    | app.marketdata.csv_provider:get_candles:33 - CSV file not found for symbol 'NONEXISTENT' at C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-33\test_csv_provider_missing_file0\NONEXISTENT.csv
+2026-08-04 13:40:20.398 | INFO     | app.marketdata.csv_provider:get_candles:36 - Reading CSV market data for 'AAPL' from C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-33\test_csv_provider_empty_date_r0\aapl.csv
+2026-08-04 13:40:20.403 | INFO     | app.marketdata.validator:validate_ohlcv:119 - Market data validation passed successfully (5 candles)
+2026-08-04 13:40:20.403 | WARNING  | app.marketdata.csv_provider:get_candles:48 - CSV data for 'AAPL' is empty after date range filtering
+2026-08-04 13:40:20.466 | INFO     | app.marketdata.parquet_provider:get_candles:30 - Reading Parquet market data for 'AAPL' from C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-33\test_parquet_provider_success0
+2026-08-04 13:40:20.540 | INFO     | app.marketdata.validator:validate_ohlcv:119 - Market data validation passed successfully (5 candles)
+2026-08-04 13:40:20.541 | INFO     | app.marketdata.parquet_provider:get_candles:40 - Retrieved 3 candles for 'AAPL' from Parquet
+2026-08-04 13:40:20.545 | INFO     | app.marketdata.parquet_provider:get_candles:30 - Reading Parquet market data for 'NONEXISTENT' from C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-33\test_parquet_provider_missing_0
+2026-08-04 13:40:20.545 | WARNING  | app.marketdata.storage:load:52 - No Parquet data found for symbol NONEXISTENT
+2026-08-04 13:40:20.545 | WARNING  | app.marketdata.parquet_provider:get_candles:37 - No Parquet candles found for 'NONEXISTENT' in date range
+2026-08-04 13:40:20.558 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:40:20.558 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-04 13:40:20.558 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-04 13:40:20.563 | INFO     | app.api.routers.market:get_market_history:27 - GET /market/history request for symbol='AAPL', provider='yfinance', range=2024-01-01 to 2024-01-03
+2026-08-04 13:40:20.565 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-04 13:40:20.571 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:40:20.572 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-04 13:40:20.572 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-04 13:40:20.573 | INFO     | app.api.routers.market:get_market_history:27 - GET /market/history request for symbol='AAPL', provider='yfinance', range=2024-01-10 to 2024-01-01
+2026-08-04 13:40:20.574 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-04 13:40:20.580 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:40:20.580 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-04 13:40:20.580 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-04 13:40:20.582 | INFO     | app.api.routers.market:get_market_history:27 - GET /market/history request for symbol='AAPL', provider='invalid_provider', range=2024-01-01 to 2024-01-03
+2026-08-04 13:40:20.583 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-04 13:40:20.588 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:40:20.589 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-04 13:40:20.589 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-04 13:40:20.591 | INFO     | app.api.routers.market:get_market_history:27 - GET /market/history request for symbol='NONEXISTENT', provider='csv', range=2024-01-01 to 2024-01-03
+2026-08-04 13:40:20.591 | WARNING  | app.api.routers.market:get_market_history:50 - Market data file not found: CSV file not found
+2026-08-04 13:40:20.592 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-04 13:40:20.598 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:40:20.598 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-04 13:40:20.598 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-04 13:40:20.600 | INFO     | app.api.routers.market:get_market_history:27 - GET /market/history request for symbol='BADSYMBOL', provider='yfinance', range=2024-01-01 to 2024-01-03
+2026-08-04 13:40:20.600 | ERROR    | app.api.routers.market:get_market_history:55 - Market data validation error for 'BADSYMBOL': Negative price values detected
+2026-08-04 13:40:20.602 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-04 13:40:20.610 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:40:20.610 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-04 13:40:20.610 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-04 13:40:20.613 | INFO     | app.api.routers.market:get_market_history:27 - GET /market/history request for symbol='TIMEOUT', provider='yfinance', range=2024-01-01 to 2024-01-03
+2026-08-04 13:40:20.613 | ERROR    | app.api.routers.market:get_market_history:58 - Failed to fetch market data for 'TIMEOUT'
+Traceback (most recent call last):
+
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\threading.py", line 1032, in _bootstrap
+    self._bootstrap_inner()
+    │    └ <function Thread._bootstrap_inner at 0x00000149A6302E80>
+    └ <Thread(asyncio-portal-149cc911100, started daemon 23700)>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\threading.py", line 1075, in _bootstrap_inner
+    self.run()
+    │    └ <function Thread.run at 0x00000149A6302B60>
+    └ <Thread(asyncio-portal-149cc911100, started daemon 23700)>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\threading.py", line 1012, in run
+    self._target(*self._args, **self._kwargs)
+    │    │        │    │        │    └ {}
+    │    │        │    │        └ <Thread(asyncio-portal-149cc911100, started daemon 23700)>
+    │    │        │    └ ()
+    │    │        └ <Thread(asyncio-portal-149cc911100, started daemon 23700)>
+    │    └ <function start_blocking_portal.<locals>.run_blocking_portal at 0x00000149CC8E28E0>
+    └ <Thread(asyncio-portal-149cc911100, started daemon 23700)>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\anyio\from_thread.py", line 536, in run_blocking_portal
+    run_eventloop(
+    └ <function run at 0x00000149A6E67060>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\anyio\_core\_eventloop.py", line 83, in run
+    return async_backend.run(func, args, {}, backend_options)
+           │             │   │     │         └ {}
+           │             │   │     └ ()
+           │             │   └ <function start_blocking_portal.<locals>.run_portal at 0x00000149CC8E1440>
+           │             └ <classmethod(<function AsyncIOBackend.run at 0x00000149A898DDA0>)>
+           └ <class 'anyio._backends._asyncio.AsyncIOBackend'>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2481, in run
+    return runner.run(wrapper())
+           │      │   └ <function start_blocking_portal.<locals>.run_portal at 0x00000149CC8E2700>
+           │      └ <function Runner.run at 0x00000149A8908E00>
+           └ <asyncio.runners.Runner object at 0x00000149CC913A40>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           │    │     │                  └ <Task pending name='anyio.from_thread.start_blocking_portal.<locals>.run_portal' coro=<start_blocking_portal.<locals>.run_por...
+           │    │     └ <function BaseEventLoop.run_until_complete at 0x00000149A88FE980>
+           │    └ <ProactorEventLoop running=True closed=False debug=False>
+           └ <asyncio.runners.Runner object at 0x00000149CC913A40>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\asyncio\base_events.py", line 678, in run_until_complete
+    self.run_forever()
+    │    └ <function ProactorEventLoop.run_forever at 0x00000149A8973E20>
+    └ <ProactorEventLoop running=True closed=False debug=False>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\asyncio\windows_events.py", line 322, in run_forever
+    super().run_forever()
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\asyncio\base_events.py", line 645, in run_forever
+    self._run_once()
+    │    └ <function BaseEventLoop._run_once at 0x00000149A8908720>
+    └ <ProactorEventLoop running=True closed=False debug=False>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\asyncio\base_events.py", line 1999, in _run_once
+    handle._run()
+    │      └ <function Handle._run at 0x00000149A889C900>
+    └ <Handle <_asyncio.TaskStepMethWrapper object at 0x00000149CC8F68F0>()>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\asyncio\events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+    │    │            │    │           │    └ <member '_args' of 'Handle' objects>
+    │    │            │    │           └ <Handle <_asyncio.TaskStepMethWrapper object at 0x00000149CC8F68F0>()>
+    │    │            │    └ <member '_callback' of 'Handle' objects>
+    │    │            └ <Handle <_asyncio.TaskStepMethWrapper object at 0x00000149CC8F68F0>()>
+    │    └ <member '_context' of 'Handle' objects>
+    └ <Handle <_asyncio.TaskStepMethWrapper object at 0x00000149CC8F68F0>()>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\anyio\_core\_tasks.py", line 275, in _run_coro
+    retval = await self._coro
+                   │    └ <member '_coro' of 'TaskHandle' objects>
+                   └ <TaskHandle pending name='anyio.from_thread.BlockingPortal._call_func' coro=<coroutine object BlockingPortal._call_func at 0x...
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\anyio\from_thread.py", line 263, in _call_func
+    retval = await retval_or_awaitable
+                   └ <coroutine object FastAPI.__call__ at 0x00000149CC8FE3E0>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\applications.py", line 1163, in __call__
+    await super().__call__(scope, receive, send)
+                           │      │        └ <function _TestClientTransport.handle_request.<locals>.send at 0x00000149CC6F9260>
+                           │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000149C7957CE0>
+                           └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/market/history', 'raw_path': b'/market/history', 'root_pat...
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\starlette\applications.py", line 90, in __call__
+    await self.middleware_stack(scope, receive, send)
+          │    │                │      │        └ <function _TestClientTransport.handle_request.<locals>.send at 0x00000149CC6F9260>
+          │    │                │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000149C7957CE0>
+          │    │                └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/market/history', 'raw_path': b'/market/history', 'root_pat...
+          │    └ <starlette.middleware.errors.ServerErrorMiddleware object at 0x00000149CC3DB830>
+          └ <fastapi.applications.FastAPI object at 0x00000149CC12BE90>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+          │    │   │      │        └ <function ServerErrorMiddleware.__call__.<locals>._send at 0x00000149CC8E3560>
+          │    │   │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000149C7957CE0>
+          │    │   └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/market/history', 'raw_path': b'/market/history', 'root_pat...
+          │    └ <starlette.middleware.exceptions.ExceptionMiddleware object at 0x00000149CC3DB7D0>
+          └ <starlette.middleware.errors.ServerErrorMiddleware object at 0x00000149CC3DB830>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+          │                            │    │    │     │      │        └ <function ServerErrorMiddleware.__call__.<locals>._send at 0x00000149CC8E3560>
+          │                            │    │    │     │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000149C7957CE0>
+          │                            │    │    │     └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/market/history', 'raw_path': b'/market/history', 'root_pat...
+          │                            │    │    └ <starlette.requests.Request object at 0x00000149CC8F5190>
+          │                            │    └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x00000149CC3DB8F0>
+          │                            └ <starlette.middleware.exceptions.ExceptionMiddleware object at 0x00000149CC3DB7D0>
+          └ <function wrap_app_handling_exceptions at 0x00000149CA048040>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x00000149CC8E3600>
+          │   │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000149C7957CE0>
+          │   └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/market/history', 'raw_path': b'/market/history', 'root_pat...
+          └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x00000149CC3DB8F0>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+          │    │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x00000149CC8E3600>
+          │    │   │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000149C7957CE0>
+          │    │   └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/market/history', 'raw_path': b'/market/history', 'root_pat...
+          │    └ <fastapi.routing.APIRouter object at 0x00000149CB83D3A0>
+          └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x00000149CC3DB8F0>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+          │    │                │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x00000149CC8E3600>
+          │    │                │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000149C7957CE0>
+          │    │                └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/market/history', 'raw_path': b'/market/history', 'root_pat...
+          │    └ <bound method APIRouter.app of <fastapi.routing.APIRouter object at 0x00000149CB83D3A0>>
+          └ <fastapi.routing.APIRouter object at 0x00000149CB83D3A0>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 2734, in app
+    await route.handle(scope, receive, send)
+          │     │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x00000149CC8E3600>
+          │     │      │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000149C7957CE0>
+          │     │      └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/market/history', 'raw_path': b'/market/history', 'root_pat...
+          │     └ <function _IncludedRouter.handle at 0x00000149CA05E840>
+          └ _IncludedRouter(original_router=<fastapi.routing.APIRouter object at 0x00000149CC060CB0>, include_context=_RouterIncludeConte...
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 1780, in handle
+    await self.original_router.handle(scope, receive, send)
+          │    │               │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x00000149CC8E3600>
+          │    │               │      │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000149C7957CE0>
+          │    │               │      └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/market/history', 'raw_path': b'/market/history', 'root_pat...
+          │    │               └ <function APIRouter.handle at 0x00000149CA080900>
+          │    └ <fastapi.routing.APIRouter object at 0x00000149CC060CB0>
+          └ _IncludedRouter(original_router=<fastapi.routing.APIRouter object at 0x00000149CC060CB0>, include_context=_RouterIncludeConte...
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 2789, in handle
+    await included_router._handle_selected(scope, receive, send)
+          │               │                │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x00000149CC8E3600>
+          │               │                │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000149C7957CE0>
+          │               │                └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/market/history', 'raw_path': b'/market/history', 'root_pat...
+          │               └ <function _IncludedRouter._handle_selected at 0x00000149CA05E8E0>
+          └ _IncludedRouter(original_router=<fastapi.routing.APIRouter object at 0x00000149CC060CB0>, include_context=_RouterIncludeConte...
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 1800, in _handle_selected
+    await original_route.handle(scope, receive, send)
+          │              │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x00000149CC8E3600>
+          │              │      │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000149C7957CE0>
+          │              │      └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/market/history', 'raw_path': b'/market/history', 'root_pat...
+          │              └ <function APIRoute.handle at 0x00000149CA05C9A0>
+          └ APIRoute(path='/market/history', name='get_market_history', methods=['GET'])
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 1279, in handle
+    await app(scope, receive, send)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x00000149CC8E3600>
+          │   │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000149C7957CE0>
+          │   └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/market/history', 'raw_path': b'/market/history', 'root_pat...
+          └ <function request_response.<locals>.app at 0x00000149CC8E3740>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 158, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+          │                            │    │        │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x00000149CC8E3600>
+          │                            │    │        │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000149C7957CE0>
+          │                            │    │        └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/market/history', 'raw_path': b'/market/history', 'root_pat...
+          │                            │    └ <starlette.requests.Request object at 0x00000149CC8F4BC0>
+          │                            └ <function request_response.<locals>.app.<locals>.app at 0x00000149CC8E3880>
+          └ <function wrap_app_handling_exceptions at 0x00000149CA048040>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x00000149CC8E3920>
+          │   │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x00000149C7957CE0>
+          │   └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/market/history', 'raw_path': b'/market/history', 'root_pat...
+          └ <function request_response.<locals>.app.<locals>.app at 0x00000149CC8E3880>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 144, in app
+    response = await f(request)
+                     │ └ <starlette.requests.Request object at 0x00000149CC8F4BC0>
+                     └ <function get_request_handler.<locals>.app at 0x00000149CC8E37E0>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 706, in app
+    raw_response = await run_endpoint_function(
+                         └ <function run_endpoint_function at 0x00000149CA04BCE0>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 352, in run_endpoint_function
+    return await dependant.call(**values)
+                 │         │      └ {'symbol': 'TIMEOUT', 'start': datetime.date(2024, 1, 1), 'end': datetime.date(2024, 1, 3), 'provider': 'yfinance', 'interval...
+                 │         └ <member 'call' of 'Dependant' objects>
+                 └ Dependant(path_params=[], query_params=[ModelField(field_info=Query(PydanticUndefined), name='symbol', mode='validation', con...
+
+> File "D:\excersis_file\Agentic_AI\QuantFlow\backend\app\api\routers\market.py", line 46, in get_market_history
+    df = await data_provider.get_candles(
+               │             └ <AsyncMock name='get_candles' id='1416476192560'>
+               └ <app.marketdata.yfinance_provider.YahooFinanceProvider object at 0x00000149CC8F5370>
+
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\unittest\mock.py", line 2291, in _execute_mock_call
+    raise effect
+          └ RuntimeError('Yahoo API connection timeout')
+
+RuntimeError: Yahoo API connection timeout
+2026-08-04 13:40:20.622 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-04 13:40:20.629 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:40:20.630 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-04 13:40:20.630 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-04 13:40:20.633 | INFO     | app.api.routers.market:get_market_history:27 - GET /market/history request for symbol='AAPL', provider='yfinance', range=2024-01-01 to 2024-01-03
+2026-08-04 13:40:20.636 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-04 13:40:20.642 | INFO     | app.marketdata.validator:validate_ohlcv:119 - Market data validation passed successfully (45 candles)
+2026-08-04 13:40:20.653 | INFO     | app.marketdata.storage:save:37 - Saved partitioned Parquet market data for RELIANCE to C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-33\test_save_and_load_partitioned0\RELIANCE
+2026-08-04 13:40:20.690 | INFO     | app.marketdata.validator:validate_ohlcv:119 - Market data validation passed successfully (45 candles)
+2026-08-04 13:40:20.695 | INFO     | app.marketdata.validator:validate_ohlcv:119 - Market data validation passed successfully (45 candles)
+2026-08-04 13:40:20.709 | INFO     | app.marketdata.validator:validate_ohlcv:119 - Market data validation passed successfully (45 candles)
+2026-08-04 13:40:20.714 | WARNING  | app.marketdata.storage:load:52 - No Parquet data found for symbol UNKNOWN
+2026-08-04 13:40:20.729 | INFO     | app.marketdata.validator:validate_ohlcv:119 - Market data validation passed successfully (5 candles)
+2026-08-04 13:40:20.734 | ERROR    | app.marketdata.validator:validate_ohlcv:79 - Duplicate timestamps detected in market data: [Timestamp('2024-01-01 00:00:00')]
+2026-08-04 13:40:20.739 | ERROR    | app.marketdata.validator:validate_ohlcv:95 - NaN values detected in market data: {'open': 1, 'high': 0, 'low': 0, 'close': 0, 'volume': 0}
+2026-08-04 13:40:20.745 | ERROR    | app.marketdata.validator:validate_ohlcv:103 - Negative prices detected in column close: 1 rows
+2026-08-04 13:40:20.750 | ERROR    | app.marketdata.validator:validate_ohlcv:110 - Negative volume detected
+2026-08-04 13:40:20.756 | ERROR    | app.marketdata.validator:validate_ohlcv:116 - High price is less than Low price in 1 rows
+2026-08-04 13:40:20.759 | INFO     | app.research.optimization:grid_search:122 - Starting Grid Search for EMACrossoverStrategy with 4 parameter combinations
+2026-08-04 13:40:20.835 | INFO     | app.research.optimization:random_search:155 - Starting Random Search for EMACrossoverStrategy with 4 sampled combinations
+2026-08-04 13:40:20.911 | WARNING  | app.paper.execution.validator:validate:45 - Order rejected: Insufficient funds. Required: 15000.0, Available: 1000.0
+2026-08-04 13:40:20.929 | INFO     | app.paper.live_engine:start:87 - Loaded active strategy for live paper trading: ema
+2026-08-04 13:40:20.930 | INFO     | app.services.alert_engine:send_alert:59 - [ALERT - INFO] Live Paper Session Started: Started paper session for symbols ['AAPL'] with 1 strategies
+2026-08-04 13:40:20.930 | INFO     | app.marketdata.yfinance_provider:get_candles:44 - Fetching Yahoo Finance candles for symbol 'AAPL' (mapped: 'AAPL') [period: 5d, interval: 1d]
+2026-08-04 13:40:21.778 | WARNING  | app.services.alert_engine:send_alert:57 - [ALERT - WARNING] Live Paper Session Paused: Trading scheduler loop paused
+2026-08-04 13:40:21.782 | INFO     | app.services.alert_engine:send_alert:59 - [ALERT - INFO] Live Paper Session Resumed: Trading scheduler loop resumed
+2026-08-04 13:40:21.786 | INFO     | app.paper.live_engine:stop:147 - LivePaperEngine session stopped
+2026-08-04 13:40:21.787 | INFO     | app.analytics.reporting:generate:197 - HTML performance report written to D:\excersis_file\Agentic_AI\QuantFlow\backend\data\eod_report.html
+2026-08-04 13:40:21.789 | INFO     | app.analytics.reporting:generate:47 - JSON performance report written to D:\excersis_file\Agentic_AI\QuantFlow\backend\data\eod_report.json
+2026-08-04 13:40:21.789 | INFO     | app.services.alert_engine:send_alert:59 - [ALERT - INFO] Live Paper Session Stopped: Session ended. Total Equity: $100,000.00
+2026-08-04 13:40:21.795 | WARNING  | app.risk.manager:evaluate_order:37 - RiskManager REJECTED order for NIFTY: Order value 250000.0 exceeds max_position_value (50000.0)
+2026-08-04 13:40:21.795 | INFO     | app.services.alert_engine:send_alert:59 - [ALERT - INFO] DEMO ORDER INJECTED: BUY NIFTY: Injected demo BUY order for 10 NIFTY @ $25,000.00. Status: REJECTED
+2026-08-04 13:40:21.843 | INFO     | app.paper.portfolio.portfolio:record_fill:110 - Portfolio recorded fill for 10 x NVDA @ 100.0. Realized PnL: 0
+2026-08-04 13:40:21.844 | INFO     | app.paper.portfolio.portfolio:record_fill:110 - Portfolio recorded fill for 5 x GOOGL @ 150.0. Realized PnL: 0
+2026-08-04 13:40:21.857 | WARNING  | app.paper.execution.validator:validate:45 - Order rejected: Insufficient funds. Required: 60000.0, Available: 5000.0
+2026-08-04 13:40:21.861 | INFO     | app.paper.portfolio.portfolio:record_fill:110 - Portfolio recorded fill for 100 x SBIN @ 500.0. Realized PnL: 0
+2026-08-04 13:40:21.862 | INFO     | app.paper.portfolio.portfolio:record_fill:110 - Portfolio recorded fill for 100 x SBIN @ 600.0. Realized PnL: 0
+2026-08-04 13:40:21.863 | INFO     | app.paper.portfolio.portfolio:record_fill:110 - Portfolio recorded fill for 100 x SBIN @ 500.0. Realized PnL: 0
+2026-08-04 13:40:21.863 | INFO     | app.paper.portfolio.portfolio:record_fill:110 - Portfolio recorded fill for 50 x SBIN @ 600.0. Realized PnL: 5000.0
+2026-08-04 13:40:21.868 | INFO     | app.paper.portfolio.portfolio:record_fill:110 - Portfolio recorded fill for 100 x WIPRO @ 400.0. Realized PnL: 0
+2026-08-04 13:40:21.868 | INFO     | app.paper.portfolio.portfolio:record_fill:110 - Portfolio recorded fill for 100 x WIPRO @ 450.0. Realized PnL: 5000.0
+2026-08-04 13:40:21.872 | INFO     | app.paper.execution.execution_engine:submit_order:65 - Submitted order 04778dbd-e81a-4f23-8f31-ba5aff6b1f06 for 10 x WIPRO
+2026-08-04 13:40:21.878 | INFO     | app.paper.portfolio.portfolio:record_fill:110 - Portfolio recorded fill for 10 x AAPL @ 150.0. Realized PnL: 0
+2026-08-04 13:40:21.878 | INFO     | app.paper.portfolio.portfolio:record_fill:110 - Portfolio recorded fill for 10 x AAPL @ 160.0. Realized PnL: 100.0
+2026-08-04 13:40:21.881 | INFO     | app.analytics.reporting:generate:197 - HTML performance report written to C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-33\test_html_and_json_report_gene0\report.html
+2026-08-04 13:40:21.883 | INFO     | app.analytics.reporting:generate:47 - JSON performance report written to C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-33\test_html_and_json_report_gene0\report.json
+2026-08-04 13:40:21.885 | INFO     | app.core.config_loader:load_strategy_yaml:22 - Loaded strategy config from ema.yaml
+2026-08-04 13:40:22.128 | INFO     | app.research.caching:clear:109 - ResearchCache cleared
+2026-08-04 13:40:22.151 | INFO     | app.paper.portfolio.portfolio:record_fill:110 - Portfolio recorded fill for 10 x TSLA @ 200.0. Realized PnL: 0
+2026-08-04 13:40:22.152 | INFO     | app.paper.portfolio.portfolio:record_fill:110 - Portfolio recorded fill for 5 x TSLA @ 215.0. Realized PnL: 75.0
+2026-08-04 13:40:22.156 | INFO     | app.research.comparison:compare:68 - Evaluating strategy 'ema' for comparison
+2026-08-04 13:40:22.171 | INFO     | app.research.comparison:compare:68 - Evaluating strategy 'supertrend' for comparison
+2026-08-04 13:40:22.573 | INFO     | app.research.comparison:compare:68 - Evaluating strategy 'rsi' for comparison
+2026-08-04 13:40:22.665 | INFO     | app.strategies.engine:run:40 - Initializing strategy engine run for 'RELIANCE' (2024-01-01 to 2024-01-30)
+2026-08-04 13:40:22.670 | INFO     | app.strategies.engine:_execute_signal:93 - Strategy generated signal BUY -> placing order with Broker
+2026-08-04 13:40:22.671 | INFO     | app.paper.execution.execution_engine:submit_order:65 - Submitted order 0ef86368-4f75-49ba-9e91-fdf0022728a9 for 10 x RELIANCE
+2026-08-04 13:40:22.671 | INFO     | app.paper.portfolio.portfolio:record_fill:110 - Portfolio recorded fill for 10 x RELIANCE @ 98.5493. Realized PnL: 0
+2026-08-04 13:40:22.671 | INFO     | app.paper.journal.trade_journal:log_trade:56 - Trade logged in journal: BUY 10 x RELIANCE @ 98.5493
+2026-08-04 13:40:22.677 | INFO     | app.strategies.engine:run:69 - Strategy engine completed run on RELIANCE: 30 total candles processed, 1 orders executed
+2026-08-04 13:40:22.686 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'test_ema' (EMACrossoverStrategy)
+2026-08-04 13:40:22.687 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'test_case' (EMACrossoverStrategy)
+2026-08-04 13:40:22.688 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'temp_strat' (EMACrossoverStrategy)
+2026-08-04 13:40:22.689 | INFO     | app.strategies.registry:unregister:62 - Unregistered strategy plugin: 'temp_strat'
+2026-08-04 13:40:22.690 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'custom_meta' (EMACrossoverStrategy)
+2026-08-04 13:40:22.694 | INFO     | app.paper.journal.trade_journal:log_trade:56 - Trade logged in journal: BUY 10 x NFLX @ 400.0
+2026-08-04 13:40:22.695 | INFO     | app.paper.journal.trade_journal:log_trade:56 - Trade logged in journal: SELL 10 x NFLX @ 420.0
+2026-08-04 13:40:22.698 | INFO     | app.research.walk_forward:run:94 - WF Window 0: Train [2024-01-01 00:00:00 - 2024-02-29 00:00:00], Test [2024-03-01 00:00:00 - 2024-03-30 00:00:00]
+2026-08-04 13:40:22.698 | INFO     | app.research.optimization:grid_search:122 - Starting Grid Search for EMACrossoverStrategy with 4 parameter combinations
+2026-08-04 13:40:22.755 | INFO     | app.research.walk_forward:run:94 - WF Window 1: Train [2024-01-31 00:00:00 - 2024-03-30 00:00:00], Test [2024-03-31 00:00:00 - 2024-04-29 00:00:00]
+2026-08-04 13:40:22.756 | INFO     | app.research.optimization:grid_search:122 - Starting Grid Search for EMACrossoverStrategy with 4 parameter combinations
+2026-08-04 13:40:22.817 | INFO     | app.research.walk_forward:run:94 - WF Window 2: Train [2024-03-01 00:00:00 - 2024-04-29 00:00:00], Test [2024-04-30 00:00:00 - 2024-05-29 00:00:00]
+2026-08-04 13:40:22.817 | INFO     | app.research.optimization:grid_search:122 - Starting Grid Search for EMACrossoverStrategy with 4 parameter combinations
+2026-08-04 13:40:22.891 | INFO     | app.services.zerodha_auth:get_login_url:36 - Generating Zerodha login URL
+2026-08-04 13:40:22.895 | WARNING  | app.services.zerodha_auth:load_session:103 - Session file does not exist at C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-33\test_save_load_clear_session0\data\session.json
+2026-08-04 13:40:22.896 | INFO     | app.services.zerodha_auth:save_session:98 - Saved Zerodha session securely to C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-33\test_save_load_clear_session0\data\session.json
+2026-08-04 13:40:22.897 | INFO     | app.services.zerodha_auth:load_session:108 - Loaded active Zerodha session for user_id: AB1234
+2026-08-04 13:40:22.897 | INFO     | app.services.zerodha_auth:clear_session:119 - Cleared Zerodha session file C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-33\test_save_load_clear_session0\data\session.json
+2026-08-04 13:40:22.898 | WARNING  | app.services.zerodha_auth:load_session:103 - Session file does not exist at C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-33\test_save_load_clear_session0\data\session.json
+2026-08-04 13:40:22.906 | INFO     | app.services.zerodha_auth:exchange_token:44 - Exchanging request_token for Zerodha access_token
+2026-08-04 13:40:22.907 | INFO     | app.services.zerodha_auth:exchange_token:87 - Successfully authenticated user_id: AB1234
+2026-08-04 13:40:22.907 | INFO     | app.services.zerodha_auth:save_session:98 - Saved Zerodha session securely to C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-33\test_exchange_token_success0\data\session.json
+2026-08-04 13:40:22.962 | INFO     | app.services.zerodha_auth:exchange_token:44 - Exchanging request_token for Zerodha access_token
+2026-08-04 13:40:22.964 | ERROR    | app.services.zerodha_auth:exchange_token:70 - Token exchange failed with HTTP status 400
+2026-08-04 13:40:22.970 | WARNING  | app.services.zerodha_auth:load_session:103 - Session file does not exist at C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-33\test_get_profile_unauthenticat0\data\session.json
+2026-08-04 13:40:22.970 | WARNING  | app.services.zerodha_auth:get_profile:131 - Attempted to fetch profile without active session
+2026-08-04 13:40:22.976 | INFO     | app.services.zerodha_auth:save_session:98 - Saved Zerodha session securely to C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-33\test_get_profile_success0\data\session.json
+2026-08-04 13:40:22.985 | INFO     | app.services.zerodha_auth:load_session:108 - Loaded active Zerodha session for user_id: AB1234
+2026-08-04 13:40:22.985 | INFO     | app.services.zerodha_auth:get_profile:167 - Successfully fetched user profile for user_id: AB1234
+2026-08-04 13:40:30.855 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-04 13:40:32.253 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'ema' (EMACrossoverStrategy)
+2026-08-04 13:40:32.255 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'mean_reversion' (MeanReversionStrategy)
+2026-08-04 13:40:32.256 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'orb' (ORBStrategy)
+2026-08-04 13:40:32.257 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'rsi' (RSIPullbackStrategy)
+2026-08-04 13:40:32.257 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'supertrend' (SupertrendStrategy)
+2026-08-04 13:40:32.258 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'vwapreversal' (VWAPReversalStrategy)
+2026-08-04 13:40:32.259 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'vwap' (VWAPStrategy)
+2026-08-04 13:40:32.259 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:40:32.259 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-04 13:40:32.259 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-04 13:40:40.588 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'ema' (EMACrossoverStrategy)
+2026-08-04 13:40:40.590 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'mean_reversion' (MeanReversionStrategy)
+2026-08-04 13:40:40.590 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'orb' (ORBStrategy)
+2026-08-04 13:40:40.590 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'rsi' (RSIPullbackStrategy)
+2026-08-04 13:40:40.590 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'supertrend' (SupertrendStrategy)
+2026-08-04 13:40:40.598 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'vwapreversal' (VWAPReversalStrategy)
+2026-08-04 13:40:40.598 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'vwap' (VWAPStrategy)
+2026-08-04 13:40:40.598 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:40:40.598 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-04 13:40:40.598 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-04 13:40:40.605 | INFO     | app.api.routers.auth:login:19 - Handling GET /auth/login request
+2026-08-04 13:40:40.606 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-04 13:40:40.611 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:40:40.611 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-04 13:40:40.612 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-04 13:40:40.614 | INFO     | app.api.routers.auth:callback:31 - Handling GET /auth/callback request
+2026-08-04 13:40:40.614 | WARNING  | app.api.routers.auth:callback:38 - Callback missing request_token parameter
+2026-08-04 13:40:40.615 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-04 13:40:40.621 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:40:40.621 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-04 13:40:40.622 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-04 13:40:40.623 | INFO     | app.api.routers.auth:callback:31 - Handling GET /auth/callback request
+2026-08-04 13:40:40.623 | WARNING  | app.api.routers.auth:callback:34 - Callback received non-success status: error
+2026-08-04 13:40:40.624 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-04 13:40:40.629 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:40:40.630 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-04 13:40:40.630 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-04 13:40:40.632 | INFO     | app.api.routers.auth:callback:31 - Handling GET /auth/callback request
+2026-08-04 13:40:40.633 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-04 13:40:40.638 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:40:40.639 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-04 13:40:40.639 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-04 13:40:40.641 | INFO     | app.api.routers.auth:callback:31 - Handling GET /auth/callback request
+2026-08-04 13:40:40.641 | ERROR    | app.api.routers.auth:callback:50 - Kite login callback failed during token exchange
+Traceback (most recent call last):
+
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\threading.py", line 1032, in _bootstrap
+    self._bootstrap_inner()
+    │    └ <function Thread._bootstrap_inner at 0x000001EEEDDD2E80>
+    └ <Thread(asyncio-portal-1ee93eb7da0, started daemon 28396)>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\threading.py", line 1075, in _bootstrap_inner
+    self.run()
+    │    └ <function Thread.run at 0x000001EEEDDD2B60>
+    └ <Thread(asyncio-portal-1ee93eb7da0, started daemon 28396)>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\threading.py", line 1012, in run
+    self._target(*self._args, **self._kwargs)
+    │    │        │    │        │    └ {}
+    │    │        │    │        └ <Thread(asyncio-portal-1ee93eb7da0, started daemon 28396)>
+    │    │        │    └ ()
+    │    │        └ <Thread(asyncio-portal-1ee93eb7da0, started daemon 28396)>
+    │    └ <function start_blocking_portal.<locals>.run_blocking_portal at 0x000001EE93E4A020>
+    └ <Thread(asyncio-portal-1ee93eb7da0, started daemon 28396)>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\anyio\from_thread.py", line 536, in run_blocking_portal
+    run_eventloop(
+    └ <function run at 0x000001EEEE8F7060>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\anyio\_core\_eventloop.py", line 83, in run
+    return async_backend.run(func, args, {}, backend_options)
+           │             │   │     │         └ {}
+           │             │   │     └ ()
+           │             │   └ <function start_blocking_portal.<locals>.run_portal at 0x000001EE93E4B100>
+           │             └ <classmethod(<function AsyncIOBackend.run at 0x000001EEF049DDA0>)>
+           └ <class 'anyio._backends._asyncio.AsyncIOBackend'>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2481, in run
+    return runner.run(wrapper())
+           │      │   └ <function start_blocking_portal.<locals>.run_portal at 0x000001EE93E49F80>
+           │      └ <function Runner.run at 0x000001EEF0358E00>
+           └ <asyncio.runners.Runner object at 0x000001EE93EB7D10>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           │    │     │                  └ <Task pending name='anyio.from_thread.start_blocking_portal.<locals>.run_portal' coro=<start_blocking_portal.<locals>.run_por...
+           │    │     └ <function BaseEventLoop.run_until_complete at 0x000001EEF034E980>
+           │    └ <ProactorEventLoop running=True closed=False debug=False>
+           └ <asyncio.runners.Runner object at 0x000001EE93EB7D10>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\asyncio\base_events.py", line 678, in run_until_complete
+    self.run_forever()
+    │    └ <function ProactorEventLoop.run_forever at 0x000001EEF0483E20>
+    └ <ProactorEventLoop running=True closed=False debug=False>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\asyncio\windows_events.py", line 322, in run_forever
+    super().run_forever()
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\asyncio\base_events.py", line 645, in run_forever
+    self._run_once()
+    │    └ <function BaseEventLoop._run_once at 0x000001EEF0358720>
+    └ <ProactorEventLoop running=True closed=False debug=False>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\asyncio\base_events.py", line 1999, in _run_once
+    handle._run()
+    │      └ <function Handle._run at 0x000001EEF02EC900>
+    └ <Handle Task.task_wakeup(<Future finis...25714600736'>>)>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\asyncio\events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+    │    │            │    │           │    └ <member '_args' of 'Handle' objects>
+    │    │            │    │           └ <Handle Task.task_wakeup(<Future finis...25714600736'>>)>
+    │    │            │    └ <member '_callback' of 'Handle' objects>
+    │    │            └ <Handle Task.task_wakeup(<Future finis...25714600736'>>)>
+    │    └ <member '_context' of 'Handle' objects>
+    └ <Handle Task.task_wakeup(<Future finis...25714600736'>>)>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\anyio\_core\_tasks.py", line 275, in _run_coro
+    retval = await self._coro
+                   │    └ <member '_coro' of 'TaskHandle' objects>
+                   └ <TaskHandle pending name='anyio.from_thread.BlockingPortal._call_func' coro=<coroutine object BlockingPortal._call_func at 0x...
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\anyio\from_thread.py", line 263, in _call_func
+    retval = await retval_or_awaitable
+                   └ <coroutine object FastAPI.__call__ at 0x000001EE93EA65C0>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\applications.py", line 1163, in __call__
+    await super().__call__(scope, receive, send)
+                           │      │        └ <function _TestClientTransport.handle_request.<locals>.send at 0x000001EE93E9D620>
+                           │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001EE93E49EE0>
+                           └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\starlette\applications.py", line 90, in __call__
+    await self.middleware_stack(scope, receive, send)
+          │    │                │      │        └ <function _TestClientTransport.handle_request.<locals>.send at 0x000001EE93E9D620>
+          │    │                │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001EE93E49EE0>
+          │    │                └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │    └ <starlette.middleware.errors.ServerErrorMiddleware object at 0x000001EE93E78F80>
+          └ <fastapi.applications.FastAPI object at 0x000001EE93811370>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+          │    │   │      │        └ <function ServerErrorMiddleware.__call__.<locals>._send at 0x000001EE93E9D760>
+          │    │   │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001EE93E49EE0>
+          │    │   └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │    └ <starlette.middleware.exceptions.ExceptionMiddleware object at 0x000001EE93E78F50>
+          └ <starlette.middleware.errors.ServerErrorMiddleware object at 0x000001EE93E78F80>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+          │                            │    │    │     │      │        └ <function ServerErrorMiddleware.__call__.<locals>._send at 0x000001EE93E9D760>
+          │                            │    │    │     │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001EE93E49EE0>
+          │                            │    │    │     └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │                            │    │    └ <starlette.requests.Request object at 0x000001EE93ECE570>
+          │                            │    └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x000001EE93E78F20>
+          │                            └ <starlette.middleware.exceptions.ExceptionMiddleware object at 0x000001EE93E78F50>
+          └ <function wrap_app_handling_exceptions at 0x000001EE91B3C040>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001EE93E9D940>
+          │   │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001EE93E49EE0>
+          │   └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x000001EE93E78F20>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+          │    │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001EE93E9D940>
+          │    │   │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001EE93E49EE0>
+          │    │   └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │    └ <fastapi.routing.APIRouter object at 0x000001EE93BB9970>
+          └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x000001EE93E78F20>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+          │    │                │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001EE93E9D940>
+          │    │                │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001EE93E49EE0>
+          │    │                └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │    └ <bound method APIRouter.app of <fastapi.routing.APIRouter object at 0x000001EE93BB9970>>
+          └ <fastapi.routing.APIRouter object at 0x000001EE93BB9970>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 2734, in app
+    await route.handle(scope, receive, send)
+          │     │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001EE93E9D940>
+          │     │      │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001EE93E49EE0>
+          │     │      └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │     └ <function _IncludedRouter.handle at 0x000001EE91B4E840>
+          └ _IncludedRouter(original_router=<fastapi.routing.APIRouter object at 0x000001EE93AF0800>, include_context=_RouterIncludeConte...
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 1780, in handle
+    await self.original_router.handle(scope, receive, send)
+          │    │               │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001EE93E9D940>
+          │    │               │      │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001EE93E49EE0>
+          │    │               │      └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │    │               └ <function APIRouter.handle at 0x000001EE91B70900>
+          │    └ <fastapi.routing.APIRouter object at 0x000001EE93AF0800>
+          └ _IncludedRouter(original_router=<fastapi.routing.APIRouter object at 0x000001EE93AF0800>, include_context=_RouterIncludeConte...
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 2789, in handle
+    await included_router._handle_selected(scope, receive, send)
+          │               │                │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001EE93E9D940>
+          │               │                │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001EE93E49EE0>
+          │               │                └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │               └ <function _IncludedRouter._handle_selected at 0x000001EE91B4E8E0>
+          └ _IncludedRouter(original_router=<fastapi.routing.APIRouter object at 0x000001EE93AF0800>, include_context=_RouterIncludeConte...
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 1800, in _handle_selected
+    await original_route.handle(scope, receive, send)
+          │              │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001EE93E9D940>
+          │              │      │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001EE93E49EE0>
+          │              │      └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │              └ <function APIRoute.handle at 0x000001EE91B4C9A0>
+          └ APIRoute(path='/auth/callback', name='callback', methods=['GET'])
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 1279, in handle
+    await app(scope, receive, send)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001EE93E9D940>
+          │   │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001EE93E49EE0>
+          │   └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          └ <function request_response.<locals>.app at 0x000001EE93E9DB20>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 158, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+          │                            │    │        │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001EE93E9D940>
+          │                            │    │        │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001EE93E49EE0>
+          │                            │    │        └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          │                            │    └ <starlette.requests.Request object at 0x000001EE921CFDD0>
+          │                            └ <function request_response.<locals>.app.<locals>.app at 0x000001EE93E9CE00>
+          └ <function wrap_app_handling_exceptions at 0x000001EE91B3C040>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001EE93E9DD00>
+          │   │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001EE93E49EE0>
+          │   └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/auth/callback', 'raw_path': b'/auth/callback', 'root_path'...
+          └ <function request_response.<locals>.app.<locals>.app at 0x000001EE93E9CE00>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 144, in app
+    response = await f(request)
+                     │ └ <starlette.requests.Request object at 0x000001EE921CFDD0>
+                     └ <function get_request_handler.<locals>.app at 0x000001EE93E9D9E0>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 706, in app
+    raw_response = await run_endpoint_function(
+                         └ <function run_endpoint_function at 0x000001EE91B3FCE0>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 352, in run_endpoint_function
+    return await dependant.call(**values)
+                 │         │      └ {'auth_service': <MagicMock spec='ZerodhaAuthService' id='2125714600736'>, 'request_token': 'invalid_req_token', 'status': None}
+                 │         └ <member 'call' of 'Dependant' objects>
+                 └ Dependant(path_params=[], query_params=[ModelField(field_info=Query(None), name='request_token', mode='validation', config=No...
+
+> File "D:\excersis_file\Agentic_AI\QuantFlow\backend\app\api\routers\auth.py", line 42, in callback
+    session_data = await auth_service.exchange_token(request_token)
+                         │            │              └ 'invalid_req_token'
+                         │            └ <AsyncMock name='mock.exchange_token' id='2124195373248'>
+                         └ <MagicMock spec='ZerodhaAuthService' id='2125714600736'>
+
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\unittest\mock.py", line 2291, in _execute_mock_call
+    raise effect
+          └ RuntimeError('Token exchange failed')
+
+RuntimeError: Token exchange failed
+2026-08-04 13:40:40.657 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-04 13:40:40.662 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:40:40.663 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-04 13:40:40.663 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-04 13:40:40.665 | INFO     | app.api.routers.auth:profile:61 - Handling GET /auth/profile request
+2026-08-04 13:40:40.665 | WARNING  | app.api.routers.auth:profile:66 - Profile request unauthenticated: No active Zerodha session found. Please log in.
+2026-08-04 13:40:40.666 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-04 13:40:40.672 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:40:40.672 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-04 13:40:40.672 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-04 13:40:40.675 | INFO     | app.api.routers.auth:profile:61 - Handling GET /auth/profile request
+2026-08-04 13:40:40.676 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-04 13:40:40.682 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:40:40.682 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-04 13:40:40.682 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-04 13:40:40.685 | INFO     | app.api.routers.auth:logout:80 - Handling POST /auth/logout request
+2026-08-04 13:40:40.685 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-04 13:40:40.692 | INFO     | app.brokers.paper_broker:login:62 - PaperBroker session initiated for user TEST_TRADER
+2026-08-04 13:40:40.708 | INFO     | app.paper.execution.execution_engine:submit_order:65 - Submitted order 466f7e05-ea60-4973-af8d-beac31003aa3 for 10 x RELIANCE
+2026-08-04 13:40:40.708 | INFO     | app.paper.portfolio.portfolio:record_fill:110 - Portfolio recorded fill for 10 x RELIANCE @ 2501.25. Realized PnL: 0
+2026-08-04 13:40:40.708 | INFO     | app.paper.journal.trade_journal:log_trade:56 - Trade logged in journal: BUY 10 x RELIANCE @ 2501.25
+2026-08-04 13:40:40.710 | INFO     | app.paper.execution.execution_engine:submit_order:65 - Submitted order 834f7b6e-db9f-4c67-ae21-ad4fb2f5c0b4 for 5 x TCS
+2026-08-04 13:40:40.710 | INFO     | app.paper.portfolio.portfolio:record_fill:110 - Portfolio recorded fill for 5 x TCS @ 3501.75. Realized PnL: 0
+2026-08-04 13:40:40.710 | INFO     | app.paper.journal.trade_journal:log_trade:56 - Trade logged in journal: BUY 5 x TCS @ 3501.75
+2026-08-04 13:40:40.715 | INFO     | app.paper.execution.execution_engine:submit_order:65 - Submitted order 89b299a1-16ca-4850-a5f1-b27f95247530 for 10 x MSFT
+2026-08-04 13:40:40.716 | INFO     | app.paper.execution.execution_engine:submit_order:65 - Submitted order b7f06849-612f-49b6-b699-2021e1cbb93d for 10 x MSFT
+2026-08-04 13:40:40.843 | INFO     | app.paper.live_engine:start:87 - Loaded active strategy for live paper trading: ema
+2026-08-04 13:40:40.843 | INFO     | app.services.alert_engine:send_alert:59 - [ALERT - INFO] Live Paper Session Started: Started paper session for symbols ['AAPL'] with 1 strategies
+2026-08-04 13:40:40.843 | WARNING  | app.paper.live_engine:process_tick:256 - Tick evaluation error for AAPL: EMACrossoverStrategy.on_candle() takes 2 positional arguments but 3 were given
+2026-08-04 13:40:40.845 | WARNING  | app.services.alert_engine:send_alert:57 - [ALERT - WARNING] Live Paper Session Paused: Trading scheduler loop paused
+2026-08-04 13:40:40.845 | INFO     | app.services.alert_engine:send_alert:59 - [ALERT - INFO] Live Paper Session Resumed: Trading scheduler loop resumed
+2026-08-04 13:40:40.846 | INFO     | app.paper.live_engine:stop:147 - LivePaperEngine session stopped
+2026-08-04 13:40:40.847 | INFO     | app.analytics.reporting:generate:197 - HTML performance report written to C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-34\test_live_paper_engine_lifecyc0\eod_report.html
+2026-08-04 13:40:40.901 | INFO     | app.analytics.reporting:generate:47 - JSON performance report written to C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-34\test_live_paper_engine_lifecyc0\eod_report.json
+2026-08-04 13:40:40.901 | INFO     | app.services.alert_engine:send_alert:59 - [ALERT - INFO] Live Paper Session Stopped: Session ended. Total Equity: $50,000.00
+2026-08-04 13:40:40.924 | INFO     | app.paper.live_engine:start:87 - Loaded active strategy for live paper trading: rsi
+2026-08-04 13:40:40.924 | INFO     | app.services.alert_engine:send_alert:59 - [ALERT - INFO] Live Paper Session Started: Started paper session for symbols ['MSFT'] with 1 strategies
+2026-08-04 13:40:40.924 | INFO     | app.paper.live_engine:stop:147 - LivePaperEngine session stopped
+2026-08-04 13:40:40.941 | INFO     | app.analytics.reporting:generate:197 - HTML performance report written to C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-34\test_live_paper_session_save_a0\eod_report.html
+2026-08-04 13:40:40.943 | INFO     | app.analytics.reporting:generate:47 - JSON performance report written to C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-34\test_live_paper_session_save_a0\eod_report.json
+2026-08-04 13:40:40.943 | INFO     | app.services.alert_engine:send_alert:59 - [ALERT - INFO] Live Paper Session Stopped: Session ended. Total Equity: $100,000.00
+2026-08-04 13:40:40.951 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:40:40.958 | WARNING  | app.services.alert_engine:send_alert:57 - [ALERT - WARNING] Position Warning: Position size limit reached for SBIN
+2026-08-04 13:40:40.959 | ERROR    | app.services.alert_engine:send_alert:55 - [ALERT - CRITICAL] Emergency Stop: Account drawdown threshold breached
+2026-08-04 13:40:40.966 | INFO     | app.paper.live_engine:start:87 - Loaded active strategy for live paper trading: ema
+2026-08-04 13:40:40.966 | INFO     | app.services.alert_engine:send_alert:59 - [ALERT - INFO] Live Paper Session Started: Started paper session for symbols [] with 1 strategies
+2026-08-04 13:40:40.967 | INFO     | app.paper.live_engine:stop:147 - LivePaperEngine session stopped
+2026-08-04 13:40:40.968 | INFO     | app.analytics.reporting:generate:197 - HTML performance report written to D:\excersis_file\Agentic_AI\QuantFlow\backend\data\eod_report.html
+2026-08-04 13:40:40.970 | INFO     | app.analytics.reporting:generate:47 - JSON performance report written to D:\excersis_file\Agentic_AI\QuantFlow\backend\data\eod_report.json
+2026-08-04 13:40:40.970 | INFO     | app.services.alert_engine:send_alert:59 - [ALERT - INFO] Live Paper Session Stopped: Session ended. Total Equity: $100,000.00
+2026-08-04 13:40:40.972 | INFO     | app.paper.execution.execution_engine:submit_order:65 - Submitted order 12fdeeb6-a47e-4a58-9f50-28ad610602d0 for 25 x INFY
+2026-08-04 13:40:40.972 | INFO     | app.paper.portfolio.portfolio:record_fill:110 - Portfolio recorded fill for 25 x INFY @ 1500.75. Realized PnL: 0
+2026-08-04 13:40:40.972 | INFO     | app.paper.journal.trade_journal:log_trade:56 - Trade logged in journal: BUY 25 x INFY @ 1500.75
+2026-08-04 13:40:40.973 | INFO     | app.services.alert_engine:send_alert:59 - [ALERT - INFO] DEMO ORDER INJECTED: BUY INFY: Injected demo BUY order for 25 INFY @ $1,500.00. Status: FILLED
+2026-08-04 13:40:40.975 | INFO     | app.paper.execution.execution_engine:submit_order:65 - Submitted order 8fc231eb-b97b-44b1-aab6-714b3fd041ae for 10 x TCS
+2026-08-04 13:40:40.975 | INFO     | app.paper.portfolio.portfolio:record_fill:110 - Portfolio recorded fill for 10 x TCS @ 3198.4. Realized PnL: 0
+2026-08-04 13:40:40.975 | INFO     | app.paper.journal.trade_journal:log_trade:56 - Trade logged in journal: SELL 10 x TCS @ 3198.4
+2026-08-04 13:40:40.975 | INFO     | app.services.alert_engine:send_alert:59 - [ALERT - INFO] DEMO ORDER INJECTED: SELL TCS: Injected demo SELL order for 10 TCS @ $3,200.00. Status: FILLED
+2026-08-04 13:40:40.986 | INFO     | app.paper.live_engine:start:87 - Loaded active strategy for live paper trading: rsi
+2026-08-04 13:40:40.987 | INFO     | app.services.alert_engine:send_alert:59 - [ALERT - INFO] Live Paper Session Started: Started paper session for symbols ['MSFT'] with 1 strategies
+2026-08-04 13:40:40.987 | INFO     | app.marketdata.yfinance_provider:get_candles:44 - Fetching Yahoo Finance candles for symbol 'MSFT' (mapped: 'MSFT') [period: 5d, interval: 1d]
+2026-08-04 13:40:42.510 | WARNING  | app.services.alert_engine:send_alert:57 - [ALERT - WARNING] Live Paper Session Paused: Trading scheduler loop paused
+2026-08-04 13:40:42.515 | INFO     | app.services.alert_engine:send_alert:59 - [ALERT - INFO] Live Paper Session Resumed: Trading scheduler loop resumed
+2026-08-04 13:40:42.518 | INFO     | app.paper.live_engine:stop:147 - LivePaperEngine session stopped
+2026-08-04 13:40:42.518 | INFO     | app.services.alert_engine:send_alert:59 - [ALERT - INFO] Live Paper Session Stopped: Session ended. Total Equity: $75,000.00
+2026-08-04 13:40:42.523 | INFO     | app.marketdata.yfinance_provider:get_candles:44 - Fetching Yahoo Finance candles for symbol 'AAPL' (mapped: 'AAPL') [period: 1mo, interval: 1d]
+2026-08-04 13:40:42.527 | INFO     | app.marketdata.validator:validate_ohlcv:119 - Market data validation passed successfully (5 candles)
+2026-08-04 13:40:42.527 | INFO     | app.marketdata.yfinance_provider:get_candles:81 - Successfully fetched and validated 5 candles for 'AAPL'
+2026-08-04 13:40:42.530 | INFO     | app.marketdata.yfinance_provider:get_candles:44 - Fetching Yahoo Finance candles for symbol 'AAPL' (mapped: 'AAPL') [period: 1mo, interval: 1d]
+2026-08-04 13:40:42.531 | WARNING  | app.marketdata.yfinance_provider:get_candles:90 - Attempt 1/3 failed fetching Yahoo Finance data for 'AAPL': Network error
+2026-08-04 13:40:42.547 | INFO     | app.marketdata.validator:validate_ohlcv:119 - Market data validation passed successfully (5 candles)
+2026-08-04 13:40:42.547 | INFO     | app.marketdata.yfinance_provider:get_candles:81 - Successfully fetched and validated 5 candles for 'AAPL'
+2026-08-04 13:40:42.550 | INFO     | app.marketdata.yfinance_provider:get_candles:44 - Fetching Yahoo Finance candles for symbol 'INVALID' (mapped: 'INVALID') [period: 1mo, interval: 1d]
+2026-08-04 13:40:42.551 | WARNING  | app.marketdata.yfinance_provider:get_candles:90 - Attempt 1/2 failed fetching Yahoo Finance data for 'INVALID': API down
+2026-08-04 13:40:42.575 | WARNING  | app.marketdata.yfinance_provider:get_candles:90 - Attempt 2/2 failed fetching Yahoo Finance data for 'INVALID': API down
+2026-08-04 13:40:42.575 | ERROR    | app.marketdata.yfinance_provider:get_candles:100 - Failed all 2 attempts to fetch Yahoo Finance data for 'INVALID'
+2026-08-04 13:40:42.581 | INFO     | app.marketdata.csv_provider:get_candles:36 - Reading CSV market data for 'AAPL' from C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-34\test_csv_provider_success0\aapl.csv
+2026-08-04 13:40:42.587 | INFO     | app.marketdata.validator:validate_ohlcv:119 - Market data validation passed successfully (5 candles)
+2026-08-04 13:40:42.587 | INFO     | app.marketdata.csv_provider:get_candles:51 - Retrieved 3 candles for 'AAPL' from CSV
+2026-08-04 13:40:42.591 | ERROR    | app.marketdata.csv_provider:get_candles:33 - CSV file not found for symbol 'NONEXISTENT' at C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-34\test_csv_provider_missing_file0\NONEXISTENT.csv
+2026-08-04 13:40:42.623 | INFO     | app.marketdata.csv_provider:get_candles:36 - Reading CSV market data for 'AAPL' from C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-34\test_csv_provider_empty_date_r0\aapl.csv
+2026-08-04 13:40:42.628 | INFO     | app.marketdata.validator:validate_ohlcv:119 - Market data validation passed successfully (5 candles)
+2026-08-04 13:40:42.628 | WARNING  | app.marketdata.csv_provider:get_candles:48 - CSV data for 'AAPL' is empty after date range filtering
+2026-08-04 13:40:42.645 | INFO     | app.marketdata.parquet_provider:get_candles:30 - Reading Parquet market data for 'AAPL' from C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-34\test_parquet_provider_success0
+2026-08-04 13:40:42.664 | INFO     | app.marketdata.validator:validate_ohlcv:119 - Market data validation passed successfully (5 candles)
+2026-08-04 13:40:42.664 | INFO     | app.marketdata.parquet_provider:get_candles:40 - Retrieved 3 candles for 'AAPL' from Parquet
+2026-08-04 13:40:42.668 | INFO     | app.marketdata.parquet_provider:get_candles:30 - Reading Parquet market data for 'NONEXISTENT' from C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-34\test_parquet_provider_missing_0
+2026-08-04 13:40:42.669 | WARNING  | app.marketdata.storage:load:52 - No Parquet data found for symbol NONEXISTENT
+2026-08-04 13:40:42.669 | WARNING  | app.marketdata.parquet_provider:get_candles:37 - No Parquet candles found for 'NONEXISTENT' in date range
+2026-08-04 13:40:42.681 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:40:42.682 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-04 13:40:42.682 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-04 13:40:42.685 | INFO     | app.api.routers.market:get_market_history:27 - GET /market/history request for symbol='AAPL', provider='yfinance', range=2024-01-01 to 2024-01-03
+2026-08-04 13:40:42.687 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-04 13:40:42.692 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:40:42.693 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-04 13:40:42.693 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-04 13:40:42.694 | INFO     | app.api.routers.market:get_market_history:27 - GET /market/history request for symbol='AAPL', provider='yfinance', range=2024-01-10 to 2024-01-01
+2026-08-04 13:40:42.695 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-04 13:40:42.701 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:40:42.701 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-04 13:40:42.701 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-04 13:40:42.703 | INFO     | app.api.routers.market:get_market_history:27 - GET /market/history request for symbol='AAPL', provider='invalid_provider', range=2024-01-01 to 2024-01-03
+2026-08-04 13:40:42.704 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-04 13:40:42.709 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:40:42.709 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-04 13:40:42.709 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-04 13:40:42.711 | INFO     | app.api.routers.market:get_market_history:27 - GET /market/history request for symbol='NONEXISTENT', provider='csv', range=2024-01-01 to 2024-01-03
+2026-08-04 13:40:42.711 | WARNING  | app.api.routers.market:get_market_history:50 - Market data file not found: CSV file not found
+2026-08-04 13:40:42.712 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-04 13:40:42.718 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:40:42.718 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-04 13:40:42.718 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-04 13:40:42.720 | INFO     | app.api.routers.market:get_market_history:27 - GET /market/history request for symbol='BADSYMBOL', provider='yfinance', range=2024-01-01 to 2024-01-03
+2026-08-04 13:40:42.720 | ERROR    | app.api.routers.market:get_market_history:55 - Market data validation error for 'BADSYMBOL': Negative price values detected
+2026-08-04 13:40:42.722 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-04 13:40:42.727 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:40:42.727 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-04 13:40:42.727 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-04 13:40:42.728 | INFO     | app.api.routers.market:get_market_history:27 - GET /market/history request for symbol='TIMEOUT', provider='yfinance', range=2024-01-01 to 2024-01-03
+2026-08-04 13:40:42.729 | ERROR    | app.api.routers.market:get_market_history:58 - Failed to fetch market data for 'TIMEOUT'
+Traceback (most recent call last):
+
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\threading.py", line 1032, in _bootstrap
+    self._bootstrap_inner()
+    │    └ <function Thread._bootstrap_inner at 0x000001EEEDDD2E80>
+    └ <Thread(asyncio-portal-1eed44100e0, started daemon 27224)>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\threading.py", line 1075, in _bootstrap_inner
+    self.run()
+    │    └ <function Thread.run at 0x000001EEEDDD2B60>
+    └ <Thread(asyncio-portal-1eed44100e0, started daemon 27224)>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\threading.py", line 1012, in run
+    self._target(*self._args, **self._kwargs)
+    │    │        │    │        │    └ {}
+    │    │        │    │        └ <Thread(asyncio-portal-1eed44100e0, started daemon 27224)>
+    │    │        │    └ ()
+    │    │        └ <Thread(asyncio-portal-1eed44100e0, started daemon 27224)>
+    │    └ <function start_blocking_portal.<locals>.run_blocking_portal at 0x000001EED440D9E0>
+    └ <Thread(asyncio-portal-1eed44100e0, started daemon 27224)>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\anyio\from_thread.py", line 536, in run_blocking_portal
+    run_eventloop(
+    └ <function run at 0x000001EEEE8F7060>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\anyio\_core\_eventloop.py", line 83, in run
+    return async_backend.run(func, args, {}, backend_options)
+           │             │   │     │         └ {}
+           │             │   │     └ ()
+           │             │   └ <function start_blocking_portal.<locals>.run_portal at 0x000001EE94203240>
+           │             └ <classmethod(<function AsyncIOBackend.run at 0x000001EEF049DDA0>)>
+           └ <class 'anyio._backends._asyncio.AsyncIOBackend'>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2481, in run
+    return runner.run(wrapper())
+           │      │   └ <function start_blocking_portal.<locals>.run_portal at 0x000001EED440C180>
+           │      └ <function Runner.run at 0x000001EEF0358E00>
+           └ <asyncio.runners.Runner object at 0x000001EED44118B0>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           │    │     │                  └ <Task pending name='anyio.from_thread.start_blocking_portal.<locals>.run_portal' coro=<start_blocking_portal.<locals>.run_por...
+           │    │     └ <function BaseEventLoop.run_until_complete at 0x000001EEF034E980>
+           │    └ <ProactorEventLoop running=True closed=False debug=False>
+           └ <asyncio.runners.Runner object at 0x000001EED44118B0>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\asyncio\base_events.py", line 678, in run_until_complete
+    self.run_forever()
+    │    └ <function ProactorEventLoop.run_forever at 0x000001EEF0483E20>
+    └ <ProactorEventLoop running=True closed=False debug=False>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\asyncio\windows_events.py", line 322, in run_forever
+    super().run_forever()
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\asyncio\base_events.py", line 645, in run_forever
+    self._run_once()
+    │    └ <function BaseEventLoop._run_once at 0x000001EEF0358720>
+    └ <ProactorEventLoop running=True closed=False debug=False>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\asyncio\base_events.py", line 1999, in _run_once
+    handle._run()
+    │      └ <function Handle._run at 0x000001EEF02EC900>
+    └ <Handle <_asyncio.TaskStepMethWrapper object at 0x000001EED4419C60>()>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\asyncio\events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+    │    │            │    │           │    └ <member '_args' of 'Handle' objects>
+    │    │            │    │           └ <Handle <_asyncio.TaskStepMethWrapper object at 0x000001EED4419C60>()>
+    │    │            │    └ <member '_callback' of 'Handle' objects>
+    │    │            └ <Handle <_asyncio.TaskStepMethWrapper object at 0x000001EED4419C60>()>
+    │    └ <member '_context' of 'Handle' objects>
+    └ <Handle <_asyncio.TaskStepMethWrapper object at 0x000001EED4419C60>()>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\anyio\_core\_tasks.py", line 275, in _run_coro
+    retval = await self._coro
+                   │    └ <member '_coro' of 'TaskHandle' objects>
+                   └ <TaskHandle pending name='anyio.from_thread.BlockingPortal._call_func' coro=<coroutine object BlockingPortal._call_func at 0x...
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\anyio\from_thread.py", line 263, in _call_func
+    retval = await retval_or_awaitable
+                   └ <coroutine object FastAPI.__call__ at 0x000001EED43DF2E0>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\applications.py", line 1163, in __call__
+    await super().__call__(scope, receive, send)
+                           │      │        └ <function _TestClientTransport.handle_request.<locals>.send at 0x000001EED440D1C0>
+                           │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001EE94203100>
+                           └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/market/history', 'raw_path': b'/market/history', 'root_pat...
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\starlette\applications.py", line 90, in __call__
+    await self.middleware_stack(scope, receive, send)
+          │    │                │      │        └ <function _TestClientTransport.handle_request.<locals>.send at 0x000001EED440D1C0>
+          │    │                │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001EE94203100>
+          │    │                └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/market/history', 'raw_path': b'/market/history', 'root_pat...
+          │    └ <starlette.middleware.errors.ServerErrorMiddleware object at 0x000001EE93E78F80>
+          └ <fastapi.applications.FastAPI object at 0x000001EE93811370>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+          │    │   │      │        └ <function ServerErrorMiddleware.__call__.<locals>._send at 0x000001EED440DE40>
+          │    │   │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001EE94203100>
+          │    │   └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/market/history', 'raw_path': b'/market/history', 'root_pat...
+          │    └ <starlette.middleware.exceptions.ExceptionMiddleware object at 0x000001EE93E78F50>
+          └ <starlette.middleware.errors.ServerErrorMiddleware object at 0x000001EE93E78F80>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+          │                            │    │    │     │      │        └ <function ServerErrorMiddleware.__call__.<locals>._send at 0x000001EED440DE40>
+          │                            │    │    │     │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001EE94203100>
+          │                            │    │    │     └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/market/history', 'raw_path': b'/market/history', 'root_pat...
+          │                            │    │    └ <starlette.requests.Request object at 0x000001EED4419D30>
+          │                            │    └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x000001EE93E78F20>
+          │                            └ <starlette.middleware.exceptions.ExceptionMiddleware object at 0x000001EE93E78F50>
+          └ <function wrap_app_handling_exceptions at 0x000001EE91B3C040>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001EED440DEE0>
+          │   │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001EE94203100>
+          │   └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/market/history', 'raw_path': b'/market/history', 'root_pat...
+          └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x000001EE93E78F20>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+          │    │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001EED440DEE0>
+          │    │   │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001EE94203100>
+          │    │   └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/market/history', 'raw_path': b'/market/history', 'root_pat...
+          │    └ <fastapi.routing.APIRouter object at 0x000001EE93BB9970>
+          └ <fastapi.middleware.asyncexitstack.AsyncExitStackMiddleware object at 0x000001EE93E78F20>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+          │    │                │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001EED440DEE0>
+          │    │                │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001EE94203100>
+          │    │                └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/market/history', 'raw_path': b'/market/history', 'root_pat...
+          │    └ <bound method APIRouter.app of <fastapi.routing.APIRouter object at 0x000001EE93BB9970>>
+          └ <fastapi.routing.APIRouter object at 0x000001EE93BB9970>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 2734, in app
+    await route.handle(scope, receive, send)
+          │     │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001EED440DEE0>
+          │     │      │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001EE94203100>
+          │     │      └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/market/history', 'raw_path': b'/market/history', 'root_pat...
+          │     └ <function _IncludedRouter.handle at 0x000001EE91B4E840>
+          └ _IncludedRouter(original_router=<fastapi.routing.APIRouter object at 0x000001EE93AF0DA0>, include_context=_RouterIncludeConte...
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 1780, in handle
+    await self.original_router.handle(scope, receive, send)
+          │    │               │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001EED440DEE0>
+          │    │               │      │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001EE94203100>
+          │    │               │      └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/market/history', 'raw_path': b'/market/history', 'root_pat...
+          │    │               └ <function APIRouter.handle at 0x000001EE91B70900>
+          │    └ <fastapi.routing.APIRouter object at 0x000001EE93AF0DA0>
+          └ _IncludedRouter(original_router=<fastapi.routing.APIRouter object at 0x000001EE93AF0DA0>, include_context=_RouterIncludeConte...
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 2789, in handle
+    await included_router._handle_selected(scope, receive, send)
+          │               │                │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001EED440DEE0>
+          │               │                │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001EE94203100>
+          │               │                └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/market/history', 'raw_path': b'/market/history', 'root_pat...
+          │               └ <function _IncludedRouter._handle_selected at 0x000001EE91B4E8E0>
+          └ _IncludedRouter(original_router=<fastapi.routing.APIRouter object at 0x000001EE93AF0DA0>, include_context=_RouterIncludeConte...
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 1800, in _handle_selected
+    await original_route.handle(scope, receive, send)
+          │              │      │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001EED440DEE0>
+          │              │      │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001EE94203100>
+          │              │      └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/market/history', 'raw_path': b'/market/history', 'root_pat...
+          │              └ <function APIRoute.handle at 0x000001EE91B4C9A0>
+          └ APIRoute(path='/market/history', name='get_market_history', methods=['GET'])
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 1279, in handle
+    await app(scope, receive, send)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001EED440DEE0>
+          │   │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001EE94203100>
+          │   └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/market/history', 'raw_path': b'/market/history', 'root_pat...
+          └ <function request_response.<locals>.app at 0x000001EED440DF80>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 158, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+          │                            │    │        │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001EED440DEE0>
+          │                            │    │        │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001EE94203100>
+          │                            │    │        └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/market/history', 'raw_path': b'/market/history', 'root_pat...
+          │                            │    └ <starlette.requests.Request object at 0x000001EED4419850>
+          │                            └ <function request_response.<locals>.app.<locals>.app at 0x000001EED440E0C0>
+          └ <function wrap_app_handling_exceptions at 0x000001EE91B3C040>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+          │   │      │        └ <function wrap_app_handling_exceptions.<locals>.wrapped_app.<locals>.sender at 0x000001EED440E3E0>
+          │   │      └ <function _TestClientTransport.handle_request.<locals>.receive at 0x000001EE94203100>
+          │   └ {'type': 'http', 'http_version': '1.1', 'method': 'GET', 'path': '/market/history', 'raw_path': b'/market/history', 'root_pat...
+          └ <function request_response.<locals>.app.<locals>.app at 0x000001EED440E0C0>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 144, in app
+    response = await f(request)
+                     │ └ <starlette.requests.Request object at 0x000001EED4419850>
+                     └ <function get_request_handler.<locals>.app at 0x000001EED440E020>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 706, in app
+    raw_response = await run_endpoint_function(
+                         └ <function run_endpoint_function at 0x000001EE91B3FCE0>
+  File "D:\excersis_file\Agentic_AI\QuantFlow\.venv\Lib\site-packages\fastapi\routing.py", line 352, in run_endpoint_function
+    return await dependant.call(**values)
+                 │         │      └ {'symbol': 'TIMEOUT', 'start': datetime.date(2024, 1, 1), 'end': datetime.date(2024, 1, 3), 'provider': 'yfinance', 'interval...
+                 │         └ <member 'call' of 'Dependant' objects>
+                 └ Dependant(path_params=[], query_params=[ModelField(field_info=Query(PydanticUndefined), name='symbol', mode='validation', con...
+
+> File "D:\excersis_file\Agentic_AI\QuantFlow\backend\app\api\routers\market.py", line 46, in get_market_history
+    df = await data_provider.get_candles(
+               │             └ <AsyncMock name='get_candles' id='2124198745664'>
+               └ <app.marketdata.yfinance_provider.YahooFinanceProvider object at 0x000001EED441A6F0>
+
+  File "D:\excersis_file\Agentic_AI\QuantFlow\tools\python312\Lib\unittest\mock.py", line 2291, in _execute_mock_call
+    raise effect
+          └ RuntimeError('Yahoo API connection timeout')
+
+RuntimeError: Yahoo API connection timeout
+2026-08-04 13:40:42.744 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-04 13:40:42.755 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-04 13:40:42.755 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-04 13:40:42.755 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-04 13:40:42.759 | INFO     | app.api.routers.market:get_market_history:27 - GET /market/history request for symbol='AAPL', provider='yfinance', range=2024-01-01 to 2024-01-03
+2026-08-04 13:40:42.762 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-04 13:40:42.769 | INFO     | app.marketdata.validator:validate_ohlcv:119 - Market data validation passed successfully (45 candles)
+2026-08-04 13:40:42.776 | INFO     | app.marketdata.storage:save:37 - Saved partitioned Parquet market data for RELIANCE to C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-34\test_save_and_load_partitioned0\RELIANCE
+2026-08-04 13:40:42.787 | INFO     | app.marketdata.validator:validate_ohlcv:119 - Market data validation passed successfully (45 candles)
+2026-08-04 13:40:42.795 | INFO     | app.marketdata.validator:validate_ohlcv:119 - Market data validation passed successfully (45 candles)
+2026-08-04 13:40:42.810 | INFO     | app.marketdata.validator:validate_ohlcv:119 - Market data validation passed successfully (45 candles)
+2026-08-04 13:40:42.815 | WARNING  | app.marketdata.storage:load:52 - No Parquet data found for symbol UNKNOWN
+2026-08-04 13:40:42.831 | INFO     | app.marketdata.validator:validate_ohlcv:119 - Market data validation passed successfully (5 candles)
+2026-08-04 13:40:42.834 | ERROR    | app.marketdata.validator:validate_ohlcv:79 - Duplicate timestamps detected in market data: [Timestamp('2024-01-01 00:00:00')]
+2026-08-04 13:40:42.838 | ERROR    | app.marketdata.validator:validate_ohlcv:95 - NaN values detected in market data: {'open': 1, 'high': 0, 'low': 0, 'close': 0, 'volume': 0}
+2026-08-04 13:40:42.842 | ERROR    | app.marketdata.validator:validate_ohlcv:103 - Negative prices detected in column close: 1 rows
+2026-08-04 13:40:42.845 | ERROR    | app.marketdata.validator:validate_ohlcv:110 - Negative volume detected
+2026-08-04 13:40:42.851 | ERROR    | app.marketdata.validator:validate_ohlcv:116 - High price is less than Low price in 1 rows
+2026-08-04 13:40:42.853 | INFO     | app.research.optimization:grid_search:122 - Starting Grid Search for EMACrossoverStrategy with 4 parameter combinations
+2026-08-04 13:40:42.945 | INFO     | app.research.optimization:random_search:155 - Starting Random Search for EMACrossoverStrategy with 4 sampled combinations
+2026-08-04 13:40:42.996 | WARNING  | app.paper.execution.validator:validate:45 - Order rejected: Insufficient funds. Required: 15000.0, Available: 1000.0
+2026-08-04 13:40:43.010 | INFO     | app.paper.live_engine:start:87 - Loaded active strategy for live paper trading: ema
+2026-08-04 13:40:43.010 | INFO     | app.services.alert_engine:send_alert:59 - [ALERT - INFO] Live Paper Session Started: Started paper session for symbols ['AAPL'] with 1 strategies
+2026-08-04 13:40:43.010 | INFO     | app.marketdata.yfinance_provider:get_candles:44 - Fetching Yahoo Finance candles for symbol 'AAPL' (mapped: 'AAPL') [period: 5d, interval: 1d]
+2026-08-04 13:40:43.851 | WARNING  | app.services.alert_engine:send_alert:57 - [ALERT - WARNING] Live Paper Session Paused: Trading scheduler loop paused
+2026-08-04 13:40:43.853 | INFO     | app.services.alert_engine:send_alert:59 - [ALERT - INFO] Live Paper Session Resumed: Trading scheduler loop resumed
+2026-08-04 13:40:43.856 | INFO     | app.paper.live_engine:stop:147 - LivePaperEngine session stopped
+2026-08-04 13:40:43.857 | INFO     | app.analytics.reporting:generate:197 - HTML performance report written to D:\excersis_file\Agentic_AI\QuantFlow\backend\data\eod_report.html
+2026-08-04 13:40:43.859 | INFO     | app.analytics.reporting:generate:47 - JSON performance report written to D:\excersis_file\Agentic_AI\QuantFlow\backend\data\eod_report.json
+2026-08-04 13:40:43.859 | INFO     | app.services.alert_engine:send_alert:59 - [ALERT - INFO] Live Paper Session Stopped: Session ended. Total Equity: $100,000.00
+2026-08-04 13:40:43.864 | WARNING  | app.risk.manager:evaluate_order:37 - RiskManager REJECTED order for NIFTY: Order value 250000.0 exceeds max_position_value (50000.0)
+2026-08-04 13:40:43.864 | INFO     | app.services.alert_engine:send_alert:59 - [ALERT - INFO] DEMO ORDER INJECTED: BUY NIFTY: Injected demo BUY order for 10 NIFTY @ $25,000.00. Status: REJECTED
+2026-08-04 13:40:43.914 | INFO     | app.paper.portfolio.portfolio:record_fill:110 - Portfolio recorded fill for 10 x NVDA @ 100.0. Realized PnL: 0
+2026-08-04 13:40:43.915 | INFO     | app.paper.portfolio.portfolio:record_fill:110 - Portfolio recorded fill for 5 x GOOGL @ 150.0. Realized PnL: 0
+2026-08-04 13:40:43.926 | WARNING  | app.paper.execution.validator:validate:45 - Order rejected: Insufficient funds. Required: 60000.0, Available: 5000.0
+2026-08-04 13:40:43.928 | INFO     | app.paper.portfolio.portfolio:record_fill:110 - Portfolio recorded fill for 100 x SBIN @ 500.0. Realized PnL: 0
+2026-08-04 13:40:43.929 | INFO     | app.paper.portfolio.portfolio:record_fill:110 - Portfolio recorded fill for 100 x SBIN @ 600.0. Realized PnL: 0
+2026-08-04 13:40:43.929 | INFO     | app.paper.portfolio.portfolio:record_fill:110 - Portfolio recorded fill for 100 x SBIN @ 500.0. Realized PnL: 0
+2026-08-04 13:40:43.930 | INFO     | app.paper.portfolio.portfolio:record_fill:110 - Portfolio recorded fill for 50 x SBIN @ 600.0. Realized PnL: 5000.0
+2026-08-04 13:40:43.935 | INFO     | app.paper.portfolio.portfolio:record_fill:110 - Portfolio recorded fill for 100 x WIPRO @ 400.0. Realized PnL: 0
+2026-08-04 13:40:43.935 | INFO     | app.paper.portfolio.portfolio:record_fill:110 - Portfolio recorded fill for 100 x WIPRO @ 450.0. Realized PnL: 5000.0
+2026-08-04 13:40:43.938 | INFO     | app.paper.execution.execution_engine:submit_order:65 - Submitted order bb781149-11f8-4266-b947-9dec37f76946 for 10 x WIPRO
+2026-08-04 13:40:43.943 | INFO     | app.paper.portfolio.portfolio:record_fill:110 - Portfolio recorded fill for 10 x AAPL @ 150.0. Realized PnL: 0
+2026-08-04 13:40:43.944 | INFO     | app.paper.portfolio.portfolio:record_fill:110 - Portfolio recorded fill for 10 x AAPL @ 160.0. Realized PnL: 100.0
+2026-08-04 13:40:43.945 | INFO     | app.analytics.reporting:generate:197 - HTML performance report written to C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-34\test_html_and_json_report_gene0\report.html
+2026-08-04 13:40:43.947 | INFO     | app.analytics.reporting:generate:47 - JSON performance report written to C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-34\test_html_and_json_report_gene0\report.json
+2026-08-04 13:40:43.950 | INFO     | app.core.config_loader:load_strategy_yaml:22 - Loaded strategy config from ema.yaml
+2026-08-04 13:40:44.019 | INFO     | app.research.caching:clear:109 - ResearchCache cleared
+2026-08-04 13:40:44.033 | INFO     | app.paper.portfolio.portfolio:record_fill:110 - Portfolio recorded fill for 10 x TSLA @ 200.0. Realized PnL: 0
+2026-08-04 13:40:44.033 | INFO     | app.paper.portfolio.portfolio:record_fill:110 - Portfolio recorded fill for 5 x TSLA @ 215.0. Realized PnL: 75.0
+2026-08-04 13:40:44.038 | INFO     | app.research.comparison:compare:68 - Evaluating strategy 'ema' for comparison
+2026-08-04 13:40:44.055 | INFO     | app.research.comparison:compare:68 - Evaluating strategy 'supertrend' for comparison
+2026-08-04 13:40:44.495 | INFO     | app.research.comparison:compare:68 - Evaluating strategy 'rsi' for comparison
+2026-08-04 13:40:44.623 | INFO     | app.strategies.engine:run:40 - Initializing strategy engine run for 'RELIANCE' (2024-01-01 to 2024-01-30)
+2026-08-04 13:40:44.628 | INFO     | app.strategies.engine:_execute_signal:93 - Strategy generated signal BUY -> placing order with Broker
+2026-08-04 13:40:44.628 | INFO     | app.paper.execution.execution_engine:submit_order:65 - Submitted order 8bb144fd-fa50-4780-a60b-ee8464a335ec for 10 x RELIANCE
+2026-08-04 13:40:44.628 | INFO     | app.paper.portfolio.portfolio:record_fill:110 - Portfolio recorded fill for 10 x RELIANCE @ 98.5493. Realized PnL: 0
+2026-08-04 13:40:44.628 | INFO     | app.paper.journal.trade_journal:log_trade:56 - Trade logged in journal: BUY 10 x RELIANCE @ 98.5493
+2026-08-04 13:40:44.634 | INFO     | app.strategies.engine:run:69 - Strategy engine completed run on RELIANCE: 30 total candles processed, 1 orders executed
+2026-08-04 13:40:44.641 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'test_ema' (EMACrossoverStrategy)
+2026-08-04 13:40:44.642 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'test_case' (EMACrossoverStrategy)
+2026-08-04 13:40:44.644 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'temp_strat' (EMACrossoverStrategy)
+2026-08-04 13:40:44.644 | INFO     | app.strategies.registry:unregister:62 - Unregistered strategy plugin: 'temp_strat'
+2026-08-04 13:40:44.645 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'custom_meta' (EMACrossoverStrategy)
+2026-08-04 13:40:44.648 | INFO     | app.paper.journal.trade_journal:log_trade:56 - Trade logged in journal: BUY 10 x NFLX @ 400.0
+2026-08-04 13:40:44.650 | INFO     | app.paper.journal.trade_journal:log_trade:56 - Trade logged in journal: SELL 10 x NFLX @ 420.0
+2026-08-04 13:40:44.652 | INFO     | app.research.walk_forward:run:94 - WF Window 0: Train [2024-01-01 00:00:00 - 2024-02-29 00:00:00], Test [2024-03-01 00:00:00 - 2024-03-30 00:00:00]
+2026-08-04 13:40:44.653 | INFO     | app.research.optimization:grid_search:122 - Starting Grid Search for EMACrossoverStrategy with 4 parameter combinations
+2026-08-04 13:40:44.716 | INFO     | app.research.walk_forward:run:94 - WF Window 1: Train [2024-01-31 00:00:00 - 2024-03-30 00:00:00], Test [2024-03-31 00:00:00 - 2024-04-29 00:00:00]
+2026-08-04 13:40:44.716 | INFO     | app.research.optimization:grid_search:122 - Starting Grid Search for EMACrossoverStrategy with 4 parameter combinations
+2026-08-04 13:40:44.773 | INFO     | app.research.walk_forward:run:94 - WF Window 2: Train [2024-03-01 00:00:00 - 2024-04-29 00:00:00], Test [2024-04-30 00:00:00 - 2024-05-29 00:00:00]
+2026-08-04 13:40:44.773 | INFO     | app.research.optimization:grid_search:122 - Starting Grid Search for EMACrossoverStrategy with 4 parameter combinations
+2026-08-04 13:40:44.839 | INFO     | app.services.zerodha_auth:get_login_url:36 - Generating Zerodha login URL
+2026-08-04 13:40:44.842 | WARNING  | app.services.zerodha_auth:load_session:103 - Session file does not exist at C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-34\test_save_load_clear_session0\data\session.json
+2026-08-04 13:40:44.843 | INFO     | app.services.zerodha_auth:save_session:98 - Saved Zerodha session securely to C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-34\test_save_load_clear_session0\data\session.json
+2026-08-04 13:40:44.844 | INFO     | app.services.zerodha_auth:load_session:108 - Loaded active Zerodha session for user_id: AB1234
+2026-08-04 13:40:44.845 | INFO     | app.services.zerodha_auth:clear_session:119 - Cleared Zerodha session file C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-34\test_save_load_clear_session0\data\session.json
+2026-08-04 13:40:44.845 | WARNING  | app.services.zerodha_auth:load_session:103 - Session file does not exist at C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-34\test_save_load_clear_session0\data\session.json
+2026-08-04 13:40:44.851 | INFO     | app.services.zerodha_auth:exchange_token:44 - Exchanging request_token for Zerodha access_token
+2026-08-04 13:40:44.852 | INFO     | app.services.zerodha_auth:exchange_token:87 - Successfully authenticated user_id: AB1234
+2026-08-04 13:40:44.852 | INFO     | app.services.zerodha_auth:save_session:98 - Saved Zerodha session securely to C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-34\test_exchange_token_success0\data\session.json
+2026-08-04 13:40:44.859 | INFO     | app.services.zerodha_auth:exchange_token:44 - Exchanging request_token for Zerodha access_token
+2026-08-04 13:40:44.859 | ERROR    | app.services.zerodha_auth:exchange_token:70 - Token exchange failed with HTTP status 400
+2026-08-04 13:40:44.864 | WARNING  | app.services.zerodha_auth:load_session:103 - Session file does not exist at C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-34\test_get_profile_unauthenticat0\data\session.json
+2026-08-04 13:40:44.864 | WARNING  | app.services.zerodha_auth:get_profile:131 - Attempted to fetch profile without active session
+2026-08-04 13:40:44.872 | INFO     | app.services.zerodha_auth:save_session:98 - Saved Zerodha session securely to C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-34\test_get_profile_success0\data\session.json
+2026-08-04 13:40:44.873 | INFO     | app.services.zerodha_auth:load_session:108 - Loaded active Zerodha session for user_id: AB1234
+2026-08-04 13:40:44.873 | INFO     | app.services.zerodha_auth:get_profile:167 - Successfully fetched user profile for user_id: AB1234

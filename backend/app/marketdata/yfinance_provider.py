@@ -1,4 +1,4 @@
-"""Yahoo Finance historical-data provider."""
+"""Yahoo Finance historical-data provider with NaN cleaning and symbol mapping."""
 
 import asyncio
 from datetime import date
@@ -13,13 +13,15 @@ from app.marketdata.validator import validate_ohlcv
 
 
 class YahooFinanceProvider(MarketDataProvider):
-    """Fetch adjusted historical candles from Yahoo Finance with retries and validation."""
+    """Fetch adjusted historical candles from Yahoo Finance with retries, NaN cleaning, and validation."""
 
     SYMBOL_MAP = {
         "NIFTY": "^NSEI",
         "NIFTY 50": "^NSEI",
+        "NIFTY50": "^NSEI",
         "BANKNIFTY": "^NSEBANK",
         "NIFTYBANK": "^NSEBANK",
+        "FINNIFTY": "NIFTY_FIN_SERVICE.NS",
         "SENSEX": "^BSESN",
         "INDIAVIX": "^INDIAVIX",
         "INDIA VIX": "^INDIAVIX",
@@ -37,7 +39,7 @@ class YahooFinanceProvider(MarketDataProvider):
         period: Optional[str] = "1mo",
         interval: str = "1d",
     ) -> pd.DataFrame:
-        """Fetch historical candles with symbol mapping, retry logic, and schema validation."""
+        """Fetch historical candles with symbol mapping, NaN cleaning, retry logic, and schema validation."""
         target_symbol = self.SYMBOL_MAP.get(symbol.upper(), symbol)
         logger.info(
             "Fetching Yahoo Finance candles for symbol '{}' (mapped: '{}') [period: {}, interval: {}]",
@@ -62,6 +64,18 @@ class YahooFinanceProvider(MarketDataProvider):
                 )
                 if data is None or data.empty:
                     raise ValueError(f"No Yahoo Finance data returned for symbol '{target_symbol}'")
+
+                # Handle MultiIndex columns if returned by yfinance
+                if isinstance(data.columns, pd.MultiIndex):
+                    data = data.xs(target_symbol, axis=1, level=1) if target_symbol in data.columns.levels[1] else data.droplevel(1, axis=1)
+
+                # Clean incomplete rows containing NaN in key OHLC columns
+                ohlc_cols = [c for c in ["Open", "High", "Low", "Close", "open", "high", "low", "close"] if c in data.columns]
+                if ohlc_cols:
+                    data = data.dropna(subset=ohlc_cols)
+
+                if data.empty:
+                    raise ValueError(f"Data for '{target_symbol}' empty after dropping NaN rows")
 
                 validated = validate_ohlcv(data)
                 logger.info(
