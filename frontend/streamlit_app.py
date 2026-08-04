@@ -21,12 +21,33 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import streamlit as st
 
-from app.analytics.ai_reasoner import (
-    AIExplanation,
-    AIReasoner,
-    MarketRegime,
-    OptionTradeRecommendation,
-)
+try:
+    from app.analytics.ai_reasoner import (
+        AIExplanation,
+        AIReasoner,
+        MarketRegime,
+        OptionTradeRecommendation,
+    )
+except ImportError:
+    from dataclasses import dataclass
+
+    @dataclass
+    class OptionTradeRecommendation:
+        contract_symbol: str
+        strike: float
+        option_type: str
+        action: str
+        entry_price: float
+        stop_loss: float
+        target_price: float
+        risk_reward: str
+
+    from app.analytics.ai_reasoner import (
+        AIExplanation,
+        AIReasoner,
+        MarketRegime,
+    )
+
 from app.analytics.reporting import HTMLReportGenerator, JSONReportGenerator
 from app.indicators.engine import IndicatorEngine
 from app.marketdata.option_chain import OptionChain, OptionChainEngine
@@ -335,7 +356,7 @@ if nav == "⚡ Indian AI Options Terminal":
             ),
         )
 
-        opt_rec: OptionTradeRecommendation = ai_exp.option_recommendation or OptionTradeRecommendation(
+        opt_rec: OptionTradeRecommendation = getattr(ai_exp, "option_recommendation", None) or OptionTradeRecommendation(
             contract_symbol=f"{target_symbol.upper()} {int(atm_strike)} CE",
             strike=atm_strike,
             option_type="CE",
