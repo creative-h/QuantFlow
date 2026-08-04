@@ -2,7 +2,7 @@
 
 from datetime import UTC, datetime
 from decimal import Decimal
-from typing import Optional
+from typing import Dict, Optional
 from uuid import uuid4
 
 from loguru import logger
@@ -47,6 +47,15 @@ class PaperBroker(Broker):
     @cash.setter
     def cash(self, value: Decimal) -> None:
         self.portfolio.cash = value
+
+    @property
+    def _orders(self) -> Dict[str, Order]:
+        """Backward-compatible access to underlying order map."""
+        return self.execution_engine.order_manager._orders
+
+    def list_orders(self) -> list[Order]:
+        """Public synchronous method returning list of all paper orders."""
+        return self.execution_engine.order_manager.list_orders()
 
     async def login(self, request_token: str = "") -> str:
         """Paper broker does not require authentication; returns mock token."""

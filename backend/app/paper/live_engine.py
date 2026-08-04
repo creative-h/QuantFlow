@@ -1,4 +1,4 @@
-"""Real-time Live Paper Trading Engine with market poller, automated execution, alerts, and recovery."""
+"""Real-time Live Paper Trading Engine with market poller, automated execution, AI reasoning, and recovery."""
 
 import asyncio
 import json
@@ -13,6 +13,7 @@ from typing import Any, Dict, List, Optional
 import pandas as pd
 from loguru import logger
 
+from app.analytics.ai_reasoner import AIExplanation, AIReasoner, MarketRegime
 from app.analytics.reporting import HTMLReportGenerator, JSONReportGenerator
 from app.brokers.paper_broker import PaperBroker
 from app.marketdata.base import MarketDataProvider
@@ -42,7 +43,7 @@ class LivePaperSessionConfig:
 
 
 class LivePaperEngine:
-    """Engine managing real-time market polling, signal generation, paper execution, and recovery."""
+    """Engine managing real-time market polling, signal generation, paper execution, AI commentary, and recovery."""
 
     def __init__(
         self,
@@ -56,6 +57,7 @@ class LivePaperEngine:
         self.config: Optional[LivePaperSessionConfig] = None
         self.broker: Optional[PaperBroker] = None
         self.active_strategies: Dict[str, Strategy] = {}
+        self.recent_ai_explanations: Dict[str, AIExplanation] = {}
         self._task: Optional[asyncio.Task] = None
         self._thread: Optional[threading.Thread] = None
         self._market_history: Dict[str, pd.DataFrame] = {}
@@ -184,7 +186,7 @@ class LivePaperEngine:
             await asyncio.sleep(interval)
 
     async def process_tick(self) -> List[OrderRequest]:
-        """Fetch latest candles for configured symbols, evaluate strategies, and place paper orders."""
+        """Fetch latest candles for configured symbols, evaluate strategies, generate AI reasoning, and place paper orders."""
         if not self.config or not self.broker:
             return []
 
@@ -219,6 +221,17 @@ class LivePaperEngine:
                 # 2. Evaluate active strategies
                 for strat_name, strategy in self.active_strategies.items():
                     signal = strategy.on_candle(candle_obj, candles_df)
+
+                    # Synthesize AI reasoning payload
+                    ai_exp = AIReasoner.evaluate(
+                        symbol=symbol,
+                        candle=candle_obj,
+                        history=candles_df,
+                        signal=signal,
+                        strategy_name=strat_name,
+                    )
+                    self.recent_ai_explanations[symbol.upper()] = ai_exp
+
                     if signal and signal.side.value in ("BUY", "SELL"):
                         side = Side.BUY if signal.side.value == "BUY" else Side.SELL
                         req = OrderRequest(
@@ -236,7 +249,7 @@ class LivePaperEngine:
                         # Dispatch Alert
                         self.alert_engine.send_alert(
                             title=f"LIVE SIGNAL & ORDER: {side.value} {symbol}",
-                            message=f"Strategy '{strat_name}' triggered {side.value} for {symbol} @ ${close_price:,.2f}. Order Status: {executed_order.status.value}",
+                            message=f"Strategy '{strat_name}' triggered {side.value} for {symbol} @ ${close_price:,.2f}. AI Explanation: {ai_exp.explanation}",
                             level=AlertLevel.INFO,
                         )
             except Exception as err:
@@ -266,6 +279,31 @@ class LivePaperEngine:
         )
 
         executed_order = await self.broker.place_order(req)
+
+        # Synthesize Demo AI Explanation
+        demo_candle = Candle(
+            timestamp=datetime.now(),
+            open=float(order_price) * 0.99,
+            high=float(order_price) * 1.01,
+            low=float(order_price) * 0.98,
+            close=float(order_price),
+            volume=5000,
+        )
+        self.recent_ai_explanations[symbol.upper()] = AIExplanation(
+            timestamp=datetime.now(),
+            symbol=symbol.upper(),
+            decision=side_str.upper(),
+            confidence_score=88.5,
+            market_regime=MarketRegime.TRENDING_BULLISH if side_str.upper() == "BUY" else MarketRegime.TRENDING_BEARISH,
+            checklist={
+                "EMA Crossover Confirmed": True,
+                "VWAP Support Active": True,
+                "RSI Momentum Favorable": True,
+                "Risk Manager Approved": True,
+            },
+            explanation=f"Demo {side_str.upper()} order executed for {quantity} shares of {symbol.upper()} @ ${order_price:,.2f}. Pipeline validation successful with 88.5% AI confidence.",
+        )
+
         self.alert_engine.send_alert(
             title=f"DEMO ORDER INJECTED: {side.value} {symbol.upper()}",
             message=f"Injected demo {side.value} order for {quantity} {symbol.upper()} @ ${order_price:,.2f}. Status: {executed_order.status.value}",

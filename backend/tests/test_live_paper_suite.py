@@ -1,10 +1,11 @@
-"""Release v0.4 comprehensive unit and API test suite."""
+"""Release v0.4 & v0.5 comprehensive unit and API test suite."""
 
 import pytest
 from fastapi.testclient import TestClient
 
 from app.api.dependencies import get_live_paper_engine
 from app.api.routers.paper import DemoOrderRequest, StartPaperSessionRequest
+from app.brokers.paper_broker import PaperBroker
 from app.main import app
 from app.paper.live_engine import (
     LivePaperEngine,
@@ -14,11 +15,21 @@ from app.paper.live_engine import (
 from app.services.alert_engine import AlertChannel, AlertEngine, AlertLevel, AlertMessage
 
 
+def test_paper_broker_list_orders_public_api():
+    broker = PaperBroker(initial_cash=100000.0)
+    orders = broker.list_orders()
+    assert isinstance(orders, list)
+    assert len(orders) == 0
+    # Verify backward-compatible _orders property does not raise AttributeError
+    assert isinstance(broker._orders, dict)
+
+
 def test_live_paper_engine_initial_state():
     engine = LivePaperEngine()
     assert engine.state == LivePaperEngineState.STOPPED
     assert engine.broker is None
     assert engine.config is None
+    assert isinstance(engine.recent_ai_explanations, dict)
 
 
 def test_live_paper_engine_state_enum_values():
@@ -142,6 +153,7 @@ async def test_live_paper_engine_inject_demo_order_direct():
     assert order.request.quantity == 25
     assert engine.broker is not None
     assert float(engine.broker.portfolio.total_equity) > 0.0
+    assert "INFY" in engine.recent_ai_explanations
 
 
 @pytest.mark.asyncio
@@ -150,6 +162,7 @@ async def test_live_paper_engine_inject_demo_order_sell_side():
     order = await engine.inject_demo_order(symbol="TCS", side_str="SELL", quantity=10, price=3200.0)
     assert order.request.symbol == "TCS"
     assert order.request.side.value == "SELL"
+    assert "TCS" in engine.recent_ai_explanations
 
 
 def test_paper_router_full_control_flow():

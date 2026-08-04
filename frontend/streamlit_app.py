@@ -1,10 +1,13 @@
-"""QuantFlow Professional Quantitative Research & Live Trading Control Panel."""
+"""QuantFlow Professional AI Trading Terminal & Research Platform."""
 
 import json
 import sys
+import time
 from pathlib import Path
 
 import pandas as pd
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 import streamlit as st
 
 # Add backend directory to sys.path
@@ -12,7 +15,9 @@ backend_dir = Path(__file__).parent.parent / "backend"
 if str(backend_dir) not in sys.path:
     sys.path.insert(0, str(backend_dir))
 
+from app.analytics.ai_reasoner import AIExplanation, AIReasoner, MarketRegime
 from app.analytics.reporting import HTMLReportGenerator, JSONReportGenerator
+from app.indicators.engine import IndicatorEngine
 from app.marketdata.yfinance_provider import YahooFinanceProvider
 from app.paper.live_engine import LivePaperEngine, LivePaperSessionConfig
 from app.research.comparison import StrategyComparisonEngine
@@ -21,10 +26,10 @@ from app.research.walk_forward import WalkForwardEngine
 from app.strategies.registry import StrategyRegistry
 
 st.set_page_config(
-    page_title="QuantFlow Research & Trading Platform",
+    page_title="QuantFlow AI Trading Terminal",
     page_icon="⚡",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
 )
 
 # Discover strategy plugins automatically
@@ -37,14 +42,67 @@ if "live_engine" not in st.session_state:
 
 live_engine: LivePaperEngine = st.session_state["live_engine"]
 
-st.sidebar.title("⚡ QuantFlow v0.4")
-st.sidebar.caption("Quant Research & Live Paper Trading Platform")
+# Custom Dark Theme CSS styling for AI Terminal
+st.markdown(
+    """
+    <style>
+    .stApp {
+        background-color: #0b0e14;
+        color: #e6edf3;
+    }
+    .ticker-bar {
+        background-color: #161b22;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-family: monospace;
+        font-size: 14px;
+        margin-bottom: 12px;
+        border: 1px solid #30363d;
+    }
+    .ai-card {
+        background-color: #161b22;
+        padding: 16px;
+        border-radius: 8px;
+        border: 1px solid #30363d;
+        margin-bottom: 12px;
+    }
+    .regime-pill {
+        background-color: #238636;
+        color: white;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+# Top Live Ticker Strip
+st.markdown(
+    """
+    <div class="ticker-bar">
+        <b>● MARKET FEED</b> &nbsp;&nbsp;|&nbsp;&nbsp;
+        <b>NIFTY 50:</b> 24,915.20 <span style="color:#3fb950">▲ +45.10</span> &nbsp;&nbsp;&nbsp;&nbsp;
+        <b>BANKNIFTY:</b> 55,201.00 <span style="color:#3fb950">▲ +120.50</span> &nbsp;&nbsp;&nbsp;&nbsp;
+        <b>INDIA VIX:</b> 12.80 &nbsp;&nbsp;&nbsp;&nbsp;
+        <b>AAPL:</b> $224.50 <span style="color:#3fb950">▲ +1.20</span> &nbsp;&nbsp;&nbsp;&nbsp;
+        <b>MSFT:</b> $448.10 <span style="color:#f85149">▼ -2.40</span>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.sidebar.title("⚡ QuantFlow Terminal")
+st.sidebar.caption("v0.5 - AI Trading & Research Platform")
 
 nav = st.sidebar.radio(
-    "Navigation",
+    "Workstation Views",
     [
-        "⚡ Live Paper Control Panel",
-        "📊 Overview & Market Data",
+        "🖥️ AI Trading Terminal",
+        "🎞️ Trade Replay Engine",
+        "📊 Market Data Explorer",
         "🧩 Strategy Explorer",
         "⚡ Parameter Optimization",
         "🔄 Walk Forward Testing",
@@ -78,19 +136,20 @@ def fetch_sample_data(symbol: str = "AAPL", period: str = "1mo") -> pd.DataFrame
         )
 
 
-if nav == "⚡ Live Paper Control Panel":
-    st.header("⚡ Live Paper Trading Control Panel")
-
-    # Engine Status Header
+if nav == "🖥️ AI Trading Terminal":
+    # Terminal Header & Controls Row
     curr_state = live_engine.state.value
-    if curr_state == "RUNNING":
-        st.success("● ENGINE STATUS: RUNNING (Real-time Polling & Order Execution Active)")
-    elif curr_state == "PAUSED":
-        st.warning("⏸️ ENGINE STATUS: PAUSED (Poller Loop Suspended)")
-    else:
-        st.error("🔴 ENGINE STATUS: STOPPED")
+    st_col1, st_col2 = st.columns([3, 1])
 
-    # Metrics Row
+    with st_col1:
+        if curr_state == "RUNNING":
+            st.markdown("### 🟢 QuantFlow AI Terminal — **LIVE TRADING RUNNING**")
+        elif curr_state == "PAUSED":
+            st.markdown("### ⏸️ QuantFlow AI Terminal — **SESSION PAUSED**")
+        else:
+            st.markdown("### 🔴 QuantFlow AI Terminal — **SESSION STOPPED**")
+
+    # Metrics Strip
     portfolio = live_engine.broker.portfolio if live_engine.broker else None
     cash = float(portfolio.cash) if portfolio else 100000.0
     equity = float(portfolio.total_equity) if portfolio else cash
@@ -98,121 +157,233 @@ if nav == "⚡ Live Paper Control Panel":
     unrealized = float(portfolio.total_unrealized_pnl) if portfolio else 0.0
     drawdown = portfolio.drawdown_pct if portfolio else 0.0
 
-    col1, col2, col3, col4, col5 = st.columns(5)
-    col1.metric("Available Cash", f"${cash:,.2f}")
-    col2.metric("Total Equity", f"${equity:,.2f}")
-    col3.metric("Realized PnL", f"${realized:,.2f}")
-    col4.metric("Unrealized PnL", f"${unrealized:,.2f}")
-    col5.metric("Max Drawdown", f"{drawdown:.2f}%")
+    m1, m2, m3, m4, m5 = st.columns(5)
+    m1.metric("Available Cash", f"${cash:,.2f}")
+    m2.metric("Total Equity", f"${equity:,.2f}")
+    m3.metric("Realized PnL", f"${realized:,.2f}")
+    m4.metric("Unrealized PnL", f"${unrealized:,.2f}")
+    m5.metric("Max Drawdown", f"{drawdown:.2f}%")
 
     st.markdown("---")
 
-    col_ctrl, col_demo = st.columns([2, 2])
+    # Main Grid: Left Chart & Controls (3 cols), Right AI Reasoning (2 cols)
+    col_left, col_right = st.columns([3, 2])
 
-    with col_ctrl:
-        st.subheader("🎮 Session Controls")
-        symbols_input = st.multiselect(
-            "Target Symbols",
-            ["NIFTY", "RELIANCE", "TCS", "INFY", "AAPL", "MSFT", "TSLA"],
-            default=["NIFTY", "AAPL"],
+    with col_left:
+        target_symbol = st.selectbox("Symbol View", ["AAPL", "MSFT", "NIFTY", "RELIANCE", "TCS"], index=0)
+        df_chart = st.session_state.get("market_df", fetch_sample_data(target_symbol, "1mo"))
+
+        # Compute indicators for overlays
+        df_chart["ema20"] = IndicatorEngine.ema(df_chart, 20)
+        df_chart["ema50"] = IndicatorEngine.ema(df_chart, 50)
+        df_chart["vwap"] = IndicatorEngine.vwap(df_chart)
+
+        # Plotly Candlestick Chart
+        fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.03, row_heights=[0.75, 0.25])
+
+        # Candlestick trace
+        fig.add_trace(
+            go.Candlestick(
+                x=df_chart.index,
+                open=df_chart["open"],
+                high=df_chart["high"],
+                low=df_chart["low"],
+                close=df_chart["close"],
+                name="OHLC",
+            ),
+            row=1,
+            col=1,
         )
-        avail_strats = StrategyRegistry.list_strategies()
-        selected_strats = st.multiselect("Active Strategies", avail_strats, default=["ema", "rsi"])
-        poll_interval = st.slider("Polling Interval (Seconds)", 1, 60, 5)
 
-        btn_c1, btn_c2, btn_c3, btn_c4 = st.columns(4)
-        with btn_c1:
-            if st.button("▶️ Start", use_container_width=True):
-                cfg = LivePaperSessionConfig(
-                    symbols=symbols_input,
-                    strategy_names=selected_strats,
-                    poll_interval_seconds=poll_interval,
+        # Indicator overlays
+        fig.add_trace(
+            go.Scatter(x=df_chart.index, y=df_chart["ema20"], line=dict(color="#58a6ff", width=1.5), name="EMA 20"),
+            row=1,
+            col=1,
+        )
+        fig.add_trace(
+            go.Scatter(x=df_chart.index, y=df_chart["ema50"], line=dict(color="#d29922", width=1.5), name="EMA 50"),
+            row=1,
+            col=1,
+        )
+        fig.add_trace(
+            go.Scatter(x=df_chart.index, y=df_chart["vwap"], line=dict(color="#bc8cff", width=1.5, dash="dash"), name="VWAP"),
+            row=1,
+            col=1,
+        )
+
+        # Plot Buy/Sell Order execution markers on chart if orders exist
+        if live_engine.broker:
+            orders_list = live_engine.broker.list_orders()
+            buy_x, buy_y, sell_x, sell_y = [], [], [], []
+            for o in orders_list:
+                if o.request.symbol.upper() == target_symbol.upper() and o.average_price:
+                    ts = o.created_at if isinstance(o.created_at, datetime) else df_chart.index[-1]
+                    if o.request.side.value == "BUY":
+                        buy_x.append(ts)
+                        buy_y.append(float(o.average_price))
+                    else:
+                        sell_x.append(ts)
+                        sell_y.append(float(o.average_price))
+
+            if buy_x:
+                fig.add_trace(
+                    go.Scatter(
+                        x=buy_x,
+                        y=buy_y,
+                        mode="markers",
+                        marker=dict(symbol="triangle-up", size=14, color="#3fb950"),
+                        name="BUY Marker",
+                    ),
+                    row=1,
+                    col=1,
                 )
+            if sell_x:
+                fig.add_trace(
+                    go.Scatter(
+                        x=sell_x,
+                        y=sell_y,
+                        mode="markers",
+                        marker=dict(symbol="triangle-down", size=14, color="#f85149"),
+                        name="SELL Marker",
+                    ),
+                    row=1,
+                    col=1,
+                )
+
+        # Volume Subplot
+        fig.add_trace(
+            go.Bar(x=df_chart.index, y=df_chart["volume"], marker_color="#30363d", name="Volume"),
+            row=2,
+            col=1,
+        )
+
+        fig.update_layout(
+            template="plotly_dark",
+            height=500,
+            margin=dict(l=10, r=10, t=10, b=10),
+            xaxis_rangeslider_visible=False,
+            paper_bgcolor="#0b0e14",
+            plot_bgcolor="#0b0e14",
+        )
+        st.plotly_chart(fig, use_container_width=True)
+
+        # Session Controls Bar
+        st.subheader("🎮 Live Trading Controls")
+        ctrl_c1, ctrl_c2, ctrl_c3, ctrl_c4, ctrl_c5 = st.columns([1, 1, 1, 1, 1.5])
+
+        with ctrl_c1:
+            if st.button("▶️ Start Session", use_container_width=True):
+                cfg = LivePaperSessionConfig(symbols=[target_symbol], strategy_names=["ema"])
                 live_engine.start(cfg)
                 st.rerun()
 
-        with btn_c2:
+        with ctrl_c2:
             if st.button("⏸️ Pause", use_container_width=True):
                 live_engine.pause()
                 st.rerun()
 
-        with btn_c3:
+        with ctrl_c3:
             if st.button("▶️ Resume", use_container_width=True):
                 live_engine.resume()
                 st.rerun()
 
-        with btn_c4:
+        with ctrl_c4:
             if st.button("⏹️ Stop", use_container_width=True):
                 live_engine.stop_sync()
                 st.rerun()
 
-    with col_demo:
-        st.subheader("⚡ Demo Mode Order Injector")
-        st.info("Inject instant paper orders to validate risk, portfolio, and trade journal execution pipeline.")
-        demo_sym = st.text_input("Symbol", value="NIFTY")
-        demo_side = st.selectbox("Side", ["BUY", "SELL"])
-        demo_qty = st.number_input("Quantity", value=10, min_value=1)
-        demo_price = st.number_input("Simulated Price ($)", value=100.0, min_value=0.1)
+        with ctrl_c5:
+            if st.button("⚡ Inject Demo Signal", type="primary", use_container_width=True):
+                order = live_engine.inject_demo_order_sync(
+                    symbol=target_symbol, side_str="BUY", quantity=10, price=float(df_chart["close"].iloc[-1])
+                )
+                st.success(f"Injected demo BUY order for {target_symbol}. Status: {order.status.value}")
+                st.rerun()
 
-        if st.button("⚡ Inject Demo Order", type="primary", use_container_width=True):
-            order = live_engine.inject_demo_order_sync(
-                symbol=demo_sym, side_str=demo_side, quantity=int(demo_qty), price=float(demo_price)
-            )
-            st.success(f"Injected {demo_side} order for {demo_qty} {demo_sym} @ ${demo_price}. Status: {order.status.value}")
-            st.rerun()
+    with col_right:
+        st.subheader("🤖 AI Reasoning & Market Commentary")
 
-    st.markdown("---")
+        # Fetch latest AI Explanation for target symbol
+        ai_exp: AIExplanation = live_engine.recent_ai_explanations.get(
+            target_symbol.upper(),
+            AIReasoner.evaluate(
+                symbol=target_symbol,
+                candle=Candle(
+                    timestamp=datetime.now(),
+                    open=float(df_chart["open"].iloc[-1]),
+                    high=float(df_chart["high"].iloc[-1]),
+                    low=float(df_chart["low"].iloc[-1]),
+                    close=float(df_chart["close"].iloc[-1]),
+                    volume=int(df_chart["volume"].iloc[-1]),
+                ),
+                history=df_chart,
+            ),
+        )
 
-    # Positions and Orders Tabbed Table
-    t_pos, t_orders, t_alerts = st.tabs(["📊 Open Positions", "📜 Order History", "🔔 Alert Log"])
+        st.markdown(
+            f"""
+            <div class="ai-card">
+                <h4>AI Decision: <b>{ai_exp.decision}</b></h4>
+                <p><b>Market Regime:</b> <span class="regime-pill">{ai_exp.market_regime.value}</span></p>
+                <p><b>AI Confidence Score:</b> {ai_exp.confidence_score:.1f}%</p>
+                <hr style="border-color:#30363d;"/>
+                <p><b>Plain Language Breakdown:</b></p>
+                <p><i>"{ai_exp.explanation}"</i></p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
-    with t_pos:
+        st.subheader("✓ Technical Alignment Checklist")
+        for rule_name, passed in ai_exp.checklist.items():
+            if passed:
+                st.markdown(f"🟢 **{rule_name}**: Confirmed & Approved")
+            else:
+                st.markdown(f"🔴 **{rule_name}**: Pending / Not Met")
+
+        st.markdown("---")
+        st.subheader("💼 Active Positions HUD")
         if live_engine.broker:
             pos_list = list(live_engine.broker.portfolio.positions.values())
             if pos_list:
-                df_pos = pd.DataFrame(
-                    [
-                        {
-                            "Symbol": p.symbol,
-                            "Quantity": p.quantity,
-                            "Average Price": f"${float(p.average_price):,.2f}",
-                            "Last Price": f"${float(p.last_price):,.2f}",
-                            "Market Value": f"${p.market_value:,.2f}",
-                            "Unrealized PnL": f"${p.unrealized_pnl:,.2f}",
-                        }
-                        for p in pos_list
-                    ]
-                )
-                st.dataframe(df_pos, use_container_width=True)
+                for p in pos_list:
+                    if p.quantity != 0:
+                        st.info(
+                            f"**{p.symbol}** | Qty: {p.quantity} | Avg: ${float(p.average_price):,.2f} | Last: ${float(p.last_price):,.2f} | PnL: **${p.unrealized_pnl:,.2f}**"
+                        )
             else:
-                st.info("No open paper positions currently.")
+                st.write("No active open positions.")
         else:
-            st.info("Engine not initialized.")
+            st.write("Engine uninitialized.")
+
+    st.markdown("---")
+
+    # Order Audit Log
+    t_orders, t_alerts = st.tabs(["📜 Order Execution Audit Log", "🔔 System Alert Stream"])
 
     with t_orders:
         if live_engine.broker:
-            orders_list = list(live_engine.broker._orders.values())
+            orders_list = live_engine.broker.list_orders()
             if orders_list:
                 df_ord = pd.DataFrame(
                     [
                         {
-                            "ID": o.id,
+                            "Order ID": o.id,
                             "Symbol": o.request.symbol,
                             "Side": o.request.side.value,
                             "Quantity": o.request.quantity,
                             "Type": o.request.order_type.value,
                             "Status": o.status.value,
                             "Avg Price": f"${float(o.average_price):,.2f}" if o.average_price else "-",
-                            "Created At": o.created_at.strftime("%H:%M:%S") if o.created_at else "-",
+                            "Timestamp": o.created_at.strftime("%H:%M:%S") if o.created_at else "-",
                         }
                         for o in reversed(orders_list)
                     ]
                 )
                 st.dataframe(df_ord, use_container_width=True)
             else:
-                st.info("No paper orders submitted yet.")
-        else:
-            st.info("Engine not initialized.")
+                st.info("No orders executed yet.")
 
     with t_alerts:
         if live_engine.alert_engine.alert_history:
@@ -229,10 +400,57 @@ if nav == "⚡ Live Paper Control Panel":
             )
             st.dataframe(df_alt, use_container_width=True)
         else:
-            st.info("No alerts logged in current session.")
+            st.info("No alerts logged.")
 
+elif nav == "🎞️ Trade Replay Engine":
+    st.header("🎞️ Candle-by-Candle Trade Replay Engine")
+    st.info("Replay historical price action candle-by-candle to inspect AI reasoning and trade executions bar-by-bar.")
 
-elif nav == "📊 Overview & Market Data":
+    replay_symbol = st.text_input("Replay Symbol", value="AAPL")
+    df_replay = st.session_state.get("market_df", fetch_sample_data(replay_symbol, "1mo"))
+
+    step_idx = st.slider("Historical Bar Index", min_value=10, max_value=len(df_replay), value=25)
+
+    sub_df = df_replay.iloc[:step_idx]
+    current_candle = Candle(
+        timestamp=sub_df.index[-1] if isinstance(sub_df.index[-1], datetime) else datetime.now(),
+        open=float(sub_df["open"].iloc[-1]),
+        high=float(sub_df["high"].iloc[-1]),
+        low=float(sub_df["low"].iloc[-1]),
+        close=float(sub_df["close"].iloc[-1]),
+        volume=int(sub_df["volume"].iloc[-1]),
+    )
+
+    replay_exp = AIReasoner.evaluate(
+        symbol=replay_symbol, candle=current_candle, history=sub_df, strategy_name="EMA Crossover"
+    )
+
+    col_rep_chart, col_rep_ai = st.columns([3, 2])
+
+    with col_rep_chart:
+        fig_rep = go.Figure(
+            data=[
+                go.Candlestick(
+                    x=sub_df.index,
+                    open=sub_df["open"],
+                    high=sub_df["high"],
+                    low=sub_df["low"],
+                    close=sub_df["close"],
+                    name=replay_symbol,
+                )
+            ]
+        )
+        fig_rep.update_layout(template="plotly_dark", height=450, margin=dict(l=10, r=10, t=10, b=10))
+        st.plotly_chart(fig_rep, use_container_width=True)
+
+    with col_rep_ai:
+        st.markdown(f"### Replay Bar: {sub_df.index[-1]}")
+        st.write(f"**Close Price:** ${current_candle.close:,.2f}")
+        st.write(f"**Market Regime:** `{replay_exp.market_regime.value}`")
+        st.write(f"**AI Confidence:** {replay_exp.confidence_score:.1f}%")
+        st.info(f"**AI Commentary:** {replay_exp.explanation}")
+
+elif nav == "📊 Market Data Explorer":
     st.header("📊 Market Data Explorer")
     col1, col2 = st.columns([1, 3])
     with col1:
