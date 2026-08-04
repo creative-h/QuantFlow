@@ -2,6 +2,7 @@
 
 import asyncio
 import json
+import threading
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from decimal import Decimal
@@ -56,6 +57,7 @@ class LivePaperEngine:
         self.broker: Optional[PaperBroker] = None
         self.active_strategies: Dict[str, Strategy] = {}
         self._task: Optional[asyncio.Task] = None
+        self._thread: Optional[threading.Thread] = None
         self._market_history: Dict[str, pd.DataFrame] = {}
 
         if session_file is None:
@@ -66,7 +68,7 @@ class LivePaperEngine:
             self.session_file = Path(session_file)
 
     def start(self, config: LivePaperSessionConfig) -> None:
-        """Initialize paper broker, load strategies, and start live scheduler loop."""
+        """Initialize paper broker, load strategies, and start live scheduler loop safely in async or sync contexts."""
         if self.state == LivePaperEngineState.RUNNING:
             logger.warning("LivePaperEngine is already running")
             return
@@ -92,7 +94,18 @@ class LivePaperEngine:
         )
 
         self.save_session()
-        self._task = asyncio.create_task(self._run_loop())
+
+        # Start loop safely whether in async event loop or sync thread (e.g. Streamlit)
+        try:
+            loop = asyncio.get_running_loop()
+            self._task = loop.create_task(self._run_loop())
+        except RuntimeError:
+            self._thread = threading.Thread(target=self._run_thread, daemon=True)
+            self._thread.start()
+
+    def _run_thread(self) -> None:
+        """Background thread entry point running event loop for asyncio coroutines."""
+        asyncio.run(self._run_loop())
 
     def pause(self) -> None:
         """Pause live paper scheduler loop."""
@@ -149,6 +162,14 @@ class LivePaperEngine:
         )
         self.save_session()
         return report_summary
+
+    def stop_sync(self) -> Dict[str, Any]:
+        """Synchronous wrapper for stop() called from Streamlit or sync contexts."""
+        try:
+            loop = asyncio.get_running_loop()
+            return loop.run_until_complete(self.stop())
+        except RuntimeError:
+            return asyncio.run(self.stop())
 
     async def _run_loop(self) -> None:
         """Continuous polling loop executing tick evaluations."""
@@ -252,6 +273,16 @@ class LivePaperEngine:
         )
         self.save_session()
         return executed_order
+
+    def inject_demo_order_sync(
+        self, symbol: str = "NIFTY", side_str: str = "BUY", quantity: int = 10, price: Optional[float] = None
+    ) -> Order:
+        """Synchronous wrapper for inject_demo_order called from Streamlit or sync contexts."""
+        try:
+            loop = asyncio.get_running_loop()
+            return loop.run_until_complete(self.inject_demo_order(symbol, side_str, quantity, price))
+        except RuntimeError:
+            return asyncio.run(self.inject_demo_order(symbol, side_str, quantity, price))
 
     def save_session(self) -> None:
         """Persist current session state and portfolio snapshot to JSON file."""

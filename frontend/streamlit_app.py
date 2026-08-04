@@ -143,9 +143,7 @@ if nav == "⚡ Live Paper Control Panel":
 
         with btn_c4:
             if st.button("⏹️ Stop", use_container_width=True):
-                import asyncio
-
-                asyncio.run(live_engine.stop())
+                live_engine.stop_sync()
                 st.rerun()
 
     with col_demo:
@@ -157,12 +155,8 @@ if nav == "⚡ Live Paper Control Panel":
         demo_price = st.number_input("Simulated Price ($)", value=100.0, min_value=0.1)
 
         if st.button("⚡ Inject Demo Order", type="primary", use_container_width=True):
-            import asyncio
-
-            order = asyncio.run(
-                live_engine.inject_demo_order(
-                    symbol=demo_sym, side_str=demo_side, quantity=int(demo_qty), price=float(demo_price)
-                )
+            order = live_engine.inject_demo_order_sync(
+                symbol=demo_sym, side_str=demo_side, quantity=int(demo_qty), price=float(demo_price)
             )
             st.success(f"Injected {demo_side} order for {demo_qty} {demo_sym} @ ${demo_price}. Status: {order.status.value}")
             st.rerun()
@@ -174,9 +168,7 @@ if nav == "⚡ Live Paper Control Panel":
 
     with t_pos:
         if live_engine.broker:
-            import asyncio
-
-            pos_list = asyncio.run(live_engine.broker.positions())
+            pos_list = list(live_engine.broker.portfolio.positions.values())
             if pos_list:
                 df_pos = pd.DataFrame(
                     [
@@ -199,9 +191,7 @@ if nav == "⚡ Live Paper Control Panel":
 
     with t_orders:
         if live_engine.broker:
-            import asyncio
-
-            orders_list = asyncio.run(live_engine.broker.orders())
+            orders_list = list(live_engine.broker._orders.values())
             if orders_list:
                 df_ord = pd.DataFrame(
                     [
