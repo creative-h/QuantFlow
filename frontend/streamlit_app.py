@@ -1,21 +1,25 @@
 """QuantFlow v1.0 — Indian AI Options Trading Terminal & Quantitative Research Platform."""
 
+import sys
+from pathlib import Path
+
+# Unconditionally force backend directory to position 0 in sys.path
+backend_dir = str((Path(__file__).parent.parent / "backend").resolve())
+if backend_dir in sys.path:
+    sys.path.remove(backend_dir)
+sys.path.insert(0, backend_dir)
+
 import asyncio
 from datetime import datetime
 import json
-import sys
 import time
-from pathlib import Path
+
+button_kwargs = {"use_container_width": True}
 
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import streamlit as st
-
-# Add backend directory to sys.path
-backend_dir = Path(__file__).parent.parent / "backend"
-if str(backend_dir) not in sys.path:
-    sys.path.insert(0, str(backend_dir))
 
 from app.analytics.ai_reasoner import (
     AIExplanation,
@@ -208,24 +212,24 @@ if nav == "⚡ Indian AI Options Terminal":
 
         st.markdown("---")
         st.subheader("🎮 Session Controls")
-        if st.button("▶️ Start Engine", width="stretch"):
+        if st.button("▶️ Start Engine", **button_kwargs):
             cfg = LivePaperSessionConfig(symbols=[target_symbol], strategy_names=["ema"])
             live_engine.start(cfg)
             st.rerun()
 
-        if st.button("⏸️ Pause", width="stretch"):
+        if st.button("⏸️ Pause", **button_kwargs):
             live_engine.pause()
             st.rerun()
 
-        if st.button("▶️ Resume", width="stretch"):
+        if st.button("▶️ Resume", **button_kwargs):
             live_engine.resume()
             st.rerun()
 
-        if st.button("⏹️ Stop & Report", width="stretch"):
+        if st.button("⏹️ Stop & Report", **button_kwargs):
             live_engine.stop_sync()
             st.rerun()
 
-        if st.button("⚡ Inject Option Order", type="primary", width="stretch"):
+        if st.button("⚡ Inject Option Order", type="primary", **button_kwargs):
             order = live_engine.inject_demo_order_sync(
                 symbol=target_symbol, side_str="BUY", quantity=50, price=118.0
             )
@@ -309,7 +313,7 @@ if nav == "⚡ Indian AI Options Terminal":
             paper_bgcolor="#0b0e14",
             plot_bgcolor="#0b0e14",
         )
-        st.plotly_chart(fig, width="stretch")
+        st.plotly_chart(fig, **button_kwargs)
 
     with col_right:
         st.subheader("🤖 AI Option Trade Generator")
@@ -410,7 +414,7 @@ if nav == "⚡ Indian AI Options Terminal":
                 }
             )
 
-        st.dataframe(pd.DataFrame(chain_data), width="stretch")
+        st.dataframe(pd.DataFrame(chain_data), **button_kwargs)
 
     with t_orders:
         if live_engine.broker:
@@ -431,7 +435,7 @@ if nav == "⚡ Indian AI Options Terminal":
                         for o in reversed(orders_list)
                     ]
                 )
-                st.dataframe(df_ord, width="stretch")
+                st.dataframe(df_ord, **button_kwargs)
             else:
                 st.info("No option paper orders submitted yet.")
 
@@ -448,7 +452,7 @@ if nav == "⚡ Indian AI Options Terminal":
                     for a in reversed(live_engine.alert_engine.alert_history)
                 ]
             )
-            st.dataframe(df_alt, width="stretch")
+            st.dataframe(df_alt, **button_kwargs)
         else:
             st.info("No system alerts recorded.")
 
@@ -477,7 +481,7 @@ elif nav == "⛓️ Live Option Chain Matrix":
                 "Put OI": p.oi,
             }
         )
-    st.dataframe(pd.DataFrame(chain_rows), width="stretch")
+    st.dataframe(pd.DataFrame(chain_rows), **button_kwargs)
 
 elif nav == "🎞️ Trade Replay Engine":
     st.header("🎞️ Candle-by-Candle Trade Replay Engine")
@@ -516,7 +520,7 @@ elif nav == "🎞️ Trade Replay Engine":
             ]
         )
         fig_rep.update_layout(template="plotly_dark", height=450, margin=dict(l=10, r=10, t=10, b=10))
-        st.plotly_chart(fig_rep, width="stretch")
+        st.plotly_chart(fig_rep, **button_kwargs)
 
     with col_rep_ai:
         st.markdown(f"### Replay Bar: {sub_df.index[-1]}")
@@ -541,7 +545,7 @@ elif nav == "📊 Market Data Explorer":
     st.subheader(f"Historical Candle Data for {symbol}")
     st.line_chart(df["close"])
     with st.expander("Raw Data Table"):
-        st.dataframe(df, width="stretch")
+        st.dataframe(df, **button_kwargs)
 
 elif nav == "🧩 Strategy Explorer":
     st.header("🧩 Strategy Registry & Plugins")
@@ -593,7 +597,7 @@ elif nav == "⚡ Parameter Optimization":
 
         res_df = pd.DataFrame([r.to_dict() for r in results])
         st.subheader("Top Optimization Results")
-        st.dataframe(res_df, width="stretch")
+        st.dataframe(res_df, **button_kwargs)
 
 elif nav == "🔄 Walk Forward Testing":
     st.header("🔄 Walk-Forward Optimization & Testing")
@@ -621,7 +625,7 @@ elif nav == "🔄 Walk Forward Testing":
             col4.metric("Max Drawdown", f"{wf_res.consolidated_max_drawdown:.2f}%")
 
             st.subheader("Window-by-Window Results")
-            st.dataframe(pd.DataFrame([w.__dict__ for w in wf_res.windows]), width="stretch")
+            st.dataframe(pd.DataFrame([w.__dict__ for w in wf_res.windows]), **button_kwargs)
         except Exception as e:
             st.error(f"Walk Forward execution error: {e}")
 
@@ -638,7 +642,7 @@ elif nav == "⚔️ Strategy Comparison":
         comp_report = engine.compare(instances, df)
 
         st.subheader("Strategy Comparison Ranking Table")
-        st.dataframe(comp_report.to_dataframe(), width="stretch")
+        st.dataframe(comp_report.to_dataframe(), **button_kwargs)
 
 elif nav == "📄 Reports & Analytics":
     st.header("📄 Performance Reports & HTML Export")
