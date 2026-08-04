@@ -17,7 +17,7 @@ backend_dir = Path(__file__).parent.parent / "backend"
 if str(backend_dir) not in sys.path:
     sys.path.insert(0, str(backend_dir))
 
-from app.analytics.ai_reasoner import (
+from app.analytics import (
     AIExplanation,
     AIReasoner,
     MarketRegime,
