@@ -30,7 +30,7 @@ from app.analytics.multi_agent.coordinator import DecisionCoordinator
 from app.analytics.multi_agent.debate import AIDebateEngine, AIDebateSession
 from app.analytics.multi_agent.decision import AITradeDecision, AgentOpinion
 from app.analytics.performance_auditor import AuditReport, PerformanceAuditor
-from app.analytics.scoreboard import ScoreboardConsensus, StrategyScoreboard
+from app.analytics.multi_agent.scoreboard import ScoreboardConsensus, StrategyScoreboard
 from app.analytics.reporting import HTMLReportGenerator, JSONReportGenerator
 from app.indicators.engine import IndicatorEngine
 from app.marketdata.live_feed import Tick
