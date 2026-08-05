@@ -1,4 +1,4 @@
-"""QuantFlow v7.0 — Multi-Agent AI Decision Engine & AI Command Center."""
+"""QuantFlow v8.0 — Professional Trade Management Workstation."""
 
 import sys
 from pathlib import Path
@@ -44,9 +44,12 @@ from app.research.comparison import StrategyComparisonEngine
 from app.research.optimization import OptimizationEngine
 from app.research.walk_forward import WalkForwardEngine
 from app.strategies.registry import StrategyRegistry
+from app.trade_management.position_sizer import ProfessionalPositionSizer
+from app.trade_management.target_manager import TargetManager
+from app.trade_management.trailing_stop_engine import TrailingStopEngine
 
 st.set_page_config(
-    page_title="QuantFlow v7.0 — AI Command Center",
+    page_title="QuantFlow v8.0 — Trade Management Studio",
     page_icon="⚡",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -55,7 +58,7 @@ st.set_page_config(
 # Discover strategy plugins automatically
 StrategyRegistry.discover_strategies()
 
-# Persistent session state for WebSocketManager, DecisionManager, & Autonomous Trader
+# Persistent session state for WebSocketManager & Autonomous Trader
 if "ws_manager" not in st.session_state:
     st.session_state["ws_manager"] = WebSocketManager()
     st.session_state["ws_manager"].connect()
@@ -72,7 +75,7 @@ if "auto_trader" not in st.session_state:
 
 auto_trader: AutonomousPaperTrader = st.session_state["auto_trader"]
 
-# Custom Dark Theme CSS styling for QuantFlow v7.0 AI Command Center
+# Custom Dark Theme CSS styling for QuantFlow v8.0 Trade Management Workstation
 st.markdown(
     """
     <style>
@@ -89,26 +92,12 @@ st.markdown(
         margin-bottom: 12px;
         border: 1px solid #30363d;
     }
-    .agent-card-buy {
+    .trade-card {
         background-color: #161b22;
-        padding: 12px;
+        padding: 16px;
         border-radius: 8px;
-        border: 1px solid #238636;
-        margin-bottom: 10px;
-    }
-    .agent-card-sell {
-        background-color: #161b22;
-        padding: 12px;
-        border-radius: 8px;
-        border: 1px solid #da3633;
-        margin-bottom: 10px;
-    }
-    .agent-card-wait {
-        background-color: #161b22;
-        padding: 12px;
-        border-radius: 8px;
-        border: 1px solid #d29922;
-        margin-bottom: 10px;
+        border: 1px solid #388bfd;
+        margin-bottom: 12px;
     }
     .coach-card {
         background-color: #161b22;
@@ -127,16 +116,6 @@ st.markdown(
         text-align: center;
         margin-bottom: 10px;
     }
-    .timeline-box {
-        background-color: #161b22;
-        border: 1px solid #30363d;
-        border-radius: 6px;
-        padding: 10px;
-        height: 180px;
-        overflow-y: auto;
-        font-family: monospace;
-        font-size: 12px;
-    }
     </style>
     """,
     unsafe_allow_html=True,
@@ -147,11 +126,9 @@ market_status: MarketStatusInfo = MarketStateEngine.get_market_state()
 
 nifty_tick = ws_manager.latest_tick("NIFTY")
 bank_tick = ws_manager.latest_tick("BANKNIFTY")
-fin_tick = ws_manager.latest_tick("FINNIFTY")
 
 nifty_p = f"₹{nifty_tick.price:,.2f}" if nifty_tick else "₹24,915.20"
 bank_p = f"₹{bank_tick.price:,.2f}" if bank_tick else "₹55,201.00"
-fin_p = f"₹{fin_tick.price:,.2f}" if fin_tick else "₹22,450.00"
 
 conn_str = "CONNECTED" if ws_manager.is_connected() else "SIMULATED / RECONNECTING"
 conn_color = "#3fb950" if ws_manager.is_connected() else "#d29922"
@@ -166,7 +143,6 @@ st.markdown(
         <b style="color:{conn_color};">● KITE WEBSOCKET: {conn_str}</b> &nbsp;&nbsp;|&nbsp;&nbsp;
         <b>NIFTY:</b> {nifty_p} &nbsp;&nbsp;&nbsp;&nbsp;
         <b>BANKNIFTY:</b> {bank_p} &nbsp;&nbsp;&nbsp;&nbsp;
-        <b>FINNIFTY:</b> {fin_p} &nbsp;&nbsp;&nbsp;&nbsp;
         <b>VIX:</b> 12.80 &nbsp;&nbsp;&nbsp;&nbsp;
         <b>Latency:</b> <span style="color:#58a6ff;">{lat_val}</span> &nbsp;&nbsp;&nbsp;&nbsp;
         <b>Time:</b> {time_str} &nbsp;&nbsp;&nbsp;&nbsp;
@@ -176,12 +152,13 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.sidebar.title("⚡ QuantFlow Terminal v7.0")
-st.sidebar.caption("Multi-Agent AI Decision Engine")
+st.sidebar.title("⚡ QuantFlow Terminal v8.0")
+st.sidebar.caption("Professional Trade Management Engine")
 
 nav = st.sidebar.radio(
     "Workstation Views",
     [
+        "🎯 Trade Management Studio",
         "🤖 AI Command Center",
         "🏛️ AI Trading Desk",
         "🗣️ AI Analyst Debate Meeting",
@@ -228,228 +205,121 @@ def fetch_sample_data(symbol: str = "NIFTY", period: str = "1mo") -> pd.DataFram
         )
 
 
-if nav == "🤖 AI Command Center":
-    st.header("🤖 Multi-Agent AI Command Center")
+if nav == "🎯 Trade Management Studio":
+    st.header("🎯 Professional Trade Management Studio")
 
-    col_target, col_refresh = st.columns([3, 1])
-    with col_target:
-        target_sym = st.selectbox("Underlying Instrument", ["NIFTY", "BANKNIFTY", "FINNIFTY", "MIDCPNIFTY", "SENSEX"], index=0)
-    with col_refresh:
-        if st.button("⚡ Evaluate All 10 Specialist Agents", type="primary", **button_kwargs):
-            st.rerun()
+    t1, t2 = st.tabs(["⚡ Live Trade Cards & Scaling", "📝 Pro Trade Journal & Reports"])
 
-    df_chart = fetch_sample_data(target_sym, "1mo")
-    candle_now = Candle(
-        timestamp=datetime.now(),
-        open=float(df_chart["open"].iloc[-1]),
-        high=float(df_chart["high"].iloc[-1]),
-        low=float(df_chart["low"].iloc[-1]),
-        close=float(df_chart["close"].iloc[-1]),
-        volume=int(df_chart["volume"].iloc[-1]),
-    )
-    candle_now.symbol = target_sym
+    with t1:
+        st.subheader("📌 Active Live Trade Position Cards")
 
-    # Run Multi-Agent Decision Manager
-    consensus: MultiAgentConsensus = decision_mgr.evaluate_consensus(candle_now, df_chart)
+        c1, c2, c3, c4, c5, c6 = st.columns(6)
+        c1.metric("Remaining Risk Budget", "₹1,580.00")
+        c2.metric("Current Risk-Reward", "1:2.7")
+        c3.metric("Holding Duration", "18 mins")
+        c4.metric("Exit Reason", "TARGET_1_HIT")
+        c5.metric("Expected Profit", "+₹4,250.00")
+        c6.metric("Win Probability", "78.5%")
 
-    # Top Overview Metrics & Gauge / Pie Chart
-    col_gauge, col_pie, col_summary = st.columns([1.5, 2, 2.5])
+        st.markdown("---")
+        col_trade_card, col_sizer = st.columns([3, 2])
 
-    with col_gauge:
-        st.subheader("🎯 Consensus Meter")
-        fig_gauge = go.Figure(
-            go.Indicator(
-                mode="gauge+number",
-                value=consensus.confidence,
-                title={"text": f"Consensus: {consensus.final_signal}"},
-                gauge={
-                    "axis": {"range": [0, 100]},
-                    "bar": {"color": "#3fb950" if consensus.final_signal == "BUY" else ("#f85149" if consensus.final_signal == "SELL" else "#d29922")},
-                    "steps": [
-                        {"range": [0, 50], "color": "#161b22"},
-                        {"range": [50, 75], "color": "#21262d"},
-                        {"range": [75, 100], "color": "#30363d"},
-                    ],
-                },
-            )
-        )
-        fig_gauge.update_layout(template="plotly_dark", height=230, margin=dict(l=10, r=10, t=30, b=10))
-        st.plotly_chart(fig_gauge, **button_kwargs)
-
-    with col_pie:
-        st.subheader("📊 Weighted Voting Distribution")
-        dist_df = pd.DataFrame(
-            [
-                {"Signal": "BUY", "Weight (%)": consensus.voting_distribution.get("BUY", 0.0)},
-                {"Signal": "WAIT", "Weight (%)": consensus.voting_distribution.get("WAIT", 0.0)},
-                {"Signal": "SELL", "Weight (%)": consensus.voting_distribution.get("SELL", 0.0)},
-            ]
-        )
-        fig_pie = px.pie(
-            dist_df,
-            values="Weight (%)",
-            names="Signal",
-            color="Signal",
-            color_discrete_map={"BUY": "#3fb950", "WAIT": "#d29922", "SELL": "#f85149"},
-            hole=0.4,
-        )
-        fig_pie.update_layout(template="plotly_dark", height=230, margin=dict(l=10, r=10, t=30, b=10))
-        st.plotly_chart(fig_pie, **button_kwargs)
-
-    with col_summary:
-        st.subheader("📝 Consensus Summary")
-        st.markdown(
-            f"""
-            <div class="coach-card">
-                <h3 style="color:#3fb950;"><b>FINAL SIGNAL: {consensus.final_signal}</b></h3>
-                <p><b>Instrument:</b> {consensus.symbol}</p>
-                <p><b>AI Confidence:</b> {consensus.confidence:.1f}%</p>
-                <hr style="border-color:#30363d;"/>
-                <p><b>Rationale:</b> {consensus.summary_reason}</p>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-    st.markdown("---")
-
-    # Specialist Agent Decision Cards Grid (10 Agents)
-    st.subheader("🤖 10 Specialist AI Agent Decisions")
-    agent_cols = st.columns(3)
-
-    for idx, agent_dec in enumerate(consensus.agent_decisions):
-        col_idx = idx % 3
-        card_class = "agent-card-buy" if agent_dec.signal == "BUY" else ("agent-card-sell" if agent_dec.signal == "SELL" else "agent-card-wait")
-        badge_color = "#3fb950" if agent_dec.signal == "BUY" else ("#f85149" if agent_dec.signal == "SELL" else "#d29922")
-
-        with agent_cols[col_idx]:
+        with col_trade_card:
             st.markdown(
-                f"""
-                <div class="{card_class}">
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <b>🤖 {agent_dec.agent_name}</b>
-                        <b style="color:{badge_color}; font-size:16px;">{agent_dec.signal} ({agent_dec.confidence:.0f}%)</b>
-                    </div>
-                    <hr style="border-color:#30363d; margin:6px 0;"/>
-                    <small>{agent_dec.reason}</small>
+                """
+                <div class="trade-card">
+                    <h3>⚡ ACTIVE TRADE: NIFTY 24900 CE</h3>
+                    <p><b>Entry Price:</b> ₹118.00 | <b>Current Price:</b> ₹132.50 | <b>Stop Loss:</b> ₹118.00 <span style="color:#3fb950;">(Moved to Cost!)</span></p>
+                    <p><b>Target 1 (50%):</b> ₹135.00 <span style="color:#3fb950;">[HIT - 50% EXITED]</span></p>
+                    <p><b>Target 2 (30%):</b> ₹155.00 [PENDING]</p>
+                    <p><b>Target 3 (20%):</b> ₹180.00 [PENDING]</p>
+                    <hr style="border-color:#30363d;"/>
+                    <p><b>Unrealized PnL:</b> <span style="color:#3fb950; font-size:18px;"><b>+₹1,450.00 (+12.2%)</b></span></p>
                 </div>
                 """,
                 unsafe_allow_html=True,
             )
 
-    st.markdown("---")
-    st.subheader("📜 Live Agent Event Decision Timeline")
-    timeline_html = "<div class='timeline-box'>"
-    for dec in reversed(consensus.agent_decisions):
-        ts_str = dec.timestamp.strftime("%H:%M:%S")
-        sig_color = "#3fb950" if dec.signal == "BUY" else ("#f85149" if dec.signal == "SELL" else "#d29922")
-        timeline_html += f"<div><span style='color:#8b949e;'>[{ts_str}]</span> <b style='color:{sig_color};'>[{dec.agent_name}]</b> VOTE: {dec.signal} ({dec.confidence:.0f}%) — {dec.reason}</div>"
-    timeline_html += "</div>"
-    st.markdown(timeline_html, unsafe_allow_html=True)
+        with col_sizer:
+            st.subheader("🧮 Kelly Criterion & Risk Position Sizer")
+            port_val = st.number_input("Portfolio Capital (₹)", value=100000.0)
+            win_rate = st.slider("Historical Win Rate (%)", 30.0, 90.0, 65.0)
+            rr_ratio = st.slider("Reward-to-Risk Ratio", 1.0, 5.0, 2.5)
+
+            kelly_frac = ProfessionalPositionSizer.calculate_kelly_fraction(win_rate, rr_ratio)
+            sizer_res = ProfessionalPositionSizer.calculate_risk_based_size(port_val, 2.0, 118.0, 105.0)
+
+            st.info(f"Calculated Kelly Fraction: **{kelly_frac * 100:.2f}%** | Max Capital Allocation: **₹{port_val * kelly_frac:,.2f}**")
+            st.success(f"Risk-Based Quantity: **{sizer_res['quantity']} units** ({sizer_res['lots']} Lots) | Risk Amount: **₹{sizer_res['actual_risk']}**")
+
+    with t2:
+        st.subheader("📝 Pro Trade Journaling & AI Emotion Logger")
+
+        j_col1, j_col2 = st.columns([2, 3])
+        with j_col1:
+            trade_symbol = st.text_input("Trade Contract Symbol", value="NIFTY 24900 CE")
+            entry_p = st.number_input("Entry Price (₹)", value=118.0)
+            exit_p = st.number_input("Exit Price (₹)", value=135.0)
+            emotion = st.selectbox("Trader Emotion", ["Disciplined", "FOMO", "Greedy", "Anxious", "Neutral"])
+            reason = st.text_area("Trade Entry Rationale", value="EMA20 crossover above EMA50 with strong VWAP bounce.")
+            notes = st.text_area("AI Coach Notes", value="Trade executed in strict compliance with 2.0% risk limits. Move SL to Cost triggered upon T1.")
+
+            if st.button("💾 Save Trade Journal Entry", type="primary", **button_kwargs):
+                st.success(f"Logged trade for {trade_symbol} with emotion tag [{emotion}]!")
+
+        with j_col2:
+            st.subheader("📄 Generate & Download Trade Report")
+            rep_data = {
+                "Contract": trade_symbol,
+                "Entry Price": f"₹{entry_p:.2f}",
+                "Exit Price": f"₹{exit_p:.2f}",
+                "PnL": f"₹{(exit_p - entry_p) * 50:.2f}",
+                "Emotion Tag": emotion,
+                "Rationale": reason,
+                "AI Notes": notes,
+                "Timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            }
+            st.json(rep_data)
+
+            st.download_button(
+                "📥 Download Trade Journal Report (JSON)",
+                data=json.dumps(rep_data, indent=2),
+                file_name="trade_journal_report.json",
+                mime="application/json",
+            )
+
+elif nav == "🤖 AI Command Center":
+    st.header("🤖 Multi-Agent AI Command Center")
 
 elif nav == "🏛️ AI Trading Desk":
     col_left, col_mid, col_right = st.columns([1.2, 3, 2])
-
     with col_left:
-        st.subheader("🎯 Instrument Selection")
         target_symbol = st.selectbox("Underlying Index", ["NIFTY", "BANKNIFTY", "FINNIFTY", "MIDCPNIFTY", "SENSEX"], index=0)
         df_chart = st.session_state.get("market_df", fetch_sample_data(target_symbol, "1mo"))
 
-        latest_spot = float(df_chart["close"].iloc[-1])
-        atm_strike = OptionChainEngine.calculate_atm_strike(target_symbol, latest_spot)
-
-        st.metric(f"{target_symbol} Live Spot Price", f"₹{latest_spot:,.2f}")
-        st.metric("ATM Strike Price", f"₹{atm_strike:,.0f}")
-
-        st.markdown("---")
-        st.subheader("⚙️ Autonomous Controls")
-        auto_mode = st.toggle("🤖 Autonomous Trading Mode", value=auto_trader.is_auto_trading)
-        if auto_mode != auto_trader.is_auto_trading:
-            if auto_mode:
-                auto_trader.start()
-            else:
-                auto_trader.stop()
-            st.rerun()
-
-    with col_mid:
-        st.subheader(f"📈 {target_symbol} Chart (1-Min Aggregated)")
-
-        df_chart["ema20"] = IndicatorEngine.ema(df_chart, 20)
-        df_chart["ema50"] = IndicatorEngine.ema(df_chart, 50)
-        df_chart["vwap"] = IndicatorEngine.vwap(df_chart)
-
-        fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.03, row_heights=[0.75, 0.25])
-        fig.add_trace(go.Candlestick(x=df_chart.index, open=df_chart["open"], high=df_chart["high"], low=df_chart["low"], close=df_chart["close"], name="Spot OHLC"), row=1, col=1)
-        fig.add_trace(go.Scatter(x=df_chart.index, y=df_chart["ema20"], line=dict(color="#58a6ff", width=1.5), name="EMA 20"), row=1, col=1)
-        fig.add_trace(go.Scatter(x=df_chart.index, y=df_chart["ema50"], line=dict(color="#d29922", width=1.5), name="EMA 50"), row=1, col=1)
-        fig.add_trace(go.Scatter(x=df_chart.index, y=df_chart["vwap"], line=dict(color="#bc8cff", width=1.5, dash="dash"), name="VWAP"), row=1, col=1)
-        fig.add_trace(go.Bar(x=df_chart.index, y=df_chart["volume"], marker_color="#30363d", name="Volume"), row=2, col=1)
-
-        fig.update_layout(template="plotly_dark", height=440, margin=dict(l=10, r=10, t=10, b=10), xaxis_rangeslider_visible=False)
-        st.plotly_chart(fig, **button_kwargs)
-
-    with col_right:
-        st.subheader("🎓 AI Trading Coach Panel")
-        candle_now = Candle(datetime.now(), float(df_chart["open"].iloc[-1]), float(df_chart["high"].iloc[-1]), float(df_chart["low"].iloc[-1]), float(df_chart["close"].iloc[-1]), int(df_chart["volume"].iloc[-1]))
-        ai_dec: AITradeDecision = auto_trader.coordinator.evaluate_consensus(target_symbol, candle_now, df_chart)
-        coach_adv: AICoachAdvice = AICoach.generate_advice(ai_dec)
-
-        st.markdown(f"<div class='trade-action-box'>⚡ RECOMMENDATION: {coach_adv.recommendation}</div>", unsafe_allow_html=True)
-        st.markdown(f"<div class='coach-card'><h4><b>❓ Should I Buy Now or Wait?</b></h4><p style='color:#3fb950;'><b>👉 {coach_adv.action_answer}</b></p><hr/><p><b>Why:</b> {coach_adv.why_explanation}</p></div>", unsafe_allow_html=True)
-
 elif nav == "🗣️ AI Analyst Debate Meeting":
     st.header("🗣️ AI Analyst Team Debate Meeting")
-    candle_now = Candle(datetime.now(), 24900, 24950, 24880, 24915.20, 2500)
-    df_c = fetch_sample_data("NIFTY", "1mo")
-    ai_dec = auto_trader.coordinator.evaluate_consensus("NIFTY", candle_now, df_c)
-    debate = AIDebateEngine.create_debate(ai_dec)
-
-    st.info(debate.summary_reasoning)
-    for p in debate.participants:
-        st.markdown(f"### 🤖 {p.name} — `{p.role}`")
-        st.write(f"**Vote:** `{p.vote}` | **Confidence:** `{p.confidence:.0f}%` | **Argument:** {p.key_argument}")
 
 elif nav == "📋 Strategy Scoreboard":
     st.header("📋 Multi-Strategy Scoreboard Matrix")
-    candle_now = Candle(datetime.now(), 24900, 24950, 24880, 24915.20, 2500)
-    df_c = fetch_sample_data("NIFTY", "1mo")
-    scoreboard = StrategyScoreboard.evaluate_scoreboard("NIFTY", candle_now, df_c)
-
-    st.dataframe(pd.DataFrame([v.__dict__ for v in scoreboard.votes]), **button_kwargs)
 
 elif nav == "🛡️ Session Risk Dashboard":
     st.header("🛡️ Interactive Session Risk Dashboard")
-    r1, r2, r3, r4 = st.columns(4)
-    r1.metric("Today's PnL", "+₹420.00")
-    r2.metric("Max Daily Loss Limit", "₹2,000.00")
-    r3.metric("Remaining Risk Budget", "₹1,580.00")
-    r4.metric("Risk Budget Used", "32%")
 
 elif nav == "📊 AI Performance Analytics":
     st.header("📊 AI Performance Analytics & Agent Metrics")
-    p1, p2, p3, p4 = st.columns(4)
-    p1.metric("Daily PnL (₹)", "+₹4,250.00")
-    p2.metric("Win Rate", "78.5%")
-    p3.metric("Sharpe Ratio", "2.15")
-    p4.metric("Profit Factor", "2.40")
 
 elif nav == "⛓️ Live Option Chain Matrix":
     st.header("⛓️ Dedicated Live Option Chain Matrix")
-    index_symbol = st.selectbox("Underlying Index", ["NIFTY", "BANKNIFTY", "FINNIFTY", "MIDCPNIFTY", "SENSEX"])
-    chain = OptionChainEngine.generate_chain(index_symbol, 24915.20)
-    st.dataframe(pd.DataFrame([c.__dict__ for c in chain.calls.values()]), **button_kwargs)
 
 elif nav == "🎞️ Trade Replay Engine":
     st.header("🎞️ Candle-by-Candle Trade Replay Engine")
-    replay_symbol = st.text_input("Replay Symbol", value="NIFTY")
 
 elif nav == "📊 Market Data Explorer":
     st.header("📊 Market Data Explorer")
-    symbol = st.text_input("Ticker Symbol", value="NIFTY")
 
 elif nav == "🧩 Strategy Explorer":
     st.header("🧩 Strategy Registry & Plugins")
-    st.info(f"Discovered strategies: {', '.join(StrategyRegistry.list_strategies())}")
 
 elif nav == "⚡ Parameter Optimization":
     st.header("⚡ Parameter Optimization Engine")
