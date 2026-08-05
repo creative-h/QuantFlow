@@ -1,0 +1,12 @@
+# QuantFlow Autonomous Paper Trading Configuration
+
+paper_trading:
+  initial_cash: 100000.0
+  auto_trading_enabled: true
+  auto_eod_report: true
+  lot_sizes:
+    NIFTY: 25
+    BANKNIFTY: 15
+    FINNIFTY: 40
+    MIDCPNIFTY: 50
+    SENSEX: 10

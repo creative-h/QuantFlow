@@ -1,0 +1,13 @@
+# QuantFlow Multi-Agent AI Consensus Configuration
+
+ai_consensus:
+  min_confidence_threshold: 75.0
+  agent_weights:
+    trend_agent: 0.25
+    momentum_agent: 0.20
+    vwap_agent: 0.20
+    options_oi_agent: 0.20
+    risk_agent: 0.10
+    regime_agent: 0.05
+  reasons_logging: true
+  explainability_enabled: true

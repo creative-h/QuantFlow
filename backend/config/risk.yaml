@@ -1,0 +1,14 @@
+# QuantFlow Risk Management Configuration
+
+risk_parameters:
+  max_position_size_pct: 10.0
+  max_drawdown_limit_pct: 15.0
+  max_risk_per_trade_pct: 2.0
+  daily_max_loss_limit: 5000.0
+  max_open_trades: 5
+  stop_loss_pct: 10.0
+  take_profit_target1_pct: 20.0
+  take_profit_target2_pct: 40.0
+  take_profit_target3_pct: 60.0
+  trailing_stop_activation_pct: 15.0
+  trailing_stop_step_pct: 5.0

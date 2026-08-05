@@ -1,0 +1,17 @@
+# QuantFlow Market Feed Configuration
+
+market_feed:
+  primary_indices:
+    - "NIFTY"
+    - "BANKNIFTY"
+    - "FINNIFTY"
+    - "MIDCPNIFTY"
+  poll_interval_seconds: 1
+  auto_reconnect: true
+  heartbeat_seconds: 5
+  strike_step_mapping:
+    NIFTY: 50.0
+    BANKNIFTY: 100.0
+    FINNIFTY: 50.0
+    MIDCPNIFTY: 25.0
+    SENSEX: 100.0

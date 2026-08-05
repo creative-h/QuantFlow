@@ -1,0 +1,20 @@
+# QuantFlow Strategy Configuration
+
+default_strategy: "ema"
+active_strategies:
+  - name: "ema"
+    enabled: true
+    fast_period: 9
+    slow_period: 21
+  - name: "vwap"
+    enabled: true
+    deviation_pct: 1.5
+  - name: "rsi"
+    enabled: true
+    period: 14
+    oversold: 30.0
+    overbought: 70.0
+  - name: "supertrend"
+    enabled: true
+    period: 10
+    multiplier: 3.0
