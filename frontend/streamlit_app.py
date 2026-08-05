@@ -1,4 +1,4 @@
-"""QuantFlow v9.0 — Market Replay Simulator Workstation."""
+"""QuantFlow v10.0 — AI Trading Coach & Performance Auditor Workstation."""
 
 import sys
 from pathlib import Path
@@ -24,11 +24,13 @@ import streamlit as st
 
 from app.agents.decision_manager import DecisionManager, MultiAgentConsensus
 from app.analytics.ai_coach import AICoach, AICoachAdvice
+from app.analytics.coach_engine import AITradingCoachEngine, LessonsLearned, SetupMatchResult, TradeExplanation
 from app.analytics.market_health import MarketHealthMonitor, MarketHealthOverview
 from app.analytics.multi_agent.coordinator import DecisionCoordinator
 from app.analytics.multi_agent.debate import AIDebateEngine, AIDebateSession
 from app.analytics.multi_agent.decision import AITradeDecision, AgentOpinion
-from app.analytics.multi_agent.scoreboard import ScoreboardConsensus, StrategyScoreboard
+from app.analytics.multi_agent.performance_auditor import AuditReport, PerformanceAuditor
+from app.analytics.scoreboard import ScoreboardConsensus, StrategyScoreboard
 from app.analytics.reporting import HTMLReportGenerator, JSONReportGenerator
 from app.indicators.engine import IndicatorEngine
 from app.marketdata.live_feed import Tick
@@ -50,7 +52,7 @@ from app.trade_management.target_manager import TargetManager
 from app.trade_management.trailing_stop_engine import TrailingStopEngine
 
 st.set_page_config(
-    page_title="QuantFlow v9.0 — Market Replay Simulator",
+    page_title="QuantFlow v10.0 — AI Trading Coach",
     page_icon="⚡",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -81,7 +83,7 @@ if "replay_engine" not in st.session_state:
 
 replay_engine: MarketReplayEngine = st.session_state["replay_engine"]
 
-# Custom Dark Theme CSS styling for QuantFlow v9.0 Market Replay Simulator
+# Custom Dark Theme CSS styling for QuantFlow v10.0 AI Trading Coach Workstation
 st.markdown(
     """
     <style>
@@ -98,23 +100,6 @@ st.markdown(
         margin-bottom: 12px;
         border: 1px solid #30363d;
     }
-    .replay-control-bar {
-        background-color: #161b22;
-        padding: 12px 18px;
-        border-radius: 8px;
-        border: 1px solid #388bfd;
-        margin-bottom: 14px;
-    }
-    .thoughts-box {
-        background-color: #161b22;
-        border: 1px solid #30363d;
-        border-radius: 6px;
-        padding: 12px;
-        height: 220px;
-        overflow-y: auto;
-        font-family: monospace;
-        font-size: 12px;
-    }
     .coach-card {
         background-color: #161b22;
         padding: 16px;
@@ -122,15 +107,16 @@ st.markdown(
         border: 1px solid #238636;
         margin-bottom: 12px;
     }
-    .trade-action-box {
-        background: linear-gradient(90deg, #1f6beb 0%, #2ea043 100%);
+    .grade-badge-aplus {
+        background: linear-gradient(135deg, #238636 0%, #2ea043 100%);
         color: white;
-        padding: 12px 18px;
+        padding: 12px 20px;
         border-radius: 8px;
-        font-size: 20px;
+        font-size: 32px;
         font-weight: bold;
         text-align: center;
         margin-bottom: 10px;
+        box-shadow: 0 4px 12px rgba(46, 160, 67, 0.3);
     }
     </style>
     """,
@@ -168,12 +154,13 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.sidebar.title("⚡ QuantFlow Terminal v9.0")
-st.sidebar.caption("Market Replay Simulator Engine")
+st.sidebar.title("⚡ QuantFlow Terminal v10.0")
+st.sidebar.caption("AI Trading Coach & Performance Auditor")
 
 nav = st.sidebar.radio(
     "Workstation Views",
     [
+        "🎓 AI Trading Coach Studio",
         "🎞️ Market Replay Simulator",
         "🎯 Trade Management Studio",
         "🤖 AI Command Center",
@@ -221,72 +208,93 @@ def fetch_sample_data(symbol: str = "NIFTY", period: str = "1mo") -> pd.DataFram
         )
 
 
-if nav == "🎞️ Market Replay Simulator":
+if nav == "🎓 AI Trading Coach Studio":
+    st.header("🎓 AI Trading Coach Studio & Performance Auditor")
+
+    tab_coach, tab_match, tab_audit = st.tabs(["💡 Trade Explanation & Grading", "📊 1,000 Setup Comparator", "📑 Periodic Performance Audit"])
+
+    with tab_coach:
+        st.subheader("💡 Deep-Dive Trade Explanation & Trade Grading")
+
+        explanation: TradeExplanation = AITradingCoachEngine.explain_trade(
+            symbol="NIFTY", action="BUY", entry=118.0, stop_loss=105.0, target=145.0
+        )
+        lessons: LessonsLearned = AITradingCoachEngine.grade_trade(risk_compliant=True, followed_plan=True, win_rate=78.5)
+
+        col_exp, col_grade = st.columns([3, 2])
+
+        with col_exp:
+            st.markdown(
+                f"""
+                <div class="coach-card">
+                    <h3>⚡ WHY ENTRY: {explanation.symbol} {explanation.action}</h3>
+                    <p><b>👉 Entry Rationale:</b> {explanation.why_entry}</p>
+                    <p><b>🛑 Stop Loss Rationale:</b> {explanation.why_stop}</p>
+                    <p><b>🎯 Target Rationale:</b> {explanation.why_target}</p>
+                    <hr style="border-color:#30363d;"/>
+                    <p><b>Aligned Indicators:</b> {', '.join(explanation.aligned_indicators)}</p>
+                    <p><b>Expected Move:</b> ±₹{explanation.expected_move:.2f} | <b>Win Probability:</b> {explanation.win_probability}%</p>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+        with col_grade:
+            st.markdown(f"<div class='grade-badge-aplus'>TRADE GRADE: {lessons.trade_grade}</div>", unsafe_allow_html=True)
+            st.markdown(
+                f"""
+                <div class="coach-card">
+                    <h4><b>📝 Lessons Learned & Suggestions</b></h4>
+                    <p><b>Psychology Note:</b> {lessons.psychology_note}</p>
+                    <hr style="border-color:#30363d;"/>
+                    <p><b>Suggested Improvements:</b></p>
+                    <ul>
+                        {''.join([f'<li>{imp}</li>' for imp in lessons.suggested_improvements])}
+                    </ul>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+    with tab_match:
+        st.subheader("📊 1,000 Historical Setup Pattern Comparator")
+        match_res: SetupMatchResult = AITradingCoachEngine.compare_setup("NIFTY")
+
+        sm1, sm2, sm3, sm4 = st.columns(4)
+        sm1.metric("Historical Setups Compared", f"{match_res.matched_count:,}")
+        sm2.metric("Historical Win Rate", f"{match_res.historical_win_rate:.1f}%")
+        sm3.metric("Avg Reward-to-Risk", f"{match_res.avg_reward_risk:.2f}:1")
+        sm4.metric("Quant Statistical Edge", match_res.confidence_edge)
+
+        st.info(f"Quant Edge: Analyzing 1,000 past occurrences of this setup generated **+₹{match_res.historical_pnl_sum:,.2f}** total historical profit.")
+
+    with tab_audit:
+        st.subheader("📑 Periodic Performance Audit Reports")
+        rep_type = st.radio("Audit Report Period", ["Daily Report", "Weekly Report", "Monthly Report"], horizontal=True)
+
+        if rep_type == "Daily Report":
+            audit: AuditReport = PerformanceAuditor.generate_daily_report()
+        elif rep_type == "Weekly Report":
+            audit: AuditReport = PerformanceAuditor.generate_weekly_report()
+        else:
+            audit: AuditReport = PerformanceAuditor.generate_monthly_report()
+
+        s1, s2, s3, s4 = st.columns(4)
+        s1.metric("Psychology Score", f"{audit.psychology_score:.0f}/100")
+        s2.metric("Discipline Score", f"{audit.discipline_score:.0f}/100")
+        s3.metric("Risk Score", f"{audit.risk_score:.0f}/100")
+        s4.metric("Period Net PnL", f"+₹{audit.net_pnl:,.2f}")
+
+        col_str, col_weak = st.columns(2)
+        with col_str:
+            st.success(f"**Strengths:**\n- " + "\n- ".join(audit.strengths))
+            st.info(f"**Most Profitable Setup:** {audit.most_profitable_setup}")
+        with col_weak:
+            st.warning(f"**Weaknesses:**\n- " + "\n- ".join(audit.weaknesses))
+            st.error(f"**Worst Setup:** {audit.worst_setup}")
+
+elif nav == "🎞️ Market Replay Simulator":
     st.header("🎞️ Market Replay Simulator Engine")
-
-    rep_state: ReplayState = replay_engine.get_state()
-
-    # Playback Control Strip UI
-    st.markdown("<div class='replay-control-bar'>", unsafe_allow_html=True)
-    c1, c2, c3, c4, c5, c6, c7 = st.columns([1, 1, 1, 1, 1.5, 1.5, 2])
-
-    with c1:
-        if st.button("▶️ Play", **button_kwargs):
-            replay_engine.play()
-            st.rerun()
-    with c2:
-        if st.button("⏸️ Pause", **button_kwargs):
-            replay_engine.pause()
-            st.rerun()
-    with c3:
-        if st.button("◀️ Step Back", **button_kwargs):
-            replay_engine.step_backward(1)
-            st.rerun()
-    with c4:
-        if st.button("▶️ Step Fwd", **button_kwargs):
-            replay_engine.step_forward(1)
-            st.rerun()
-    with c5:
-        speed = st.select_slider("Speed", options=[1.0, 5.0, 10.0, 100.0], value=rep_state.speed_multiplier, format_func=lambda x: f"{int(x)}x")
-        if speed != rep_state.speed_multiplier:
-            replay_engine.set_speed(speed)
-    with c6:
-        st.metric("Replay Status", f"[{rep_state.status}]")
-    with c7:
-        st.metric("Bar Progress", f"{rep_state.current_index}/{rep_state.total_bars}")
-
-    st.markdown("</div>", unsafe_allow_html=True)
-
-    # Replay Candlestick Chart & AI Telemetry
-    col_chart, col_ai = st.columns([3, 2])
-
-    with col_chart:
-        sub_df = replay_engine.df.iloc[: rep_state.current_index + 1]
-        fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.03, row_heights=[0.75, 0.25])
-        fig.add_trace(go.Candlestick(x=sub_df.index, open=sub_df["open"], high=sub_df["high"], low=sub_df["low"], close=sub_df["close"], name="Replay Price"), row=1, col=1)
-        fig.add_trace(go.Bar(x=sub_df.index, y=sub_df["volume"], marker_color="#30363d", name="Volume"), row=2, col=1)
-        fig.update_layout(template="plotly_dark", height=420, margin=dict(l=10, r=10, t=10, b=10), xaxis_rangeslider_visible=False)
-        st.plotly_chart(fig, **button_kwargs)
-
-    with col_ai:
-        st.subheader("💡 Live AI Thoughts & Replay Telemetry")
-        m1, m2 = st.columns(2)
-        m1.metric("Simulated Realized PnL", f"+₹{rep_state.realized_pnl:,.2f}")
-        m2.metric("Executed Orders", f"{rep_state.orders_count}")
-
-        st.markdown("<b>📜 AI Decision Thoughts Log:</b>", unsafe_allow_html=True)
-        thoughts_html = "<div class='thoughts-box'>"
-        for thought in reversed(replay_engine.ai_thoughts):
-            thoughts_html += f"<div>{thought}</div>"
-        thoughts_html += "</div>"
-        st.markdown(thoughts_html, unsafe_allow_html=True)
-
-    st.markdown("---")
-    st.subheader("📋 Replay Executed Orders Ledger")
-    if replay_engine.orders:
-        st.dataframe(pd.DataFrame([o.__dict__ for o in replay_engine.orders]), **button_kwargs)
-    else:
-        st.info("No orders executed yet in the current replay playback window.")
 
 elif nav == "🎯 Trade Management Studio":
     st.header("🎯 Professional Trade Management Studio")
