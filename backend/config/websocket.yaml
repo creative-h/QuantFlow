@@ -1,0 +1,15 @@
+# QuantFlow v3.0 WebSocket & Market Feed Configuration
+
+websocket:
+  api_key: ""
+  access_token: ""
+  reconnect_initial_delay_sec: 1
+  reconnect_max_delay_sec: 30
+  reconnect_backoff_factor: 2.0
+  heartbeat_interval_sec: 5
+  instruments:
+    NIFTY: 256265
+    BANKNIFTY: 260105
+    FINNIFTY: 257001
+    MIDCPNIFTY: 288009
+    SENSEX: 265
