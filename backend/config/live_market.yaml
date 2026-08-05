@@ -1,0 +1,28 @@
+# QuantFlow v3.0 Live Market Engine Configuration
+
+live_market:
+  refresh_interval_sec: 1.0
+  websocket:
+    api_key: ""
+    access_token: ""
+    reconnect_initial_delay_sec: 1
+    reconnect_max_delay_sec: 30
+    reconnect_backoff_factor: 2.0
+    heartbeat_interval_sec: 5
+    tokens:
+      NIFTY: 256265
+      BANKNIFTY: 260105
+      FINNIFTY: 257001
+      MIDCPNIFTY: 288009
+      SENSEX: 265
+  cache:
+    max_history_ticks: 10000
+    ttl_seconds: 86400
+  candle_intervals:
+    - 1m
+    - 3m
+    - 5m
+    - 15m
+    - 30m
+    - 1h
+    - 1d

@@ -16,11 +16,11 @@ class ZerodhaAuthService:
 
     def __init__(
         self,
-        settings: Settings,
+        settings: Optional[Settings] = None,
         session_file: Path | str | None = None,
         client: Optional[httpx.AsyncClient] = None,
     ) -> None:
-        self.settings = settings
+        self.settings = settings or Settings()
         if session_file is None:
             # Save session in backend/data/session.json
             base_dir = Path(__file__).resolve().parent.parent.parent
@@ -111,6 +111,11 @@ class ZerodhaAuthService:
             logger.error("Error loading session file {}: {}", self.session_file, str(err))
             return None
 
+    def is_authenticated(self) -> bool:
+        """Return True if session exists with valid access token."""
+        session = self.load_session()
+        return session is not None and "access_token" in session
+
     def clear_session(self) -> bool:
         """Remove the session file on logout."""
         if self.session_file.exists():
@@ -166,3 +171,7 @@ class ZerodhaAuthService:
 
         logger.info("Successfully fetched user profile for user_id: {}", res_json["data"].get("user_id", "unknown"))
         return res_json["data"]
+
+
+# Alias for backward compatibility
+ZerodhaAuthSession = ZerodhaAuthService

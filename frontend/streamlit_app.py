@@ -1,4 +1,4 @@
-"""QuantFlow v3.0 — Real Market Data & Kite WebSocket Engine Workstation."""
+"""QuantFlow v3.0 — Real-Time Indian Market Engine & Institutional Workstation."""
 
 import sys
 from pathlib import Path
@@ -30,7 +30,10 @@ from app.analytics.multi_agent.scoreboard import ScoreboardConsensus, StrategySc
 from app.analytics.reporting import HTMLReportGenerator, JSONReportGenerator
 from app.indicators.engine import IndicatorEngine
 from app.marketdata.live_feed import Tick
+from app.marketdata.market_state import MarketStateEngine, MarketStatusInfo
 from app.marketdata.option_chain import OptionChain, OptionChainEngine
+from app.marketdata.tick_cache import TickCache
+from app.marketdata.websocket_manager import WebSocketManager
 from app.marketdata.yfinance_provider import YahooFinanceProvider
 from app.models.dataclasses import Candle
 from app.paper.autonomous_trader import AutonomousPaperTrader
@@ -38,11 +41,10 @@ from app.paper.state_machine import TradeState
 from app.research.comparison import StrategyComparisonEngine
 from app.research.optimization import OptimizationEngine
 from app.research.walk_forward import WalkForwardEngine
-from app.services.live_market_service import InstrumentSnapshot, LiveMarketService
 from app.strategies.registry import StrategyRegistry
 
 st.set_page_config(
-    page_title="QuantFlow v3.0 — Kite WebSocket Workstation",
+    page_title="QuantFlow v3.0 — Real-Time Indian Market Engine",
     page_icon="⚡",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -51,19 +53,19 @@ st.set_page_config(
 # Discover strategy plugins automatically
 StrategyRegistry.discover_strategies()
 
-# Persistent session state for LiveMarketService and Autonomous Paper Trader in Streamlit
-if "market_service" not in st.session_state:
-    st.session_state["market_service"] = LiveMarketService()
-    st.session_state["market_service"].start()
+# Persistent session state for WebSocketManager & Autonomous Trader in Streamlit
+if "ws_manager" not in st.session_state:
+    st.session_state["ws_manager"] = WebSocketManager()
+    st.session_state["ws_manager"].connect()
 
-market_service: LiveMarketService = st.session_state["market_service"]
+ws_manager: WebSocketManager = st.session_state["ws_manager"]
 
 if "auto_trader" not in st.session_state:
     st.session_state["auto_trader"] = AutonomousPaperTrader()
 
 auto_trader: AutonomousPaperTrader = st.session_state["auto_trader"]
 
-# Custom Dark Theme CSS styling for QuantFlow v3.0
+# Custom Dark Theme CSS styling for QuantFlow v3.0 Institutional Workstation
 st.markdown(
     """
     <style>
@@ -78,14 +80,7 @@ st.markdown(
         font-family: monospace;
         font-size: 13px;
         margin-bottom: 12px;
-        border: 1px solid #388bfd;
-    }
-    .health-card {
-        background-color: #161b22;
-        padding: 10px 14px;
-        border-radius: 6px;
         border: 1px solid #30363d;
-        text-align: center;
     }
     .agent-card {
         background-color: #161b22;
@@ -117,7 +112,7 @@ st.markdown(
         border-radius: 6px;
         padding: 10px;
         height: 180px;
-        overflow-y: auto;
+        overflow-y. auto;
         font-family: monospace;
         font-size: 12px;
     }
@@ -126,35 +121,45 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# Fetch Market Snapshots
-nifty_snap = market_service.get_market_snapshot("NIFTY")
-bank_snap = market_service.get_market_snapshot("BANKNIFTY")
+# Polled Cached Ticks & Market State
+market_status: MarketStatusInfo = MarketStateEngine.get_market_state()
 
-status_str = market_service.feed_manager.get_connection_status()
-status_color = "#3fb950" if "CONNECTED" in status_str else "#d29922"
-nifty_p = f"₹{nifty_snap.price:,.2f}" if nifty_snap else "₹24,915.20"
-bank_p = f"₹{bank_snap.price:,.2f}" if bank_snap else "₹55,201.00"
-latency = f"{nifty_snap.latency_ms:.1f}ms" if nifty_snap else "12.5ms"
-last_update = nifty_snap.last_update.strftime("%H:%M:%S") if nifty_snap else datetime.now().strftime("%H:%M:%S")
-countdown = f"{nifty_snap.candle_countdown_sec:02d}s" if nifty_snap else "35s"
+nifty_tick = ws_manager.latest_tick("NIFTY")
+bank_tick = ws_manager.latest_tick("BANKNIFTY")
+fin_tick = ws_manager.latest_tick("FINNIFTY")
+mid_tick = ws_manager.latest_tick("MIDCPNIFTY")
 
-# Module 5: Streamlit Live Connection Telemetry HUD
+nifty_p = f"₹{nifty_tick.price:,.2f}" if nifty_tick else "₹24,915.20"
+bank_p = f"₹{bank_tick.price:,.2f}" if bank_tick else "₹55,201.00"
+fin_p = f"₹{fin_tick.price:,.2f}" if fin_tick else "₹22,450.00"
+mid_p = f"₹{mid_tick.price:,.2f}" if mid_tick else "₹13,150.00"
+
+conn_str = "CONNECTED" if ws_manager.is_connected() else "SIMULATED / RECONNECTING"
+conn_color = "#3fb950" if ws_manager.is_connected() else "#d29922"
+lat_val = f"{ws_manager.tick_cache.get_latency_ms('NIFTY'):.1f}ms"
+time_str = market_status.timestamp.strftime("%H:%M:%S IST")
+status_badge_color = "#3fb950" if market_status.status == "OPEN" else "#f85149"
+
+# TOP TICKER HUD
 st.markdown(
     f"""
     <div class="hud-bar">
-        <b style="color:{status_color};">● KITE WEBSOCKET: {status_str}</b> &nbsp;&nbsp;|&nbsp;&nbsp;
+        <b style="color:{conn_color};">● KITE WEBSOCKET: {conn_str}</b> &nbsp;&nbsp;|&nbsp;&nbsp;
         <b>NIFTY:</b> {nifty_p} &nbsp;&nbsp;&nbsp;&nbsp;
         <b>BANKNIFTY:</b> {bank_p} &nbsp;&nbsp;&nbsp;&nbsp;
-        <b>Tick Latency:</b> <span style="color:#58a6ff;">{latency}</span> &nbsp;&nbsp;&nbsp;&nbsp;
-        <b>Last Update:</b> {last_update} &nbsp;&nbsp;&nbsp;&nbsp;
-        <b>Candle Countdown:</b> <span style="color:#3fb950;">{countdown}</span>
+        <b>FINNIFTY:</b> {fin_p} &nbsp;&nbsp;&nbsp;&nbsp;
+        <b>MIDCPNIFTY:</b> {mid_p} &nbsp;&nbsp;&nbsp;&nbsp;
+        <b>VIX:</b> 12.80 &nbsp;&nbsp;&nbsp;&nbsp;
+        <b>Latency:</b> <span style="color:#58a6ff;">{lat_val}</span> &nbsp;&nbsp;&nbsp;&nbsp;
+        <b>Time:</b> {time_str} &nbsp;&nbsp;&nbsp;&nbsp;
+        <b>State:</b> <b style="color:{status_badge_color};">[{market_status.status}]</b>
     </div>
     """,
     unsafe_allow_html=True,
 )
 
-st.sidebar.title("⚡ QuantFlow v3.0 Workstation")
-st.sidebar.caption("Real Market Data & Kite WebSocket Engine")
+st.sidebar.title("⚡ QuantFlow Workstation v3.0")
+st.sidebar.caption("Real-Time Indian Market Engine (Kite WebSocket)")
 
 nav = st.sidebar.radio(
     "Workstation Views",
@@ -206,73 +211,49 @@ def fetch_sample_data(symbol: str = "NIFTY", period: str = "1mo") -> pd.DataFram
 
 
 if nav == "🏛️ AI Trading Desk":
-    # Header Status Banner
-    is_running = auto_trader.is_auto_trading
-    st_col1, st_col2 = st.columns([3, 1])
-
-    with st_col1:
-        if is_running:
-            st.markdown("### 🟢 QuantFlow v3.0 — **LIVE KITE WEBSOCKET TRADER ACTIVE**")
-        else:
-            st.markdown("### 🔴 QuantFlow v3.0 — **WEBSOCKET TRADER IDLE / PAUSED**")
-
-    # Market Health Cards Strip
-    m_health: MarketHealthOverview = MarketHealthMonitor.get_market_health()
-    h_cols = st.columns(len(m_health.items))
-    for idx, item in enumerate(m_health.items):
-        with h_cols[idx]:
-            st.markdown(
-                f"""
-                <div class="health-card">
-                    <small><b>{item.name}</b></small><br/>
-                    <b>{item.status}</b><br/>
-                    <span style="color:#d29922;">{item.stars}</span>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-
-    st.markdown("---")
-
-    # Main Grid Layout: Left Controls (1.2 cols), Middle Chart & Timeline (3 cols), Right AI Coach (2 cols)
+    # Main Grid Layout: Left Panel (1.2 cols), Center Panel (3 cols), Right Panel (2 cols)
     col_left, col_mid, col_right = st.columns([1.2, 3, 2])
 
     with col_left:
-        st.subheader("🎯 Spot & Strike")
+        st.subheader("🎯 Instrument Selection")
         target_symbol = st.selectbox("Underlying Index", ["NIFTY", "BANKNIFTY", "FINNIFTY", "MIDCPNIFTY", "SENSEX"], index=0)
-        df_chart = st.session_state.get("market_df", fetch_sample_data(target_symbol, "1mo"))
+        expiry = st.selectbox("Expiry Date", ["Current Weekly (Thursday)", "Next Weekly", "Monthly"], index=0)
+        interval = st.selectbox("Timeframe Interval", ["1m", "3m", "5m", "15m", "30m", "1h", "1d"], index=0)
 
+        df_chart = st.session_state.get("market_df", fetch_sample_data(target_symbol, "1mo"))
         latest_spot = float(df_chart["close"].iloc[-1])
         atm_strike = OptionChainEngine.calculate_atm_strike(target_symbol, latest_spot)
 
-        st.metric(f"{target_symbol} Spot Price", f"₹{latest_spot:,.2f}")
+        st.metric(f"{target_symbol} Live Spot Price", f"₹{latest_spot:,.2f}")
         st.metric("ATM Strike Price", f"₹{atm_strike:,.0f}")
-        st.caption("📅 Current Expiry: **Thursday Weekly**")
 
         st.markdown("---")
-        st.subheader("🎮 Autonomous Controls")
-        if st.button("▶️ Start Live Market Feed", type="primary", **button_kwargs):
-            market_service.start()
-            auto_trader.start()
+        st.subheader("⚙️ Strategy & Autonomous Mode")
+        strat_choice = st.selectbox("Active Strategy Engine", StrategyRegistry.list_strategies())
+
+        auto_mode = st.toggle("🤖 Autonomous Trading Mode", value=auto_trader.is_auto_trading)
+        if auto_mode != auto_trader.is_auto_trading:
+            if auto_mode:
+                auto_trader.start()
+            else:
+                auto_trader.stop()
             st.rerun()
 
-        if st.button("⏹️ Stop Live Market Feed", **button_kwargs):
-            auto_trader.stop()
-            market_service.stop()
-            st.rerun()
-
-        if st.button("⚡ Evaluate Market Now", **button_kwargs):
+        if st.button("⚡ Evaluate Multi-Agent Consensus", **button_kwargs):
             auto_trader.scan_and_execute()
             st.success(f"Evaluated multi-agent consensus for {target_symbol}")
             st.rerun()
 
     with col_mid:
-        st.subheader(f"📈 {target_symbol} Spot Candlestick Chart (1-Min Aggregated)")
+        st.subheader(f"📈 {target_symbol} TradingView Chart ({interval} Bar)")
 
         # Compute technical indicator overlays
         df_chart["ema20"] = IndicatorEngine.ema(df_chart, 20)
         df_chart["ema50"] = IndicatorEngine.ema(df_chart, 50)
         df_chart["vwap"] = IndicatorEngine.vwap(df_chart)
+
+        supp_level = atm_strike - 150.0
+        res_level = atm_strike + 150.0
 
         # Plotly Candlestick Chart
         fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.03, row_heights=[0.75, 0.25])
@@ -306,6 +287,12 @@ if nav == "🏛️ AI Trading Desk":
             col=1,
         )
 
+        # Support & Resistance Horizontal Lines
+        fig.add_hline(y=res_level, line_color="#f85149", line_dash="dot", annotation_text="Resistance", row=1, col=1)
+        fig.add_hline(y=supp_level, line_color="#3fb950", line_dash="dot", annotation_text="Support", row=1, col=1)
+        fig.add_hline(y=latest_spot, line_color="#58a6ff", line_width=1, annotation_text=f"Live: ₹{latest_spot:,.2f}", row=1, col=1)
+
+        # Volume Bar
         fig.add_trace(
             go.Bar(x=df_chart.index, y=df_chart["volume"], marker_color="#30363d", name="Volume"),
             row=2,
@@ -333,9 +320,8 @@ if nav == "🏛️ AI Trading Desk":
         st.markdown(timeline_html, unsafe_allow_html=True)
 
     with col_right:
-        st.subheader("🎓 AI Trading Coach Panel")
+        st.subheader("🤖 Live AI Panel")
 
-        # Query Multi-Agent Consensus & AI Coach Advice
         candle_now = Candle(
             timestamp=datetime.now(),
             open=float(df_chart["open"].iloc[-1]),
@@ -350,7 +336,7 @@ if nav == "🏛️ AI Trading Desk":
         st.markdown(
             f"""
             <div class="trade-action-box">
-                ⚡ RECOMMENDATION: {coach_adv.recommendation}
+                ⚡ SIGNAL: {ai_dec.action} {ai_dec.symbol} {int(ai_dec.strike)} {ai_dec.option_type}
             </div>
             """,
             unsafe_allow_html=True,
@@ -359,13 +345,14 @@ if nav == "🏛️ AI Trading Desk":
         st.markdown(
             f"""
             <div class="coach-card">
-                <h4><b>❓ Should I Buy Now or Wait?</b></h4>
-                <p style="color:#3fb950; font-size:16px;"><b>👉 {coach_adv.action_answer}</b></p>
+                <p><b>Current Spot:</b> ₹{latest_spot:,.2f}</p>
+                <p><b>Current Option Price:</b> ₹{ai_dec.entry:.2f}</p>
+                <p><b>Current Trend:</b> <b style="color:#3fb950;">{ai_dec.market_regime}</b></p>
+                <p><b>AI Confidence:</b> <b style="color:#d29922;">{ai_dec.confidence:.1f}%</b></p>
                 <hr style="border-color:#30363d;"/>
-                <p><b>Why:</b> {coach_adv.why_explanation}</p>
-                <p><b>Risk Guidance:</b> {coach_adv.risk_guidance}</p>
+                <p><b>Reasoning:</b> {ai_dec.reason}</p>
                 <hr style="border-color:#30363d;"/>
-                <p style="color:#d29922;"><i>"{coach_adv.coach_tip}"</i></p>
+                <p style="color:#3fb950;"><b>Coach Advice:</b> {coach_adv.action_answer}</p>
             </div>
             """,
             unsafe_allow_html=True,
@@ -373,64 +360,46 @@ if nav == "🏛️ AI Trading Desk":
 
     st.markdown("---")
 
-    # Bottom Row Tabs: AI Debate View, Strategy Scoreboard, Active Trades
-    t_debate, t_score, t_active = st.tabs(["🗣️ AI Analyst Debate Meeting", "📋 Strategy Scoreboard", "⚡ Active Managed Trades"])
+    # Bottom Panel: Live Option Chain Matrix with Greeks & Highlighting
+    st.subheader(f"⛓️ Live Option Chain Matrix with Option Greeks ({target_symbol})")
+    chain: OptionChain = OptionChainEngine.generate_chain(target_symbol, latest_spot)
 
-    with t_debate:
-        debate_sess: AIDebateSession = AIDebateEngine.create_debate(ai_dec)
-        st.markdown(f"#### AI Analyst Team Debate for **{target_symbol}** (Consensus: **{debate_sess.consensus_action}** | Confidence: **{debate_sess.consensus_confidence:.1f}%**)")
+    st.caption(f"ATM Strike: **{chain.atm_strike:.0f}** | Put-Call Ratio (PCR): **{chain.pcr:.2f}** | Max Pain: **{chain.max_pain:.0f}** | Support: **{chain.support_level:.0f}** | Resistance: **{chain.resistance_level:.0f}**")
 
-        d_cols = st.columns(3)
-        for idx, participant in enumerate(debate_sess.participants):
-            col_idx = idx % 3
-            vote_color = "#3fb950" if participant.vote == "BUY" else ("#f85149" if participant.vote == "SELL" else "#d29922")
-            with d_cols[col_idx]:
-                st.markdown(
-                    f"""
-                    <div class="agent-card">
-                        <b>{participant.name}</b> <small>({participant.role})</small><br/>
-                        <span style="color:{vote_color}; font-size:16px;"><b>VOTE: {participant.vote} ({participant.confidence:.0f}%)</b></span>
-                        <hr style="border-color:#30363d; margin:6px 0;"/>
-                        <small>{participant.key_argument}</small>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
+    matrix_rows = []
+    for strike in sorted(chain.calls.keys()):
+        c = chain.calls[strike]
+        p = chain.puts[strike]
 
-    with t_score:
-        scoreboard: ScoreboardConsensus = StrategyScoreboard.evaluate_scoreboard(target_symbol, candle_now, df_chart)
-        st.markdown(f"#### Strategy Scoreboard Consensus: **BUY ({scoreboard.buy_count})** | **WAIT ({scoreboard.wait_count})** | **SELL ({scoreboard.sell_count})**")
+        tag = ""
+        if c.is_atm:
+            tag = "⚡ ATM"
+        elif c.is_resistance:
+            tag = "🔴 RES (Max OI)"
+        elif p.is_support:
+            tag = "🟢 SUPP (Max OI)"
 
-        score_rows = [
+        matrix_rows.append(
             {
-                "Strategy": v.strategy_name,
-                "Vote": v.vote,
-                "Confidence": f"{v.confidence:.0f}%",
-                "Rationale": v.description,
+                "CE LTP (₹)": f"₹{c.ltp:.2f}",
+                "CE OI": f"{c.oi:,}",
+                "CE Vol": f"{c.volume:,}",
+                "CE Delta": c.delta,
+                "CE Gamma": c.gamma,
+                "CE Theta": c.theta,
+                "CE Vega": c.vega,
+                "STRIKE": f"{strike:.0f} {tag}",
+                "PE Vega": p.vega,
+                "PE Theta": p.theta,
+                "PE Gamma": p.gamma,
+                "PE Delta": p.delta,
+                "PE Vol": f"{p.volume:,}",
+                "PE OI": f"{p.oi:,}",
+                "PE LTP (₹)": f"₹{p.ltp:.2f}",
             }
-            for v in scoreboard.votes
-        ]
-        st.dataframe(pd.DataFrame(score_rows), **button_kwargs)
+        )
 
-    with t_active:
-        if auto_trader.active_trades:
-            active_rows = []
-            for k, tr in auto_trader.active_trades.items():
-                active_rows.append(
-                    {
-                        "Trade ID": tr.trade_id,
-                        "Contract": tr.contract_symbol,
-                        "State": tr.state_machine.current_state.value,
-                        "Entry (₹)": f"₹{tr.entry_price:.2f}",
-                        "Current (₹)": f"₹{tr.current_price:.2f}",
-                        "Stop Loss (₹)": f"₹{tr.stop_loss:.2f}",
-                        "Target 1 (₹)": f"₹{tr.target1:.2f}",
-                        "Unrealized PnL (₹)": f"₹{tr.unrealized_pnl:.2f}",
-                    }
-                )
-            st.dataframe(pd.DataFrame(active_rows), **button_kwargs)
-        else:
-            st.info("No active autonomous trades currently open.")
+    st.dataframe(pd.DataFrame(matrix_rows), **button_kwargs)
 
 elif nav == "🗣️ AI Analyst Debate Meeting":
     st.header("🗣️ AI Analyst Team Debate Meeting")
