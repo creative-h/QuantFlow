@@ -38,3 +38,10 @@ class AITradeDecision:
     market_regime: str = "TRENDING_BULLISH"
     timestamp: datetime = field(default_factory=datetime.now)
     agent_opinions: List[AgentOpinion] = field(default_factory=list)
+
+    @property
+    def reason(self) -> str:
+        """Return combined single-string reasoning for UI display compatibility."""
+        if self.reasons:
+            return " ".join(self.reasons)
+        return "Multi-agent consensus evaluation completed."
