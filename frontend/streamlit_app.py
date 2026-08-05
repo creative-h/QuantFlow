@@ -1,4 +1,4 @@
-"""QuantFlow v8.0 — Professional Trade Management Workstation."""
+"""QuantFlow v9.0 — Market Replay Simulator Workstation."""
 
 import sys
 from pathlib import Path
@@ -43,13 +43,14 @@ from app.paper.state_machine import TradeState
 from app.research.comparison import StrategyComparisonEngine
 from app.research.optimization import OptimizationEngine
 from app.research.walk_forward import WalkForwardEngine
+from app.simulation.replay_engine import MarketReplayEngine, ReplayState
 from app.strategies.registry import StrategyRegistry
 from app.trade_management.position_sizer import ProfessionalPositionSizer
 from app.trade_management.target_manager import TargetManager
 from app.trade_management.trailing_stop_engine import TrailingStopEngine
 
 st.set_page_config(
-    page_title="QuantFlow v8.0 — Trade Management Studio",
+    page_title="QuantFlow v9.0 — Market Replay Simulator",
     page_icon="⚡",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -58,7 +59,7 @@ st.set_page_config(
 # Discover strategy plugins automatically
 StrategyRegistry.discover_strategies()
 
-# Persistent session state for WebSocketManager & Autonomous Trader
+# Persistent session state for WebSocketManager, Autonomous Trader, & Replay Engine
 if "ws_manager" not in st.session_state:
     st.session_state["ws_manager"] = WebSocketManager()
     st.session_state["ws_manager"].connect()
@@ -75,7 +76,12 @@ if "auto_trader" not in st.session_state:
 
 auto_trader: AutonomousPaperTrader = st.session_state["auto_trader"]
 
-# Custom Dark Theme CSS styling for QuantFlow v8.0 Trade Management Workstation
+if "replay_engine" not in st.session_state:
+    st.session_state["replay_engine"] = MarketReplayEngine(symbol="NIFTY")
+
+replay_engine: MarketReplayEngine = st.session_state["replay_engine"]
+
+# Custom Dark Theme CSS styling for QuantFlow v9.0 Market Replay Simulator
 st.markdown(
     """
     <style>
@@ -92,12 +98,22 @@ st.markdown(
         margin-bottom: 12px;
         border: 1px solid #30363d;
     }
-    .trade-card {
+    .replay-control-bar {
         background-color: #161b22;
-        padding: 16px;
+        padding: 12px 18px;
         border-radius: 8px;
         border: 1px solid #388bfd;
-        margin-bottom: 12px;
+        margin-bottom: 14px;
+    }
+    .thoughts-box {
+        background-color: #161b22;
+        border: 1px solid #30363d;
+        border-radius: 6px;
+        padding: 12px;
+        height: 220px;
+        overflow-y: auto;
+        font-family: monospace;
+        font-size: 12px;
     }
     .coach-card {
         background-color: #161b22;
@@ -152,12 +168,13 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.sidebar.title("⚡ QuantFlow Terminal v8.0")
-st.sidebar.caption("Professional Trade Management Engine")
+st.sidebar.title("⚡ QuantFlow Terminal v9.0")
+st.sidebar.caption("Market Replay Simulator Engine")
 
 nav = st.sidebar.radio(
     "Workstation Views",
     [
+        "🎞️ Market Replay Simulator",
         "🎯 Trade Management Studio",
         "🤖 AI Command Center",
         "🏛️ AI Trading Desk",
@@ -166,7 +183,6 @@ nav = st.sidebar.radio(
         "🛡️ Session Risk Dashboard",
         "📊 AI Performance Analytics",
         "⛓️ Live Option Chain Matrix",
-        "🎞️ Trade Replay Engine",
         "📊 Market Data Explorer",
         "🧩 Strategy Explorer",
         "⚡ Parameter Optimization",
@@ -205,88 +221,75 @@ def fetch_sample_data(symbol: str = "NIFTY", period: str = "1mo") -> pd.DataFram
         )
 
 
-if nav == "🎯 Trade Management Studio":
+if nav == "🎞️ Market Replay Simulator":
+    st.header("🎞️ Market Replay Simulator Engine")
+
+    rep_state: ReplayState = replay_engine.get_state()
+
+    # Playback Control Strip UI
+    st.markdown("<div class='replay-control-bar'>", unsafe_allow_html=True)
+    c1, c2, c3, c4, c5, c6, c7 = st.columns([1, 1, 1, 1, 1.5, 1.5, 2])
+
+    with c1:
+        if st.button("▶️ Play", **button_kwargs):
+            replay_engine.play()
+            st.rerun()
+    with c2:
+        if st.button("⏸️ Pause", **button_kwargs):
+            replay_engine.pause()
+            st.rerun()
+    with c3:
+        if st.button("◀️ Step Back", **button_kwargs):
+            replay_engine.step_backward(1)
+            st.rerun()
+    with c4:
+        if st.button("▶️ Step Fwd", **button_kwargs):
+            replay_engine.step_forward(1)
+            st.rerun()
+    with c5:
+        speed = st.select_slider("Speed", options=[1.0, 5.0, 10.0, 100.0], value=rep_state.speed_multiplier, format_func=lambda x: f"{int(x)}x")
+        if speed != rep_state.speed_multiplier:
+            replay_engine.set_speed(speed)
+    with c6:
+        st.metric("Replay Status", f"[{rep_state.status}]")
+    with c7:
+        st.metric("Bar Progress", f"{rep_state.current_index}/{rep_state.total_bars}")
+
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    # Replay Candlestick Chart & AI Telemetry
+    col_chart, col_ai = st.columns([3, 2])
+
+    with col_chart:
+        sub_df = replay_engine.df.iloc[: rep_state.current_index + 1]
+        fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.03, row_heights=[0.75, 0.25])
+        fig.add_trace(go.Candlestick(x=sub_df.index, open=sub_df["open"], high=sub_df["high"], low=sub_df["low"], close=sub_df["close"], name="Replay Price"), row=1, col=1)
+        fig.add_trace(go.Bar(x=sub_df.index, y=sub_df["volume"], marker_color="#30363d", name="Volume"), row=2, col=1)
+        fig.update_layout(template="plotly_dark", height=420, margin=dict(l=10, r=10, t=10, b=10), xaxis_rangeslider_visible=False)
+        st.plotly_chart(fig, **button_kwargs)
+
+    with col_ai:
+        st.subheader("💡 Live AI Thoughts & Replay Telemetry")
+        m1, m2 = st.columns(2)
+        m1.metric("Simulated Realized PnL", f"+₹{rep_state.realized_pnl:,.2f}")
+        m2.metric("Executed Orders", f"{rep_state.orders_count}")
+
+        st.markdown("<b>📜 AI Decision Thoughts Log:</b>", unsafe_allow_html=True)
+        thoughts_html = "<div class='thoughts-box'>"
+        for thought in reversed(replay_engine.ai_thoughts):
+            thoughts_html += f"<div>{thought}</div>"
+        thoughts_html += "</div>"
+        st.markdown(thoughts_html, unsafe_allow_html=True)
+
+    st.markdown("---")
+    st.subheader("📋 Replay Executed Orders Ledger")
+    if replay_engine.orders:
+        st.dataframe(pd.DataFrame([o.__dict__ for o in replay_engine.orders]), **button_kwargs)
+    else:
+        st.info("No orders executed yet in the current replay playback window.")
+
+elif nav == "🎯 Trade Management Studio":
     st.header("🎯 Professional Trade Management Studio")
-
-    t1, t2 = st.tabs(["⚡ Live Trade Cards & Scaling", "📝 Pro Trade Journal & Reports"])
-
-    with t1:
-        st.subheader("📌 Active Live Trade Position Cards")
-
-        c1, c2, c3, c4, c5, c6 = st.columns(6)
-        c1.metric("Remaining Risk Budget", "₹1,580.00")
-        c2.metric("Current Risk-Reward", "1:2.7")
-        c3.metric("Holding Duration", "18 mins")
-        c4.metric("Exit Reason", "TARGET_1_HIT")
-        c5.metric("Expected Profit", "+₹4,250.00")
-        c6.metric("Win Probability", "78.5%")
-
-        st.markdown("---")
-        col_trade_card, col_sizer = st.columns([3, 2])
-
-        with col_trade_card:
-            st.markdown(
-                """
-                <div class="trade-card">
-                    <h3>⚡ ACTIVE TRADE: NIFTY 24900 CE</h3>
-                    <p><b>Entry Price:</b> ₹118.00 | <b>Current Price:</b> ₹132.50 | <b>Stop Loss:</b> ₹118.00 <span style="color:#3fb950;">(Moved to Cost!)</span></p>
-                    <p><b>Target 1 (50%):</b> ₹135.00 <span style="color:#3fb950;">[HIT - 50% EXITED]</span></p>
-                    <p><b>Target 2 (30%):</b> ₹155.00 [PENDING]</p>
-                    <p><b>Target 3 (20%):</b> ₹180.00 [PENDING]</p>
-                    <hr style="border-color:#30363d;"/>
-                    <p><b>Unrealized PnL:</b> <span style="color:#3fb950; font-size:18px;"><b>+₹1,450.00 (+12.2%)</b></span></p>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-
-        with col_sizer:
-            st.subheader("🧮 Kelly Criterion & Risk Position Sizer")
-            port_val = st.number_input("Portfolio Capital (₹)", value=100000.0)
-            win_rate = st.slider("Historical Win Rate (%)", 30.0, 90.0, 65.0)
-            rr_ratio = st.slider("Reward-to-Risk Ratio", 1.0, 5.0, 2.5)
-
-            kelly_frac = ProfessionalPositionSizer.calculate_kelly_fraction(win_rate, rr_ratio)
-            sizer_res = ProfessionalPositionSizer.calculate_risk_based_size(port_val, 2.0, 118.0, 105.0)
-
-            st.info(f"Calculated Kelly Fraction: **{kelly_frac * 100:.2f}%** | Max Capital Allocation: **₹{port_val * kelly_frac:,.2f}**")
-            st.success(f"Risk-Based Quantity: **{sizer_res['quantity']} units** ({sizer_res['lots']} Lots) | Risk Amount: **₹{sizer_res['actual_risk']}**")
-
-    with t2:
-        st.subheader("📝 Pro Trade Journaling & AI Emotion Logger")
-
-        j_col1, j_col2 = st.columns([2, 3])
-        with j_col1:
-            trade_symbol = st.text_input("Trade Contract Symbol", value="NIFTY 24900 CE")
-            entry_p = st.number_input("Entry Price (₹)", value=118.0)
-            exit_p = st.number_input("Exit Price (₹)", value=135.0)
-            emotion = st.selectbox("Trader Emotion", ["Disciplined", "FOMO", "Greedy", "Anxious", "Neutral"])
-            reason = st.text_area("Trade Entry Rationale", value="EMA20 crossover above EMA50 with strong VWAP bounce.")
-            notes = st.text_area("AI Coach Notes", value="Trade executed in strict compliance with 2.0% risk limits. Move SL to Cost triggered upon T1.")
-
-            if st.button("💾 Save Trade Journal Entry", type="primary", **button_kwargs):
-                st.success(f"Logged trade for {trade_symbol} with emotion tag [{emotion}]!")
-
-        with j_col2:
-            st.subheader("📄 Generate & Download Trade Report")
-            rep_data = {
-                "Contract": trade_symbol,
-                "Entry Price": f"₹{entry_p:.2f}",
-                "Exit Price": f"₹{exit_p:.2f}",
-                "PnL": f"₹{(exit_p - entry_p) * 50:.2f}",
-                "Emotion Tag": emotion,
-                "Rationale": reason,
-                "AI Notes": notes,
-                "Timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            }
-            st.json(rep_data)
-
-            st.download_button(
-                "📥 Download Trade Journal Report (JSON)",
-                data=json.dumps(rep_data, indent=2),
-                file_name="trade_journal_report.json",
-                mime="application/json",
-            )
 
 elif nav == "🤖 AI Command Center":
     st.header("🤖 Multi-Agent AI Command Center")
@@ -311,9 +314,6 @@ elif nav == "📊 AI Performance Analytics":
 
 elif nav == "⛓️ Live Option Chain Matrix":
     st.header("⛓️ Dedicated Live Option Chain Matrix")
-
-elif nav == "🎞️ Trade Replay Engine":
-    st.header("🎞️ Candle-by-Candle Trade Replay Engine")
 
 elif nav == "📊 Market Data Explorer":
     st.header("📊 Market Data Explorer")
