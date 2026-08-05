@@ -6032,3 +6032,10 @@ RuntimeError: Yahoo API connection timeout
 2026-08-05 23:37:47.141 | ERROR    | app.marketdata.validator:validate_ohlcv:110 - Negative volume detected
 2026-08-05 23:37:47.146 | ERROR    | app.marketdata.validator:validate_ohlcv:116 - High price is less than Low price in 1 rows
 2026-08-05 23:37:56.119 | ERROR    | app.services.zerodha_auth:exchange_token:70 - Token exchange failed with HTTP status 400
+2026-08-06 00:05:55.310 | ERROR    | app.marketdata.yfinance_provider:get_candles:100 - Failed all 2 attempts to fetch Yahoo Finance data for 'INVALID'
+2026-08-06 00:05:55.337 | ERROR    | app.marketdata.csv_provider:get_candles:33 - CSV file not found for symbol 'NONEXISTENT' at C:\Users\creat\AppData\Local\Temp\pytest-of-creat\pytest-61\test_csv_provider_missing_file0\NONEXISTENT.csv
+2026-08-06 00:05:55.709 | ERROR    | app.marketdata.validator:validate_ohlcv:95 - NaN values detected in market data: {'open': 1, 'high': 0, 'low': 0, 'close': 0, 'volume': 0}
+2026-08-06 00:05:55.714 | ERROR    | app.marketdata.validator:validate_ohlcv:103 - Negative prices detected in column close: 1 rows
+2026-08-06 00:05:55.719 | ERROR    | app.marketdata.validator:validate_ohlcv:110 - Negative volume detected
+2026-08-06 00:05:55.724 | ERROR    | app.marketdata.validator:validate_ohlcv:116 - High price is less than Low price in 1 rows
+2026-08-06 00:06:06.093 | ERROR    | app.services.zerodha_auth:exchange_token:70 - Token exchange failed with HTTP status 400
