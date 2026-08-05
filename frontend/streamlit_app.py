@@ -1,4 +1,4 @@
-"""QuantFlow v2.0 — Professional Indian AI Options Trading Platform (Real-Time Automation Release)."""
+"""QuantFlow v2.1 — AI Trading Desk & Professional Intelligence Workstation."""
 
 import sys
 from pathlib import Path
@@ -21,40 +21,12 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import streamlit as st
 
-try:
-    from app.analytics.multi_agent.coordinator import DecisionCoordinator
-    from app.analytics.multi_agent.decision import AITradeDecision, AgentOpinion
-except ImportError:
-    from dataclasses import dataclass, field
-
-    @dataclass
-    class AgentOpinion:
-        agent_name: str
-        score: float
-        confidence: float
-        reason: str
-        recommendation: str
-
-    @dataclass
-    class AITradeDecision:
-        symbol: str
-        expiry: str
-        strike: float
-        option_type: str
-        action: str
-        entry: float
-        stop_loss: float
-        target1: float
-        target2: float
-        target3: float
-        confidence: float
-        expected_hold_time: str
-        risk_reward: str
-        reasons: list = field(default_factory=list)
-        warnings: list = field(default_factory=list)
-        market_regime: str = "TRENDING_BULLISH"
-        timestamp: datetime = field(default_factory=datetime.now)
-
+from app.analytics.ai_coach import AICoach, AICoachAdvice
+from app.analytics.market_health import MarketHealthMonitor, MarketHealthOverview
+from app.analytics.multi_agent.coordinator import DecisionCoordinator
+from app.analytics.multi_agent.debate import AIDebateEngine, AIDebateSession
+from app.analytics.multi_agent.decision import AITradeDecision, AgentOpinion
+from app.analytics.multi_agent.scoreboard import ScoreboardConsensus, StrategyScoreboard
 from app.analytics.reporting import HTMLReportGenerator, JSONReportGenerator
 from app.indicators.engine import IndicatorEngine
 from app.marketdata.live_feed import KiteLiveFeedManager, Tick
@@ -62,7 +34,6 @@ from app.marketdata.option_chain import OptionChain, OptionChainEngine
 from app.marketdata.yfinance_provider import YahooFinanceProvider
 from app.models.dataclasses import Candle
 from app.paper.autonomous_trader import AutonomousPaperTrader
-from app.paper.live_engine import LivePaperEngine, LivePaperSessionConfig
 from app.paper.state_machine import TradeState
 from app.research.comparison import StrategyComparisonEngine
 from app.research.optimization import OptimizationEngine
@@ -70,7 +41,7 @@ from app.research.walk_forward import WalkForwardEngine
 from app.strategies.registry import StrategyRegistry
 
 st.set_page_config(
-    page_title="QuantFlow v2.0 — Indian AI Options Platform",
+    page_title="QuantFlow v2.1 — AI Trading Desk",
     page_icon="⚡",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -85,7 +56,7 @@ if "auto_trader" not in st.session_state:
 
 auto_trader: AutonomousPaperTrader = st.session_state["auto_trader"]
 
-# Custom Dark Theme CSS styling for QuantFlow v2.0 AI Options Terminal
+# Custom Dark Theme CSS styling for QuantFlow v2.1 AI Trading Desk
 st.markdown(
     """
     <style>
@@ -98,24 +69,30 @@ st.markdown(
         padding: 8px 16px;
         border-radius: 6px;
         font-family: monospace;
-        font-size: 14px;
+        font-size: 13px;
         margin-bottom: 12px;
         border: 1px solid #30363d;
     }
-    .option-card {
+    .health-card {
+        background-color: #161b22;
+        padding: 10px 14px;
+        border-radius: 6px;
+        border: 1px solid #30363d;
+        text-align: center;
+    }
+    .agent-card {
+        background-color: #161b22;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #30363d;
+        margin-bottom: 8px;
+    }
+    .coach-card {
         background-color: #161b22;
         padding: 16px;
         border-radius: 8px;
-        border: 1px solid #388bfd;
+        border: 1px solid #238636;
         margin-bottom: 12px;
-    }
-    .regime-pill {
-        background-color: #238636;
-        color: white;
-        padding: 4px 10px;
-        border-radius: 12px;
-        font-size: 12px;
-        font-weight: bold;
     }
     .trade-action-box {
         background: linear-gradient(90deg, #1f6beb 0%, #2ea043 100%);
@@ -142,7 +119,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# Top Live Ticker Strip (Real-Time Feed)
+# Top Live Ticker Strip
 st.markdown(
     """
     <div class="ticker-bar">
@@ -150,7 +127,7 @@ st.markdown(
         <b>NIFTY 50:</b> 24,915.20 <span style="color:#3fb950">▲ +45.10</span> &nbsp;&nbsp;&nbsp;&nbsp;
         <b>BANKNIFTY:</b> 55,201.00 <span style="color:#3fb950">▲ +120.50</span> &nbsp;&nbsp;&nbsp;&nbsp;
         <b>FINNIFTY:</b> 22,450.00 <span style="color:#3fb950">▲ +35.20</span> &nbsp;&nbsp;&nbsp;&nbsp;
-        <b>MIDCPNIFTY:</b> 13,150.00 <span style="color:#3fb950">▲ +18.40</span> &nbsp;&nbsp;&nbsp;&nbsp;
+        <b>MIDCPNIFTY:</b> 13,150.00 <span style="color:#f85149">▼ -18.40</span> &nbsp;&nbsp;&nbsp;&nbsp;
         <b>INDIA VIX:</b> 12.80 &nbsp;&nbsp;&nbsp;&nbsp;
         <b>SENSEX:</b> 81,500.00 <span style="color:#3fb950">▲ +180.00</span>
     </div>
@@ -158,14 +135,16 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.sidebar.title("⚡ QuantFlow Terminal v2.0")
-st.sidebar.caption("Real-Time Autonomous AI Options Trading Platform")
+st.sidebar.title("⚡ QuantFlow Terminal v2.1")
+st.sidebar.caption("AI Trading Desk & Professional Intelligence")
 
 nav = st.sidebar.radio(
     "Workstation Views",
     [
-        "⚡ Indian AI Options Terminal",
-        "🛡️ Risk Management Dashboard",
+        "🏛️ AI Trading Desk",
+        "🗣️ AI Analyst Debate Meeting",
+        "📋 Strategy Scoreboard",
+        "🛡️ Session Risk Dashboard",
         "📊 AI Performance Analytics",
         "⛓️ Live Option Chain Matrix",
         "🎞️ Trade Replay Engine",
@@ -208,35 +187,36 @@ def fetch_sample_data(symbol: str = "NIFTY", period: str = "1mo") -> pd.DataFram
         )
 
 
-if nav == "⚡ Indian AI Options Terminal":
+if nav == "🏛️ AI Trading Desk":
     # Header Status Banner
     is_running = auto_trader.is_auto_trading
     st_col1, st_col2 = st.columns([3, 1])
 
     with st_col1:
         if is_running:
-            st.markdown("### 🟢 QuantFlow v2.0 — **AUTONOMOUS REAL-TIME TRADER ACTIVE**")
+            st.markdown("### 🟢 QuantFlow v2.1 — **AI TRADING DESK ACTIVE**")
         else:
-            st.markdown("### 🔴 QuantFlow v2.0 — **AUTONOMOUS TRADER IDLE / PAUSED**")
+            st.markdown("### 🔴 QuantFlow v2.1 — **AI TRADING DESK IDLE / PAUSED**")
 
-    # Executive Portfolio Metrics Strip
-    portfolio = auto_trader.broker.portfolio if auto_trader.broker else None
-    cash = float(portfolio.cash) if portfolio else 100000.0
-    equity = float(portfolio.total_equity) if portfolio else cash
-    realized = float(portfolio.total_realized_pnl) if portfolio else 0.0
-    unrealized = float(portfolio.total_unrealized_pnl) if portfolio else 0.0
-    drawdown = portfolio.drawdown_pct if portfolio else 0.0
-
-    m1, m2, m3, m4, m5 = st.columns(5)
-    m1.metric("Available Capital (₹)", f"₹{cash:,.2f}")
-    m2.metric("Total Equity (₹)", f"₹{equity:,.2f}")
-    m3.metric("Realized PnL (₹)", f"₹{realized:,.2f}")
-    m4.metric("Unrealized PnL (₹)", f"₹{unrealized:,.2f}")
-    m5.metric("Max Drawdown", f"{drawdown:.2f}%")
+    # Market Health Cards Strip
+    m_health: MarketHealthOverview = MarketHealthMonitor.get_market_health()
+    h_cols = st.columns(len(m_health.items))
+    for idx, item in enumerate(m_health.items):
+        with h_cols[idx]:
+            st.markdown(
+                f"""
+                <div class="health-card">
+                    <small><b>{item.name}</b></small><br/>
+                    <b>{item.status}</b><br/>
+                    <span style="color:#d29922;">{item.stars}</span>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
 
     st.markdown("---")
 
-    # Main Grid: Left Spot Panel & Controls (1 col), Middle Plotly Chart (3 cols), Right AI Options Card (2 cols)
+    # Main Grid Layout: Left Controls (1.2 cols), Middle Chart & Timeline (3 cols), Right AI Coach (2 cols)
     col_left, col_mid, col_right = st.columns([1.2, 3, 2])
 
     with col_left:
@@ -253,17 +233,17 @@ if nav == "⚡ Indian AI Options Terminal":
 
         st.markdown("---")
         st.subheader("🎮 Autonomous Controls")
-        if st.button("▶️ Start Autonomous Trader", type="primary", **button_kwargs):
+        if st.button("▶️ Start AI Trading Desk", type="primary", **button_kwargs):
             auto_trader.start()
             st.rerun()
 
-        if st.button("⏹️ Stop Autonomous Trader", **button_kwargs):
+        if st.button("⏹️ Stop AI Trading Desk", **button_kwargs):
             auto_trader.stop()
             st.rerun()
 
-        if st.button("⚡ Inject Paper Order", **button_kwargs):
+        if st.button("⚡ Evaluate Market Now", **button_kwargs):
             auto_trader.scan_and_execute()
-            st.success(f"Scanned & evaluated multi-agent consensus for {target_symbol}")
+            st.success(f"Evaluated multi-agent consensus for {target_symbol}")
             st.rerun()
 
     with col_mid:
@@ -314,7 +294,7 @@ if nav == "⚡ Indian AI Options Terminal":
 
         fig.update_layout(
             template="plotly_dark",
-            height=460,
+            height=440,
             margin=dict(l=10, r=10, t=10, b=10),
             xaxis_rangeslider_visible=False,
             paper_bgcolor="#0b0e14",
@@ -322,8 +302,8 @@ if nav == "⚡ Indian AI Options Terminal":
         )
         st.plotly_chart(fig, **button_kwargs)
 
-        # Live AI Commentary Timeline (Module 9)
-        st.subheader("📜 Live AI Commentary Timeline")
+        # Live AI Session Commentary Timeline (Module E)
+        st.subheader("📜 Live AI Session Commentary Timeline")
         timeline_html = "<div class='timeline-box'>"
         for event in reversed(auto_trader.ai_timeline):
             ts_str = event.timestamp.strftime("%H:%M:%S")
@@ -333,9 +313,9 @@ if nav == "⚡ Indian AI Options Terminal":
         st.markdown(timeline_html, unsafe_allow_html=True)
 
     with col_right:
-        st.subheader("🤖 Multi-Agent AI Decision Box")
+        st.subheader("🎓 AI Trading Coach Panel")
 
-        # Query Multi-Agent Consensus
+        # Query Multi-Agent Consensus & AI Coach Advice
         candle_now = Candle(
             timestamp=datetime.now(),
             open=float(df_chart["open"].iloc[-1]),
@@ -345,11 +325,12 @@ if nav == "⚡ Indian AI Options Terminal":
             volume=int(df_chart["volume"].iloc[-1]),
         )
         ai_dec: AITradeDecision = auto_trader.coordinator.evaluate_consensus(target_symbol, candle_now, df_chart)
+        coach_adv: AICoachAdvice = AICoach.generate_advice(ai_dec)
 
         st.markdown(
             f"""
             <div class="trade-action-box">
-                ⚡ SUGGESTED TRADE: {ai_dec.action} {ai_dec.symbol} {int(ai_dec.strike)} {ai_dec.option_type}
+                ⚡ RECOMMENDATION: {coach_adv.recommendation}
             </div>
             """,
             unsafe_allow_html=True,
@@ -357,42 +338,59 @@ if nav == "⚡ Indian AI Options Terminal":
 
         st.markdown(
             f"""
-            <div class="option-card">
-                <p><b>Market Regime:</b> <span class="regime-pill">{ai_dec.market_regime}</span> &nbsp;&nbsp; <b>AI Confidence:</b> {ai_dec.confidence:.1f}%</p>
+            <div class="coach-card">
+                <h4><b>❓ Should I Buy Now or Wait?</b></h4>
+                <p style="color:#3fb950; font-size:16px;"><b>👉 {coach_adv.action_answer}</b></p>
                 <hr style="border-color:#30363d;"/>
-                <table style="width:100%; text-align:center;">
-                    <tr>
-                        <th>Entry Price</th>
-                        <th>Stop Loss</th>
-                        <th>Target 1</th>
-                        <th>Target 2</th>
-                        <th>Risk-Reward</th>
-                    </tr>
-                    <tr>
-                        <td><b>₹{ai_dec.entry}</b></td>
-                        <td><span style="color:#f85149">₹{ai_dec.stop_loss}</span></td>
-                        <td><span style="color:#3fb950">₹{ai_dec.target1}</span></td>
-                        <td><span style="color:#3fb950">₹{ai_dec.target2}</span></td>
-                        <td><b>{ai_dec.risk_reward}</b></td>
-                    </tr>
-                </table>
+                <p><b>Why:</b> {coach_adv.why_explanation}</p>
+                <p><b>Risk Guidance:</b> {coach_adv.risk_guidance}</p>
                 <hr style="border-color:#30363d;"/>
-                <p><b>Expected Hold Time:</b> {ai_dec.expected_hold_time}</p>
+                <p style="color:#d29922;"><i>"{coach_adv.coach_tip}"</i></p>
             </div>
             """,
             unsafe_allow_html=True,
         )
 
-        st.subheader("💡 AI Multi-Agent Explainability")
-        for reason_text in ai_dec.reasons:
-            st.markdown(f"<span style='color:#3fb950;'>{reason_text}</span>", unsafe_allow_html=True)
-        for warn_text in ai_dec.warnings:
-            st.markdown(f"<span style='color:#d29922;'>{warn_text}</span>", unsafe_allow_html=True)
-
     st.markdown("---")
 
-    # Bottom Row: Active Autonomous Positions & Live Option Chain Matrix Tabs
-    t_active, t_chain, t_history = st.tabs(["⚡ Active Managed Trades", "⛓️ Live Option Chain Matrix", "📜 Trade History"])
+    # Bottom Row Tabs: AI Debate View, Strategy Scoreboard, Active Trades
+    t_debate, t_score, t_active = st.tabs(["🗣️ AI Analyst Debate Meeting", "📋 Strategy Scoreboard", "⚡ Active Managed Trades"])
+
+    with t_debate:
+        debate_sess: AIDebateSession = AIDebateEngine.create_debate(ai_dec)
+        st.markdown(f"#### AI Analyst Team Debate for **{target_symbol}** (Consensus: **{debate_sess.consensus_action}** | Confidence: **{debate_sess.consensus_confidence:.1f}%**)")
+
+        d_cols = st.columns(3)
+        for idx, participant in enumerate(debate_sess.participants):
+            col_idx = idx % 3
+            vote_color = "#3fb950" if participant.vote == "BUY" else ("#f85149" if participant.vote == "SELL" else "#d29922")
+            with d_cols[col_idx]:
+                st.markdown(
+                    f"""
+                    <div class="agent-card">
+                        <b>{participant.name}</b> <small>({participant.role})</small><br/>
+                        <span style="color:{vote_color}; font-size:16px;"><b>VOTE: {participant.vote} ({participant.confidence:.0f}%)</b></span>
+                        <hr style="border-color:#30363d; margin:6px 0;"/>
+                        <small>{participant.key_argument}</small>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+    with t_score:
+        scoreboard: ScoreboardConsensus = StrategyScoreboard.evaluate_scoreboard(target_symbol, candle_now, df_chart)
+        st.markdown(f"#### Strategy Scoreboard Consensus: **BUY ({scoreboard.buy_count})** | **WAIT ({scoreboard.wait_count})** | **SELL ({scoreboard.sell_count})**")
+
+        score_rows = [
+            {
+                "Strategy": v.strategy_name,
+                "Vote": v.vote,
+                "Confidence": f"{v.confidence:.0f}%",
+                "Rationale": v.description,
+            }
+            for v in scoreboard.votes
+        ]
+        st.dataframe(pd.DataFrame(score_rows), **button_kwargs)
 
     with t_active:
         if auto_trader.active_trades:
@@ -414,61 +412,52 @@ if nav == "⚡ Indian AI Options Terminal":
         else:
             st.info("No active autonomous trades currently open.")
 
-    with t_chain:
-        chain: OptionChain = OptionChainEngine.generate_chain(target_symbol, latest_spot)
-        st.markdown(f"#### Option Chain Matrix for **{target_symbol}** (Spot: ₹{latest_spot:,.2f} | PCR: **{chain.pcr:.2f}**)")
+elif nav == "🗣️ AI Analyst Debate Meeting":
+    st.header("🗣️ AI Analyst Team Debate Meeting")
+    candle_now = Candle(datetime.now(), 24900, 24950, 24880, 24915.20, 2500)
+    df_c = fetch_sample_data("NIFTY", "1mo")
+    ai_dec = auto_trader.coordinator.evaluate_consensus("NIFTY", candle_now, df_c)
+    debate = AIDebateEngine.create_debate(ai_dec)
 
-        chain_data = []
-        for strike in sorted(chain.calls.keys()):
-            c = chain.calls[strike]
-            p = chain.puts[strike]
-            is_atm = strike == chain.atm_strike
-            chain_data.append(
-                {
-                    "Call OI": f"{c.oi:,}",
-                    "Call Delta": f"{c.delta:.2f}",
-                    "Call LTP (₹)": f"₹{c.ltp:.2f}",
-                    "STRIKE": f"🎯 {int(strike)} (ATM)" if is_atm else f"{int(strike)}",
-                    "Put LTP (₹)": f"₹{p.ltp:.2f}",
-                    "Put Delta": f"{p.delta:.2f}",
-                    "Put OI": f"{p.oi:,}",
-                }
-            )
+    st.info(debate.summary_reasoning)
+    for p in debate.participants:
+        st.markdown(f"### 🤖 {p.name} — `{p.role}`")
+        st.write(f"**Vote:** `{p.vote}` | **Confidence:** `{p.confidence:.0f}%`")
+        st.write(f"**Key Argument:** {p.key_argument}")
+        st.markdown("---")
 
-        st.dataframe(pd.DataFrame(chain_data), **button_kwargs)
+elif nav == "📋 Strategy Scoreboard":
+    st.header("📋 Multi-Strategy Scoreboard Matrix")
+    candle_now = Candle(datetime.now(), 24900, 24950, 24880, 24915.20, 2500)
+    df_c = fetch_sample_data("NIFTY", "1mo")
+    scoreboard = StrategyScoreboard.evaluate_scoreboard("NIFTY", candle_now, df_c)
 
-    with t_history:
-        if auto_trader.broker and auto_trader.broker.list_orders():
-            orders_list = auto_trader.broker.list_orders()
-            df_ord = pd.DataFrame(
-                [
-                    {
-                        "Order ID": o.id,
-                        "Symbol": o.request.symbol,
-                        "Side": o.request.side.value,
-                        "Quantity": o.request.quantity,
-                        "Status": o.status.value,
-                        "Price": f"₹{float(o.average_price):,.2f}" if o.average_price else "-",
-                    }
-                    for o in reversed(orders_list)
-                ]
-            )
-            st.dataframe(df_ord, **button_kwargs)
-        else:
-            st.info("No trade history recorded yet.")
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric("BUY Votes", scoreboard.buy_count)
+    col2.metric("WAIT Votes", scoreboard.wait_count)
+    col3.metric("SELL Votes", scoreboard.sell_count)
+    col4.metric("Alignment Score", f"{scoreboard.alignment_score:.1f}%")
 
-elif nav == "🛡️ Risk Management Dashboard":
-    st.header("🛡️ Real-Time Risk Management Dashboard")
+    st.subheader("Strategy Plugin Vote Breakdown")
+    st.dataframe(pd.DataFrame([v.__dict__ for v in scoreboard.votes]), **button_kwargs)
+
+elif nav == "🛡️ Session Risk Dashboard":
+    st.header("🛡️ Interactive Session Risk Dashboard")
 
     r1, r2, r3, r4 = st.columns(4)
-    r1.metric("Today's Risk Exposure", "₹10,000.00")
-    r2.metric("Margin Utilized", "₹2,950.00")
-    r3.metric("Max Loss Limit", "₹5,000.00")
-    r4.metric("Risk Budget Left", "₹2,050.00")
+    r1.metric("Today's PnL", "+₹420.00")
+    r2.metric("Max Daily Loss Limit", "₹2,000.00")
+    r3.metric("Remaining Risk Budget", "₹1,580.00")
+    r4.metric("Risk Budget Used", "32%")
 
     st.markdown("---")
-    st.subheader("📌 Open Positions & Pre-Trade Risk Checks")
+    r5, r6, r7 = st.columns(3)
+    r5.metric("Trades Taken Today", "3")
+    r6.metric("Winning / Losing Trades", "2 Win / 1 Loss")
+    r7.metric("Current Exposure", "₹6,200.00")
 
+    st.markdown("---")
+    st.subheader("📌 Pre-Trade Risk Limit Approvals")
     risk_checks = [
         {"Rule": "Maximum Position Size (10%)", "Status": "APPROVED", "Value": "2.95%"},
         {"Rule": "Maximum Daily Drawdown (5%)", "Status": "APPROVED", "Value": "0.00%"},
