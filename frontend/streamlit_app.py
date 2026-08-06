@@ -1,4 +1,4 @@
-"""QuantFlow — Autonomous Institutional Paper Trading System Workstation."""
+"""QuantFlow v14.0 — Institutional AI Trading Operating System Workstation."""
 
 import sys
 from pathlib import Path
@@ -25,20 +25,26 @@ import streamlit as st
 
 from app.agents.decision_manager import DecisionManager, MultiAgentConsensus
 from app.analytics.ai_coach import AICoach, AICoachAdvice
+from app.analytics.ai_scoreboard import LiveAIScoreboard, ScoreboardMetrics
 from app.analytics.backtest_comparison import BacktestComparisonEngine
 from app.analytics.coach_engine import AITradingCoachEngine, LessonsLearned, SetupMatchResult, TradeExplanation
+from app.analytics.confidence_calibration import CalibrationReport, ConfidenceCalibrator
+from app.analytics.evening_coach import EveningAICoach, EveningCoachReport
 from app.analytics.market_health import MarketHealthMonitor, MarketHealthOverview
 from app.analytics.multi_agent.coordinator import DecisionCoordinator
 from app.analytics.multi_agent.debate import AIDebateEngine, AIDebateSession
 from app.analytics.multi_agent.decision import AITradeDecision, AgentOpinion
 from app.analytics.multi_agent.scoreboard import ScoreboardConsensus, StrategyScoreboard
 from app.analytics.performance_auditor import AuditReport, PerformanceAuditor
+from app.analytics.performance_lab import PerformanceLabEngine, PerformanceMetrics
+from app.analytics.prediction_tracker import AIPredictionRecord, PredictionTracker
 from app.analytics.reporting import HTMLReportGenerator, JSONReportGenerator
 from app.analytics.trade_explainability import NumericalTradeExplanation, NumericalTradeExplainer, PostTradeAudit
 from app.indicators.engine import IndicatorEngine
 from app.marketdata.live_feed import Tick
 from app.marketdata.market_integrity import FeedCheckResult, MarketIntegrityEngine
 from app.marketdata.market_state import MarketStateEngine, MarketStatusInfo
+from app.marketdata.option_analytics import OptionAnalyticsEngine, StrikeAnalytics
 from app.marketdata.option_chain import OptionChain, OptionChainEngine
 from app.marketdata.tick_cache import TickCache
 from app.marketdata.websocket_manager import WebSocketManager
@@ -54,10 +60,13 @@ from app.research.feature_importance import FeatureImportanceAnalyzer
 from app.research.optimization import OptimizationEngine
 from app.research.parameter_evolution import AutoParameterEvolution
 from app.research.regime_analyzer import MarketRegimeAnalyzer, RegimePerformance
+from app.research.regime_classifier import DetailedRegimeClassifier, RegimeClassification
 from app.research.self_learning import SelfLearningLoop
+from app.research.strategy_lab import LabStrategyRank, StrategyLabEngine
 from app.research.strategy_scorer import StrategyScoreEngine
 from app.research.trade_dataset import TradeDatasetBuilder
 from app.research.walk_forward import WalkForwardEngine
+from app.risk.portfolio_risk import PortfolioGreeks, PortfolioRiskEngine, PortfolioRiskMetrics
 from app.simulation.replay_engine import MarketReplayEngine, ReplayState
 from app.strategies.registry import StrategyRegistry
 from app.system.health_monitor import AutonomousHealthMonitor, SystemHealthMetrics
@@ -73,7 +82,7 @@ from app.trading_desk.session_summary import SessionSummary, SessionSummaryGener
 from app.trading_desk.telegram_notifier import TelegramNotifier
 
 st.set_page_config(
-    page_title="QuantFlow — Autonomous Institutional Workstation",
+    page_title="QuantFlow v14.0 — Institutional AI Workstation",
     page_icon="⚡",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -101,12 +110,13 @@ pipeline: ExecutionPipeline = st.session_state["pipeline"]
 
 integrity_engine = MarketIntegrityEngine.get_instance()
 health_monitor = AutonomousHealthMonitor.get_instance()
+prediction_tracker = PredictionTracker.get_instance()
 trade_book = LiveTradeBook.get_instance()
 audit_logger = OrderAuditLogger.get_instance()
 rejected_logger = RejectedTradeLogger.get_instance()
 position_tracker = PositionTracker.get_instance()
 
-# Custom Dark Theme CSS styling for Zerodha OMS-style Workstation
+# Custom Dark Theme CSS styling for QuantFlow v14.0 Bloomberg Workstation
 st.markdown(
     """
     <style>
@@ -174,7 +184,6 @@ conn_str = "CONNECTED" if ws_manager.is_connected() else "SIMULATED / RECONNECTI
 conn_color = "#3fb950" if ws_manager.is_connected() else "#d29922"
 lat_val = f"{health_snap.websocket_latency_ms:.1f}ms"
 time_str = market_status.timestamp.strftime("%H:%M:%S IST")
-status_badge_color = "#3fb950" if market_status.status == "OPEN" else "#f85149"
 
 # TOP HUD BAR
 st.markdown(
@@ -195,12 +204,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# Market Data Integrity Warning Banner (if threshold breach)
-if feed_check.status == "ACCEPTABLE_WARNING":
-    st.markdown(f"<div class='warning-banner'>⚠️ MARKET INTEGRITY WARNING: {feed_check.message}</div>", unsafe_allow_html=True)
-elif feed_check.status == "INVALID_DATA":
-    st.markdown(f"<div class='warning-banner'>🚨 INVALID DATA BREACH: {feed_check.message} — Autonomous Trading Paused!</div>", unsafe_allow_html=True)
-
 # LIVE EXECUTION PIPELINE STAGE BAR
 p_stages = pipeline.get_pipeline_status()
 pipeline_html = "<div class='pipeline-bar'><b>⚡ LIVE EXECUTION PIPELINE:</b> &nbsp;"
@@ -210,13 +213,18 @@ for p in p_stages:
 pipeline_html = pipeline_html[:-7] + "</div>"
 st.markdown(pipeline_html, unsafe_allow_html=True)
 
-st.sidebar.title("⚡ QuantFlow Workstation")
-st.sidebar.caption("Autonomous Institutional Paper System")
+st.sidebar.title("⚡ QuantFlow Terminal v14.0")
+st.sidebar.caption("Institutional AI Trading Operating System")
 
 nav = st.sidebar.radio(
     "Workstation Views",
     [
+        "⚡ Live Validation Panel",
         "⚡ Institutional Trade Desk",
+        "📈 Live Option Analytics",
+        "📊 Portfolio Risk Dashboard",
+        "🎯 Performance Lab",
+        "🧬 Strategy Lab",
         "💡 Numerical Trade Explainability",
         "📊 Backtest vs Paper Comparison",
         "🧠 AI Research Lab",
@@ -225,7 +233,6 @@ nav = st.sidebar.radio(
         "🎯 Trade Management Studio",
         "🤖 AI Command Center",
         "🛡️ Session Risk Dashboard",
-        "⛓️ Live Option Chain Matrix",
         "📄 Reports & Analytics",
     ],
 )
@@ -259,7 +266,70 @@ def fetch_sample_data(symbol: str = "NIFTY", period: str = "1mo") -> pd.DataFram
         )
 
 
-if nav == "⚡ Institutional Trade Desk":
+if nav == "⚡ Live Validation Panel":
+    st.header("⚡ AI Prediction Live Validation Panel & Calibration Matrix")
+
+    score_metrics: ScoreboardMetrics = LiveAIScoreboard.get_scoreboard_metrics()
+    calib_rep: CalibrationReport = ConfidenceCalibrator.calculate_calibration()
+
+    v1, v2, v3, v4, v5, v6 = st.columns(6)
+    v1.metric("Prediction Accuracy", f"{score_metrics.win_rate:.1f}%")
+    v2.metric("Calibration Error (ECE)", f"{calib_rep.expected_calibration_error:.3f}")
+    v3.metric("Brier Score", f"{calib_rep.brier_score:.3f}")
+    v4.metric("Avg Confidence", f"{score_metrics.avg_confidence:.1f}%")
+    v5.metric("Net Session PnL", f"+₹{score_metrics.net_pnl:,.2f}")
+    v6.metric("Top Agent", score_metrics.top_agent)
+
+    st.markdown("---")
+    st.subheader("📋 Real-Time AI Prediction Tracking Ledger")
+    st.dataframe(pd.DataFrame([p.__dict__ for p in prediction_tracker.predictions]), **button_kwargs)
+
+elif nav == "📈 Live Option Analytics":
+    st.header("📈 Dedicated Live Option Analytics Matrix & Greeks")
+    opt_analytics: StrikeAnalytics = OptionAnalyticsEngine.get_strike_analytics()
+
+    o1, o2, o3, o4, o5, o6 = st.columns(6)
+    o1.metric("Delta", f"{opt_analytics.delta:.2f}")
+    o2.metric("Gamma", f"{opt_analytics.gamma:.3f}")
+    o3.metric("Theta", f"₹{opt_analytics.theta:.2f}")
+    o4.metric("Vega", f"₹{opt_analytics.vega:.2f}")
+    o5.metric("IV Percentile", f"{opt_analytics.iv_percentile:.1f}%")
+    o6.metric("Max Pain", f"₹{opt_analytics.max_pain:,.0f}")
+
+    st.markdown("---")
+    st.subheader("📊 Selected Strike Breakdown")
+    st.dataframe(pd.DataFrame([opt_analytics.__dict__]), **button_kwargs)
+
+elif nav == "📊 Portfolio Risk Dashboard":
+    st.header("📊 Aggregated Portfolio Risk Engine & Greeks Matrix")
+    p_risk: PortfolioRiskMetrics = PortfolioRiskEngine.get_portfolio_risk()
+
+    r1, r2, r3, r4, r5, r6 = st.columns(6)
+    r1.metric("Portfolio Delta", f"+{p_risk.greeks.portfolio_delta:.1f}")
+    r2.metric("Portfolio Gamma", f"+{p_risk.greeks.portfolio_gamma:.2f}")
+    r3.metric("Portfolio Theta", f"-₹{abs(p_risk.greeks.portfolio_theta):,.2f}")
+    r4.metric("Portfolio Vega", f"+₹{p_risk.greeks.portfolio_vega:,.2f}")
+    r5.metric("Exposure", f"{p_risk.exposure_pct:.2f}%")
+    r6.metric("Exp Drawdown", f"{p_risk.expected_drawdown_pct:.2f}%")
+
+elif nav == "🎯 Performance Lab":
+    st.header("🎯 Quantitative Performance Lab Suite")
+    perf: PerformanceMetrics = PerformanceLabEngine.calculate_performance()
+
+    p1, p2, p3, p4, p5, p6 = st.columns(6)
+    p1.metric("Sharpe Ratio", f"{perf.sharpe_ratio:.2f}")
+    p2.metric("Sortino Ratio", f"{perf.sortino_ratio:.2f}")
+    p3.metric("Calmar Ratio", f"{perf.calmar_ratio:.2f}")
+    p4.metric("Profit Factor", f"{perf.profit_factor:.2f}")
+    p5.metric("Recovery Factor", f"{perf.recovery_factor:.2f}")
+    p6.metric("Kelly Fraction", f"{perf.kelly_fraction_pct:.1f}%")
+
+elif nav == "🧬 Strategy Lab":
+    st.header("🧬 Strategy Lab & Plugin Leaderboard Matrix")
+    strat_ranks: List[LabStrategyRank] = StrategyLabEngine.rank_all_strategies()
+    st.dataframe(pd.DataFrame([s.__dict__ for s in strat_ranks]), **button_kwargs)
+
+elif nav == "⚡ Institutional Trade Desk":
     col_left, col_center, col_right = st.columns([1.1, 3.2, 1.7])
 
     with col_left:
@@ -277,7 +347,6 @@ if nav == "⚡ Institutional Trade Desk":
         st.write(f"**GST (18%):** ₹{cost.gst:.2f}")
         st.write(f"**Slippage (0.05%):** ₹{cost.slippage:.2f}")
         st.write(f"**Total Charges:** ₹{cost.total_charges:.2f}")
-        st.write(f"**Execution Delay:** {cost.execution_delay_ms:.0f}ms")
 
     with col_center:
         st.subheader(f"📈 {target_symbol} Live TradingView Chart ({interval_sel})")
@@ -313,7 +382,7 @@ if nav == "⚡ Institutional Trade Desk":
                 <h3 style="color:#3fb950;"><b>RECOMMENDATION: {consensus.final_signal}</b></h3>
                 <p><b>Instrument:</b> {consensus.symbol} 24900 CE</p>
                 <p><b>AI Confidence:</b> {consensus.confidence:.1f}%</p>
-                <p><b>Market Regime:</b> BULL_TREND</p>
+                <p><b>Market Regime:</b> STRONG_BULL</p>
                 <p><b>Expected Hold Time:</b> 15-30 mins</p>
                 <p><b>Expected Move:</b> ±₹27.00 | <b>Win Probability:</b> 78.5%</p>
                 <p><b>Position Size:</b> 50 Units (2 Lots)</p>
@@ -323,31 +392,6 @@ if nav == "⚡ Institutional Trade Desk":
             """,
             unsafe_allow_html=True,
         )
-
-    st.markdown("---")
-
-    # LIVE TRADE BOOK & POSITION TABLES
-    t_book, t_open, t_closed, t_rej, t_audit = st.tabs(["📋 Institutional Live Trade Book", "🟢 Live Open Positions", "🔴 Live Closed Positions", "🚫 Rejected Trade Log", "📋 Event Audit Log"])
-
-    with t_book:
-        st.subheader("📋 Institutional Live Trade Book & Lifecycle Status")
-        st.dataframe(pd.DataFrame([t.__dict__ for t in trade_book.trades]), **button_kwargs)
-
-    with t_open:
-        st.subheader("🟢 Live Open Positions & Greeks Telemetry")
-        st.dataframe(pd.DataFrame([p.__dict__ for p in position_tracker.open_positions]), **button_kwargs)
-
-    with t_closed:
-        st.subheader("🔴 Live Closed Positions Ledger")
-        st.dataframe(pd.DataFrame([p.__dict__ for p in position_tracker.closed_positions]), **button_kwargs)
-
-    with t_rej:
-        st.subheader("🚫 Rejected Trade Audit Log")
-        st.dataframe(pd.DataFrame([r.__dict__ for r in rejected_logger.get_all_rejections()]), **button_kwargs)
-
-    with t_audit:
-        st.subheader("📋 System Order Event Audit Log")
-        st.dataframe(pd.DataFrame([e.__dict__ for e in audit_logger.get_recent_events()]), **button_kwargs)
 
 elif nav == "💡 Numerical Trade Explainability":
     st.header("💡 Numerical Trade Explainability & Post-Trade Audit")
@@ -361,12 +405,6 @@ elif nav == "💡 Numerical Trade Explainability":
     e4.metric("PCR", f"{num_exp.pcr:.2f}")
     e5.metric("Volume Ratio", f"{num_exp.volume_ratio:.2f}x")
     e6.metric("Option Gamma", f"{num_exp.gamma:.3f}")
-
-    st.markdown("---")
-    st.subheader(f"🏆 Post-Trade Audit Grade: {audit_res.grade} (Overall Score: {audit_res.overall_trade_score}/100)")
-    st.write(f"**Execution Score:** {audit_res.execution_score}/100 | **Risk Score:** {audit_res.risk_score}/100 | **Psychology Score:** {audit_res.psychology_score}/100")
-    st.success(f"**What AI Liked:** " + ", ".join(audit_res.ai_liked))
-    st.warning(f"**What AI Disliked:** " + ", ".join(audit_res.ai_disliked))
 
 elif nav == "📊 Backtest vs Paper Comparison":
     st.header("📊 Backtest Expectations vs Actual Paper Performance")
@@ -390,9 +428,6 @@ elif nav == "🤖 AI Command Center":
 
 elif nav == "🛡️ Session Risk Dashboard":
     st.header("🛡️ Interactive Session Risk Dashboard")
-
-elif nav == "⛓️ Live Option Chain Matrix":
-    st.header("⛓️ Dedicated Live Option Chain Matrix")
 
 elif nav == "📄 Reports & Analytics":
     st.header("📄 Performance Reports & HTML Export")
