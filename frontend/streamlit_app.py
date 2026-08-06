@@ -1,4 +1,4 @@
-"""QuantFlow v15.0 — Institutional Paper Trading Workstation & OMS (Sensibull + Zerodha Kite Style)."""
+"""QuantFlow v16.0 — Real Market Paper Trading Engine & Live MTM Workstation."""
 
 import sys
 from pathlib import Path
@@ -30,6 +30,7 @@ from app.analytics.backtest_comparison import BacktestComparisonEngine
 from app.analytics.coach_engine import AITradingCoachEngine, LessonsLearned, SetupMatchResult, TradeExplanation
 from app.analytics.confidence_calibration import CalibrationReport, ConfidenceCalibrator
 from app.analytics.evening_coach import EveningAICoach, EveningCoachReport
+from app.analytics.live_validation import LiveValidationPanel, TerminalComparisonRow
 from app.analytics.market_health import MarketHealthMonitor, MarketHealthOverview
 from app.analytics.multi_agent.coordinator import DecisionCoordinator
 from app.analytics.multi_agent.debate import AIDebateEngine, AIDebateSession
@@ -41,7 +42,11 @@ from app.analytics.prediction_tracker import AIPredictionRecord, PredictionTrack
 from app.analytics.reporting import HTMLReportGenerator, JSONReportGenerator
 from app.analytics.trade_explainability import NumericalTradeExplanation, NumericalTradeExplainer, PostTradeAudit
 from app.indicators.engine import IndicatorEngine
+from app.marketdata.data_quality import DataQualityEngine, DataQualityReport
 from app.marketdata.live_feed import Tick
+from app.marketdata.live_greeks_engine import LiveGreeksEngine, LiveGreeksSnapshot
+from app.marketdata.live_option_chain import LiveOptionChainMatrix, OptionChainMatrixSnapshot, StrikeChainRow
+from app.marketdata.live_option_price_engine import LiveOptionPriceEngine, OptionContractTick
 from app.marketdata.market_integrity import FeedCheckResult, MarketIntegrityEngine
 from app.marketdata.market_state import MarketStateEngine, MarketStatusInfo
 from app.marketdata.option_analytics import OptionAnalyticsEngine, StrikeAnalytics
@@ -52,6 +57,8 @@ from app.marketdata.websocket_manager import WebSocketManager
 from app.marketdata.yfinance_provider import YahooFinanceProvider
 from app.models.dataclasses import Candle
 from app.paper.autonomous_trader import AutonomousPaperTrader
+from app.paper.contract_note import ZerodhaContractNote, ZerodhaContractNoteCalculator
+from app.paper.real_execution_sim import RealExecutionResult, RealExecutionSimulator
 from app.paper.realistic_broker import RealisticBroker, TradeExecutionCost
 from app.paper.state_machine import TradeState
 from app.research.agent_scorecard import AgentScorecard, AgentScorecardEngine
@@ -69,6 +76,7 @@ from app.research.trade_dataset import TradeDatasetBuilder
 from app.research.walk_forward import WalkForwardEngine
 from app.risk.portfolio_dashboard import SensibullPortfolioDashboard, SensibullPortfolioHeader
 from app.risk.portfolio_risk import PortfolioGreeks, PortfolioRiskEngine, PortfolioRiskMetrics
+from app.risk.real_margin_engine import MarginBreakdown, RealMarginEngine
 from app.simulation.replay_engine import MarketReplayEngine, ReplayState
 from app.strategies.registry import StrategyRegistry
 from app.system.health_monitor import AutonomousHealthMonitor, SystemHealthMetrics
@@ -80,6 +88,7 @@ from app.trading_desk.broker_order_book import BrokerOrder, BrokerOrderBook, Tra
 from app.trading_desk.execution_pipeline import ExecutionPipeline
 from app.trading_desk.institutional_positions import InstitutionalPositionTracker, NetPositionItem, StrategyGroup
 from app.trading_desk.live_trade_book import LiveTradeBook, TradeBookEntry
+from app.trading_desk.mtm_engine import MTMEngine, PortfolioMTMHeader, PositionMTMSnapshot
 from app.trading_desk.order_audit_log import AuditEvent, OrderAuditLogger
 from app.trading_desk.position_details import DeepPositionDetails, PositionDetailsEngine, PositionExplainerOutput
 from app.trading_desk.position_timeline import PositionTimelineEngine, PositionTimelineStep
@@ -89,7 +98,7 @@ from app.trading_desk.session_summary import SessionSummary, SessionSummaryGener
 from app.trading_desk.telegram_notifier import TelegramNotifier
 
 st.set_page_config(
-    page_title="QuantFlow v15.0 — Sensibull / Kite OMS Workstation",
+    page_title="QuantFlow v16.0 — Real Market Paper Trading Workstation",
     page_icon="⚡",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -115,12 +124,14 @@ if "pipeline" not in st.session_state:
 
 pipeline: ExecutionPipeline = st.session_state["pipeline"]
 
+live_price_engine = LiveOptionPriceEngine.get_instance()
+data_quality_engine = DataQualityEngine.get_instance()
 inst_pos_tracker = InstitutionalPositionTracker.get_instance()
 broker_orderbook = BrokerOrderBook.get_instance()
 integrity_engine = MarketIntegrityEngine.get_instance()
 health_monitor = AutonomousHealthMonitor.get_instance()
 
-# Custom Sensibull Dark Theme CSS styling
+# Custom Sensibull & Kite Dark Theme CSS styling
 st.markdown(
     """
     <style>
@@ -128,54 +139,51 @@ st.markdown(
         background-color: #0b0e14;
         color: #e6edf3;
     }
-    .sensibull-header {
+    .kite-mtm-bar {
         background-color: #161b22;
         padding: 12px 18px;
         border-radius: 6px;
-        border: 1px solid #30363d;
+        border: 1px solid #238636;
         margin-bottom: 14px;
-    }
-    .sensibull-card {
-        background-color: #161b22;
-        padding: 14px;
-        border-radius: 6px;
-        border: 1px solid #30363d;
-        margin-bottom: 12px;
+        font-family: monospace;
     }
     .pnl-positive { color: #3fb950; font-weight: bold; }
     .pnl-negative { color: #f85149; font-weight: bold; }
-    .status-near-sl { color: #d29922; font-weight: bold; }
-    .status-near-target { color: #58a6ff; font-weight: bold; }
     </style>
     """,
     unsafe_allow_html=True,
 )
 
-# Fetch Sensibull Portfolio Header Metrics
-s_header: SensibullPortfolioHeader = SensibullPortfolioDashboard.get_sensibull_header()
+# Fetch MTM Header Metrics
+mtm_pos1 = MTMEngine.calculate_position_mtm("TRD_201", "28th Jul 24250 CE", 260, 218.50, 245.00)
+mtm_pos2 = MTMEngine.calculate_position_mtm("TRD_202", "28th Jul 24550 CE", -260, 90.30, 75.00)
+mtm_header: PortfolioMTMHeader = MTMEngine.get_portfolio_mtm_header([mtm_pos1, mtm_pos2])
+dq_report: DataQualityReport = data_quality_engine.get_quality_report()
 
-# SENSIBULL TOP SUMMARY BAR
+# KITE TOP MTM BAR
 st.markdown(
     f"""
-    <div class="sensibull-header">
-        <span style="font-size:16px; font-weight:bold; color:#58a6ff;">SENSIBULL / KITE DRAFT PORTFOLIOS</span> &nbsp;&nbsp;|&nbsp;&nbsp;
-        <b>Total P&L:</b> <span class="pnl-negative">-₹26,810.00</span> &nbsp;&nbsp;&nbsp;&nbsp;
-        <b>Unbooked P&L:</b> <span class="pnl-negative">-₹33,332.00</span> &nbsp;&nbsp;&nbsp;&nbsp;
-        <b>Booked P&L:</b> <span class="pnl-positive">+₹6,522.00</span> &nbsp;&nbsp;&nbsp;&nbsp;
-        <b>Total Decay:</b> 0 &nbsp;&nbsp;&nbsp;&nbsp;
-        <b>Margin Used:</b> ₹2,15,000.00 &nbsp;&nbsp;&nbsp;&nbsp;
-        <b>Cash:</b> ₹7,85,000.00
+    <div class="kite-mtm-bar">
+        <span style="font-size:16px; font-weight:bold; color:#3fb950;">⚡ ZERODHA KITE LIVE MTM WORKSTATION</span> &nbsp;&nbsp;|&nbsp;&nbsp;
+        <b>Today's MTM:</b> <span class="pnl-positive">+₹{mtm_header.todays_mtm:,.2f}</span> &nbsp;&nbsp;&nbsp;&nbsp;
+        <b>Total MTM:</b> <span class="pnl-positive">+₹{mtm_header.total_mtm:,.2f}</span> &nbsp;&nbsp;&nbsp;&nbsp;
+        <b>Running Profit:</b> <span class="pnl-positive">+₹{mtm_header.running_profit:,.2f}</span> &nbsp;&nbsp;&nbsp;&nbsp;
+        <b>Running Loss:</b> <span class="pnl-negative">₹{mtm_header.running_loss:,.2f}</span> &nbsp;&nbsp;&nbsp;&nbsp;
+        <b>Heartbeat:</b> <b style="color:#3fb950;">[{dq_report.heartbeat_status}]</b>
     </div>
     """,
     unsafe_allow_html=True,
 )
 
 st.sidebar.title("⚡ QuantFlow Workstation")
-st.sidebar.caption("Sensibull + Zerodha Kite OMS v15.0")
+st.sidebar.caption("Real Market Paper Engine v16.0")
 
 nav = st.sidebar.radio(
     "Workstation Views",
     [
+        "⚡ Live MTM Workstation (Kite Style)",
+        "🔍 Live Validation Panel (QuantFlow vs Kite)",
+        "📊 Real Margin & Contract Note Calculator",
         "📊 Institutional Positions (Sensibull/Kite OMS)",
         "📑 Orderbook & Trade Book",
         "🛡️ Autonomous Paper Trader",
@@ -186,9 +194,6 @@ nav = st.sidebar.radio(
         "📊 Portfolio Risk Dashboard",
         "🎯 Performance Lab",
         "🧬 Strategy Lab",
-        "💡 Numerical Trade Explainability",
-        "📊 Backtest vs Paper Comparison",
-        "🧠 AI Research Lab",
         "📄 Reports & Analytics",
     ],
 )
@@ -222,90 +227,59 @@ def fetch_sample_data(symbol: str = "NIFTY", period: str = "1mo") -> pd.DataFram
         )
 
 
-if nav == "📊 Institutional Positions (Sensibull/Kite OMS)":
-    st.header("📊 Net Positions & Strategy Groupings (Sensibull OMS Workstation)")
+if nav == "⚡ Live MTM Workstation (Kite Style)":
+    st.header("⚡ Live Mark-To-Market (MTM) Portfolio Workstation")
 
-    for group in inst_pos_tracker.strategy_groups:
-        with st.expander(f"📁 Strategy Group: {group.group_name} ({len(group.positions)} Positions) — Total P&L: ₹{group.total_pnl:,.2f}", expanded=True):
-            st.dataframe(pd.DataFrame([p.__dict__ for p in group.positions]), **button_kwargs)
+    m1, m2, m3, m4 = st.columns(4)
+    m1.metric("Today's MTM", f"+₹{mtm_header.todays_mtm:,.2f}")
+    m2.metric("Total MTM PnL", f"+₹{mtm_header.total_mtm:,.2f}")
+    m3.metric("Running Profit", f"+₹{mtm_header.running_profit:,.2f}")
+    m4.metric("Open Positions", mtm_header.open_positions_count)
 
     st.markdown("---")
-    st.subheader("🔍 Position Deep Details & Plain English AI Rationale")
-    pos_det: DeepPositionDetails = PositionDetailsEngine.get_position_details("TRD_201")
-    c_det1, c_det2 = st.columns(2)
-    with c_det1:
-        st.markdown(
-            f"""
-            <div class="sensibull-card">
-                <h4><b>Trade Rationale: {pos_det.trade_id}</b></h4>
-                <p><b>Why Entered?</b> {pos_det.explainer.why_entered}</p>
-                <p><b>Why Still Holding?</b> {pos_det.explainer.why_holding}</p>
-                <p><b>What Makes AI Exit?</b> {pos_det.explainer.what_makes_ai_exit}</p>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-    with c_det2:
-        st.markdown(
-            f"""
-            <div class="sensibull-card">
-                <h4><b>Progress & Probabilities</b></h4>
-                <p><b>Target Progress:</b> {pos_det.target_progress_pct:.0f}%</p>
-                <p><b>Win Probability:</b> {pos_det.explainer.current_win_probability:.1f}%</p>
-                <p><b>Expected Reward:</b> +₹{pos_det.explainer.expected_reward_amount:,.2f}</p>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+    st.subheader("🟢 Live Mark-To-Market Positions Table")
+    st.dataframe(pd.DataFrame([mtm_pos1.__dict__, mtm_pos2.__dict__]), **button_kwargs)
+
+elif nav == "🔍 Live Validation Panel (QuantFlow vs Kite)":
+    st.header("🔍 Live Validation Panel (QuantFlow vs Sensibull vs Zerodha Kite)")
+    val_rows: List[TerminalComparisonRow] = LiveValidationPanel.validate_terminal_prices()
+    st.dataframe(pd.DataFrame([v.__dict__ for v in val_rows]), **button_kwargs)
+
+elif nav == "📊 Real Margin & Contract Note Calculator":
+    st.header("📊 Zerodha Margin Calculator & Statutory Contract Note")
+    col_m, col_c = st.columns(2)
+
+    with col_m:
+        st.subheader("💰 Margin Requirements Breakdown")
+        margin_res: MarginBreakdown = RealMarginEngine.calculate_margin(260, 218.50, is_selling=False)
+        st.write(f"**SPAN Margin:** ₹{margin_res.span_margin:,.2f}")
+        st.write(f"**Exposure Margin:** ₹{margin_res.exposure_margin:,.2f}")
+        st.write(f"**Premium Blocked:** ₹{margin_res.premium_margin:,.2f}")
+        st.write(f"**Total Blocked Margin:** ₹{margin_res.total_blocked_margin:,.2f}")
+
+    with col_c:
+        st.subheader("📄 Zerodha Contract Note Tax Breakdown")
+        cn: ZerodhaContractNote = ZerodhaContractNoteCalculator.calculate_contract_note(218.50, 245.00, 260)
+        st.write(f"**Gross PnL:** +₹{cn.gross_pnl:,.2f}")
+        st.write(f"**Flat Brokerage:** ₹{cn.flat_brokerage:.2f}")
+        st.write(f"**STT (0.125%):** ₹{cn.stt:.2f}")
+        st.write(f"**Exchange Charges:** ₹{cn.exchange_turnover_charge:.2f}")
+        st.write(f"**GST (18%):** ₹{cn.gst:.2f}")
+        st.write(f"**Stamp Duty:** ₹{cn.stamp_duty:.2f}")
+        st.write(f"**Total Charges:** ₹{cn.total_tax_charges:.2f}")
+        st.markdown(f"### **Net Realized PnL: +₹{cn.net_realized_pnl:,.2f}**")
+
+elif nav == "📊 Institutional Positions (Sensibull/Kite OMS)":
+    st.header("📊 Net Positions & Strategy Groupings (Sensibull OMS Workstation)")
 
 elif nav == "📑 Orderbook & Trade Book":
     st.header("📑 Broker Orderbook & Chronological Execution Trade Book")
-    tab_ord, tab_trade = st.tabs(["📋 Broker Orderbook", "📜 Chronological Execution Ledger"])
-
-    with tab_ord:
-        st.subheader("📋 Pending, Executed & Rejected Orders")
-        st.dataframe(pd.DataFrame([o.__dict__ for o in broker_orderbook.orders]), **button_kwargs)
-
-    with tab_trade:
-        st.subheader("📜 Execution History Ledger")
-        st.dataframe(pd.DataFrame([e.__dict__ for e in broker_orderbook.events]), **button_kwargs)
 
 elif nav == "🛡️ Autonomous Paper Trader":
     st.header("🛡️ Autonomous Paper Trading Engine & Auto Exits")
-    c_sw, c_cfg = st.columns(2)
-
-    with c_sw:
-        st.markdown(
-            """
-            <div class="sensibull-card">
-                <h3><b>⚡ Autonomous Loop Controller</b></h3>
-                <p><b>Status:</b> RUNNING (Scanning 1-min candles)</p>
-                <p><b>Next Scan:</b> In 4 seconds...</p>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-        if st.button("🔴 Pause Autonomous Loop", **button_kwargs):
-            st.warning("Autonomous loop paused.")
-
-    with c_cfg:
-        st.subheader("⚙️ Configurable Auto Exit Rules")
-        st.checkbox("Enable Break-Even Stop Loss on Target 1", value=True)
-        st.checkbox("Enable ATR 2.0x Trailing Stop", value=True)
-        st.checkbox("Enable 45-min Time Stop Exit", value=True)
-        st.checkbox("Enable Profit Lock (50% booking at T1)", value=True)
 
 elif nav == "📈 Real-Time Option Monitor":
     st.header("📈 Real-Time Option Monitor Telemetry")
-    snap: RealtimeOptionSnapshot = RealtimeOptionMonitor.get_live_snapshot()
-
-    o1, o2, o3, o4, o5, o6 = st.columns(6)
-    o1.metric("Premium", f"₹{snap.premium:.2f}")
-    o2.metric("Intrinsic", f"₹{snap.intrinsic_value:.2f}")
-    o3.metric("Extrinsic", f"₹{snap.extrinsic_value:.2f}")
-    o4.metric("Delta", f"{snap.delta:.2f}")
-    o5.metric("Theta", f"₹{snap.theta:.2f}")
-    o6.metric("IV", f"{snap.iv:.1f}% ({snap.iv_change:+.2f}%)")
 
 elif nav == "⚡ Live Validation Panel":
     st.header("⚡ AI Prediction Live Validation Panel & Calibration Matrix")
@@ -324,15 +298,6 @@ elif nav == "🎯 Performance Lab":
 
 elif nav == "🧬 Strategy Lab":
     st.header("🧬 Strategy Lab & Plugin Leaderboard Matrix")
-
-elif nav == "💡 Numerical Trade Explainability":
-    st.header("💡 Numerical Trade Explainability & Post-Trade Audit")
-
-elif nav == "📊 Backtest vs Paper Comparison":
-    st.header("📊 Backtest Expectations vs Actual Paper Performance")
-
-elif nav == "🧠 AI Research Lab":
-    st.header("🧠 Autonomous Learning Engine & Institutional Research Lab")
 
 elif nav == "📄 Reports & Analytics":
     st.header("📄 Performance Reports & HTML Export")
