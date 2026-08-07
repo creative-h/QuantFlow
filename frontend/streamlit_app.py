@@ -1,4 +1,4 @@
-"""QuantFlow v16.0 — Real Market Paper Trading Engine & Live MTM Workstation."""
+"""QuantFlow v16.0 — Sensibull Draft Portfolios & Institutional Workstation."""
 
 import sys
 from pathlib import Path
@@ -98,7 +98,7 @@ from app.trading_desk.session_summary import SessionSummary, SessionSummaryGener
 from app.trading_desk.telegram_notifier import TelegramNotifier
 
 st.set_page_config(
-    page_title="QuantFlow v16.0 — Real Market Paper Trading Workstation",
+    page_title="QuantFlow — Sensibull Draft Portfolios Workstation",
     page_icon="⚡",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -131,7 +131,7 @@ broker_orderbook = BrokerOrderBook.get_instance()
 integrity_engine = MarketIntegrityEngine.get_instance()
 health_monitor = AutonomousHealthMonitor.get_instance()
 
-# Custom Sensibull & Kite Dark Theme CSS styling
+# Sensibull Draft Portfolios Custom CSS styling
 st.markdown(
     """
     <style>
@@ -139,16 +139,31 @@ st.markdown(
         background-color: #0b0e14;
         color: #e6edf3;
     }
-    .kite-mtm-bar {
+    .sensibull-brand {
+        font-size: 20px;
+        font-weight: 800;
+        color: #ff6838;
+        font-family: 'Inter', sans-serif;
+    }
+    .sensibull-panel {
         background-color: #161b22;
-        padding: 12px 18px;
-        border-radius: 6px;
-        border: 1px solid #238636;
-        margin-bottom: 14px;
-        font-family: monospace;
+        border: 1px solid #30363d;
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 16px;
+    }
+    .sensibull-card-title {
+        color: #8b949e;
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-bottom: 6px;
     }
     .pnl-positive { color: #3fb950; font-weight: bold; }
     .pnl-negative { color: #f85149; font-weight: bold; }
+    .badge-buy { background-color: #1f6beb; color: #ffffff; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 11px; }
+    .badge-sell { background-color: #d29922; color: #ffffff; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 11px; }
+    .badge-closed { background-color: #484f58; color: #ffffff; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 11px; }
     </style>
     """,
     unsafe_allow_html=True,
@@ -160,31 +175,31 @@ mtm_pos2 = MTMEngine.calculate_position_mtm("TRD_202", "28th Jul 24550 CE", -260
 mtm_header: PortfolioMTMHeader = MTMEngine.get_portfolio_mtm_header([mtm_pos1, mtm_pos2])
 dq_report: DataQualityReport = data_quality_engine.get_quality_report()
 
-# KITE TOP MTM BAR
+# Top Brand Nav
 st.markdown(
-    f"""
-    <div class="kite-mtm-bar">
-        <span style="font-size:16px; font-weight:bold; color:#3fb950;">⚡ ZERODHA KITE LIVE MTM WORKSTATION</span> &nbsp;&nbsp;|&nbsp;&nbsp;
-        <b>Today's MTM:</b> <span class="pnl-positive">+₹{mtm_header.todays_mtm:,.2f}</span> &nbsp;&nbsp;&nbsp;&nbsp;
-        <b>Total MTM:</b> <span class="pnl-positive">+₹{mtm_header.total_mtm:,.2f}</span> &nbsp;&nbsp;&nbsp;&nbsp;
-        <b>Running Profit:</b> <span class="pnl-positive">+₹{mtm_header.running_profit:,.2f}</span> &nbsp;&nbsp;&nbsp;&nbsp;
-        <b>Running Loss:</b> <span class="pnl-negative">₹{mtm_header.running_loss:,.2f}</span> &nbsp;&nbsp;&nbsp;&nbsp;
-        <b>Heartbeat:</b> <b style="color:#3fb950;">[{dq_report.heartbeat_status}]</b>
+    """
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid #30363d; padding-bottom: 10px; margin-bottom: 16px;">
+        <div>
+            <span class="sensibull-brand">⚡ SENSIBULL</span> &nbsp;<span style="color:#8b949e;">/ Draft Portfolios (AI Autonomous Workstation)</span>
+        </div>
+        <div>
+            <span style="background-color:#1f6beb; color:white; padding:4px 10px; border-radius:4px; font-size:12px; font-weight:bold;">Drafts Mode</span>
+        </div>
     </div>
     """,
     unsafe_allow_html=True,
 )
 
 st.sidebar.title("⚡ QuantFlow Workstation")
-st.sidebar.caption("Real Market Paper Engine v16.0")
+st.sidebar.caption("Sensibull Draft Portfolios OMS")
 
 nav = st.sidebar.radio(
     "Workstation Views",
     [
+        "📊 Institutional Positions (Sensibull Drafts)",
         "⚡ Live MTM Workstation (Kite Style)",
         "🔍 Live Validation Panel (QuantFlow vs Kite)",
         "📊 Real Margin & Contract Note Calculator",
-        "📊 Institutional Positions (Sensibull/Kite OMS)",
         "📑 Orderbook & Trade Book",
         "🛡️ Autonomous Paper Trader",
         "📈 Real-Time Option Monitor",
@@ -227,7 +242,100 @@ def fetch_sample_data(symbol: str = "NIFTY", period: str = "1mo") -> pd.DataFram
         )
 
 
-if nav == "⚡ Live MTM Workstation (Kite Style)":
+if nav == "📊 Institutional Positions (Sensibull Drafts)":
+    c_left_side, c_main_side = st.columns([1, 3.2])
+
+    # LEFT SIDEBAR SUMMARY PANEL (Matching Sensibull Drafts Sidebar)
+    with c_left_side:
+        st.markdown(
+            """
+            <div class="sensibull-panel">
+                <div style="font-size:14px; font-weight:bold; margin-bottom:12px;">Drafts Mode — 5 of 5 Strategies</div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                    <div><span class="sensibull-card-title">Total P&L</span><br/><span class="pnl-negative" style="font-size:16px;">-₹26,811</span></div>
+                    <div><span class="sensibull-card-title">Unbooked P&L</span><br/><span class="pnl-negative" style="font-size:16px;">-₹33,332</span></div>
+                    <div><span class="sensibull-card-title">Booked P&L</span><br/><span class="pnl-positive" style="font-size:16px;">+₹6,522</span></div>
+                </div>
+                <div style="font-size:12px; color:#8b949e;">Total Decay: <b>0</b></div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        st.checkbox("Show closed positions", value=True)
+        st.markdown("<b>Select Strategies:</b>", unsafe_allow_html=True)
+        st.checkbox("✓ 28 July (4 of 4 Positions)  -30,339", value=True)
+        st.checkbox("✓ 14th July (2 of 2 Positions)  -4,482", value=True)
+        st.checkbox("✓ 7th July expiry (2 of 2 Positions)  -2,532", value=True)
+
+    # RIGHT MAIN AREA (Matching Sensibull Draft Portfolios Table & Actions)
+    with c_main_side:
+        st.markdown(
+            """
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <div style="font-size:15px; font-weight:bold;">Portfolios > AI test and learn</div>
+                <div>
+                    <button style="background-color:#1f6beb; color:white; border:none; padding:6px 14px; border-radius:6px; font-weight:bold; cursor:pointer;">+ Create New Strategy</button>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        # Strategy Group Card Header
+        st.markdown(
+            """
+            <div class="sensibull-panel">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                    <div>
+                        <span style="font-size:18px; font-weight:bold; color:#58a6ff;">📅 28 July Expiry</span>
+                        <span style="font-size:12px; color:#8b949e; margin-left:10px;">4 of 4 Positions</span>
+                    </div>
+                    <div>
+                        <span><b>Total P&L:</b> <span class="pnl-negative">-₹30,339.00</span></span> &nbsp;&nbsp;|&nbsp;&nbsp;
+                        <span><b>Unbooked:</b> <span class="pnl-negative">-₹33,332.00</span></span> &nbsp;&nbsp;|&nbsp;&nbsp;
+                        <span><b>Booked:</b> <span class="pnl-positive">+₹2,993.00</span></span>
+                    </div>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        # Tabs matching Sensibull
+        t_net, t_orders, t_greeks = st.tabs(["Net Positions", "Orderbook", "Greeks"])
+
+        with t_net:
+            st.markdown("<b>NIFTY 24,559.30 <span class='pnl-negative'>-0.31%</span></b> &nbsp;&nbsp;|&nbsp;&nbsp; Breakeven: -- &nbsp;|&nbsp; Max Profit: -- &nbsp;|&nbsp; Max Loss: --", unsafe_allow_html=True)
+            st.markdown("<br/>", unsafe_allow_html=True)
+
+            # Construct exact Sensibull Table Data
+            sensibull_rows = [
+                {"Select": "☐", "Side": "[-] Closed", "Instrument": "28th Jul 24050 CE", "Qty": 0, "Avg Price": "₹0.00", "LTP": "₹0.25", "Total P&L": "+₹6,451.00", "Unbooked P&L": "₹0.00", "Booked P&L": "+₹6,451.00"},
+                {"Select": "☑", "Side": "[B] Buy", "Instrument": "28th Jul 24250 CE", "Qty": 260, "Avg Price": "₹218.50", "LTP": "₹0.10", "Total P&L": "-₹56,784.00", "Unbooked P&L": "-₹56,784.00", "Booked P&L": "₹0.00"},
+                {"Select": "☐", "Side": "[-] Closed", "Instrument": "28th Jul 24350 CE", "Qty": 0, "Avg Price": "₹0.00", "LTP": "₹0.25", "Total P&L": "-₹3,458.00", "Unbooked P&L": "₹0.00", "Booked P&L": "-₹3,458.00"},
+                {"Select": "☑", "Side": "[S] Sell", "Instrument": "28th Jul 24550 CE", "Qty": -260, "Avg Price": "₹90.30", "LTP": "₹0.10", "Total P&L": "+₹23,452.00", "Unbooked P&L": "+₹23,452.00", "Booked P&L": "₹0.00"},
+            ]
+            df_sensibull = pd.DataFrame(sensibull_rows)
+            st.dataframe(df_sensibull, **button_kwargs)
+
+            # Sensibull Action Buttons Bar
+            c_act1, c_act2, c_act3, c_act4, c_act5 = st.columns(5)
+            c_act1.button("↗ Open in Builder", **button_kwargs)
+            c_act2.button("+ Add Orders", **button_kwargs)
+            c_act3.button("🚪 Exit Orders (2)", **button_kwargs)
+            c_act4.button("✏️ Edit (4)", **button_kwargs)
+            c_act5.button("🗑️ Delete (4)", **button_kwargs)
+
+        with t_orders:
+            st.subheader("📋 Orderbook Ledger")
+            st.dataframe(pd.DataFrame([o.__dict__ for o in broker_orderbook.orders]), **button_kwargs)
+
+        with t_greeks:
+            st.subheader("📊 Aggregated Strategy Greeks")
+            st.write("**Strategy Delta:** +45.2 | **Strategy Gamma:** +0.85 | **Strategy Theta:** -₹1,250.00 | **Strategy Vega:** +₹620.00")
+
+elif nav == "⚡ Live MTM Workstation (Kite Style)":
     st.header("⚡ Live Mark-To-Market (MTM) Portfolio Workstation")
 
     m1, m2, m3, m4 = st.columns(4)
@@ -247,30 +355,6 @@ elif nav == "🔍 Live Validation Panel (QuantFlow vs Kite)":
 
 elif nav == "📊 Real Margin & Contract Note Calculator":
     st.header("📊 Zerodha Margin Calculator & Statutory Contract Note")
-    col_m, col_c = st.columns(2)
-
-    with col_m:
-        st.subheader("💰 Margin Requirements Breakdown")
-        margin_res: MarginBreakdown = RealMarginEngine.calculate_margin(260, 218.50, is_selling=False)
-        st.write(f"**SPAN Margin:** ₹{margin_res.span_margin:,.2f}")
-        st.write(f"**Exposure Margin:** ₹{margin_res.exposure_margin:,.2f}")
-        st.write(f"**Premium Blocked:** ₹{margin_res.premium_margin:,.2f}")
-        st.write(f"**Total Blocked Margin:** ₹{margin_res.total_blocked_margin:,.2f}")
-
-    with col_c:
-        st.subheader("📄 Zerodha Contract Note Tax Breakdown")
-        cn: ZerodhaContractNote = ZerodhaContractNoteCalculator.calculate_contract_note(218.50, 245.00, 260)
-        st.write(f"**Gross PnL:** +₹{cn.gross_pnl:,.2f}")
-        st.write(f"**Flat Brokerage:** ₹{cn.flat_brokerage:.2f}")
-        st.write(f"**STT (0.125%):** ₹{cn.stt:.2f}")
-        st.write(f"**Exchange Charges:** ₹{cn.exchange_turnover_charge:.2f}")
-        st.write(f"**GST (18%):** ₹{cn.gst:.2f}")
-        st.write(f"**Stamp Duty:** ₹{cn.stamp_duty:.2f}")
-        st.write(f"**Total Charges:** ₹{cn.total_tax_charges:.2f}")
-        st.markdown(f"### **Net Realized PnL: +₹{cn.net_realized_pnl:,.2f}**")
-
-elif nav == "📊 Institutional Positions (Sensibull/Kite OMS)":
-    st.header("📊 Net Positions & Strategy Groupings (Sensibull OMS Workstation)")
 
 elif nav == "📑 Orderbook & Trade Book":
     st.header("📑 Broker Orderbook & Chronological Execution Trade Book")
