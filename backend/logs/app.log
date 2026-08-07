@@ -751,3 +751,29 @@ RuntimeError: Yahoo API connection timeout
 2026-08-07 14:04:27.340 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
 2026-08-07 14:04:27.340 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
 2026-08-07 14:04:27.341 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-07 14:09:27.344 | INFO     | app.services.tasks:heartbeat:9 - QuantFlow scheduler heartbeat
+2026-08-07 14:14:27.338 | INFO     | app.services.tasks:heartbeat:9 - QuantFlow scheduler heartbeat
+2026-08-07 14:19:27.337 | INFO     | app.services.tasks:heartbeat:9 - QuantFlow scheduler heartbeat
+2026-08-07 14:24:27.342 | INFO     | app.services.tasks:heartbeat:9 - QuantFlow scheduler heartbeat
+2026-08-07 14:27:05.605 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-07 14:27:07.635 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'ema' (EMACrossoverStrategy)
+2026-08-07 14:27:07.636 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'mean_reversion' (MeanReversionStrategy)
+2026-08-07 14:27:07.640 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'orb' (ORBStrategy)
+2026-08-07 14:27:07.641 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'rsi' (RSIPullbackStrategy)
+2026-08-07 14:27:07.643 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'supertrend' (SupertrendStrategy)
+2026-08-07 14:27:07.644 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'vwapreversal' (VWAPReversalStrategy)
+2026-08-07 14:27:07.645 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'vwap' (VWAPStrategy)
+2026-08-07 14:27:07.645 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-07 14:27:07.645 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-07 14:27:07.645 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started
+2026-08-07 14:29:37.995 | INFO     | app.main:lifespan:37 - QuantFlow stopped
+2026-08-07 14:29:39.475 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'ema' (EMACrossoverStrategy)
+2026-08-07 14:29:39.476 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'mean_reversion' (MeanReversionStrategy)
+2026-08-07 14:29:39.479 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'orb' (ORBStrategy)
+2026-08-07 14:29:39.479 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'rsi' (RSIPullbackStrategy)
+2026-08-07 14:29:39.480 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'supertrend' (SupertrendStrategy)
+2026-08-07 14:29:39.480 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'vwapreversal' (VWAPReversalStrategy)
+2026-08-07 14:29:39.481 | INFO     | app.strategies.registry:register:53 - Registered strategy plugin: 'vwap' (VWAPStrategy)
+2026-08-07 14:29:39.481 | INFO     | app.paper.live_engine:recover_session:365 - Recovered live paper session state: STOPPED
+2026-08-07 14:29:39.481 | INFO     | app.main:lifespan:30 - Live paper session recovered successfully
+2026-08-07 14:29:39.481 | INFO     | app.main:lifespan:32 - QuantFlow 0.1.0 started

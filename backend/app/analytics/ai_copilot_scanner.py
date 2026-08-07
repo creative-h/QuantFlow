@@ -4,25 +4,28 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Dict, List, Optional
 
+from app.strategies.option_spreads import MultiLegOptionSpread, OptionLeg, OptionSpreadEngine
+
 
 @dataclass
 class RealtimeEntryGuidance:
-    """Dataclass storing real-time AI entry signal and guidance."""
+    """Dataclass storing real-time AI entry signal and defined-risk spread guidance."""
 
     timestamp: datetime
     symbol: str
-    action: str  # "BUY_CE", "BUY_PE", "WAIT"
-    option_strike: str  # e.g. "28th Aug 24900 CE"
+    action: str  # "BULL_CALL_SPREAD", "BEAR_PUT_SPREAD", "WAIT"
+    option_strike: str  # e.g. "Bull Call Spread (24900 CE / 25100 CE)"
     spot_price: float
-    entry_price: float
+    entry_price: float  # Net Debit
     stop_loss: float
     target_1: float
     target_2: float
     target_3: float
-    risk_reward_ratio: str  # "1:2.5"
-    win_probability: float  # e.g. 78.5%
+    risk_reward_ratio: str  # "1:1.67"
+    win_probability: float  # e.g. 74.5%
     ai_confidence: float  # e.g. 84.0%
     entry_reasoning: str
+    spread_details: Optional[MultiLegOptionSpread] = None
 
 
 @dataclass
@@ -42,7 +45,7 @@ class RealtimeExitGuidance:
 
 
 class AICopilotScanner:
-    """AI Co-Pilot Engine scanning all real-time market symbols and guiding entry & exit points."""
+    """AI Co-Pilot Engine scanning all real-time market symbols and guiding defined-risk spreads."""
 
     _instance: Optional["AICopilotScanner"] = None
 
@@ -54,25 +57,25 @@ class AICopilotScanner:
         return cls._instance
 
     def scan_symbol_for_entry(self, symbol: str = "NIFTY", spot: float = 24914.81) -> RealtimeEntryGuidance:
-        """Scan real-time market tick and generate detailed entry guidance."""
-        strike_rounded = int(round(spot / 50.0) * 50)
-        curr_month = datetime.now().strftime("%b")
+        """Scan real-time market tick and generate defined-risk spread entry guidance."""
+        spread: MultiLegOptionSpread = OptionSpreadEngine.construct_bull_call_spread(spot=spot)
 
         return RealtimeEntryGuidance(
             timestamp=datetime.now(),
             symbol=symbol,
-            action="BUY_CE",
-            option_strike=f"28th {curr_month} {strike_rounded} CE",
+            action="BULL_CALL_SPREAD",
+            option_strike=f"Bull Call Spread ({spread.legs[0].symbol} / {spread.legs[1].symbol})",
             spot_price=spot,
-            entry_price=120.00,
-            stop_loss=105.00,
-            target_1=135.00,
-            target_2=150.00,
-            target_3=170.00,
-            risk_reward_ratio="1:2.33",
-            win_probability=78.5,
+            entry_price=spread.net_debit,
+            stop_loss=round(spread.net_debit * 0.50, 2),  # 50% max loss SL
+            target_1=round(spread.net_debit * 1.50, 2),
+            target_2=round(spread.net_debit * 2.00, 2),
+            target_3=round(spread.net_debit * 2.50, 2),
+            risk_reward_ratio=spread.risk_reward_ratio,
+            win_probability=spread.win_probability,
             ai_confidence=84.0,
-            entry_reasoning=f"Multi-Agent Consensus: EMA20 (>EMA50) breakout on {symbol} @ ₹{spot:,.2f} supported by Call writing unwinding.",
+            entry_reasoning=f"Defined-Risk Strategy: BUY {spread.legs[0].symbol} @ ₹{spread.legs[0].entry_price} + SELL {spread.legs[1].symbol} @ ₹{spread.legs[1].entry_price}. Caps max downside loss to ₹{spread.max_loss:,.0f} while targeting ₹{spread.max_profit:,.0f} profit.",
+            spread_details=spread,
         )
 
     def monitor_position_for_exit(self, trade_id: str = "TRD_201", current_price: float = 132.50) -> RealtimeExitGuidance:
@@ -80,12 +83,12 @@ class AICopilotScanner:
         return RealtimeExitGuidance(
             timestamp=datetime.now(),
             trade_id=trade_id,
-            instrument="28th Aug 24900 CE",
+            instrument="Bull Call Spread (24900 CE / 25100 CE)",
             current_price=current_price,
-            entry_price=120.00,
-            unrealized_pnl=(current_price - 120.00) * 130,
-            recommended_action="HOLD_TRAILING_SL",
+            entry_price=75.00,
+            unrealized_pnl=(current_price - 75.00) * 130,
+            recommended_action="HOLD_TRAILING_SPREAD_SL",
             target_progress_pct=83.3,
-            why_holding="Price action consolidating above VWAP support; momentum remains bullish.",
-            what_triggers_exit="Exit full position if price drops below ATR Trailing Stop ₹124.50 or reaches Target 2 ₹150.00.",
+            why_holding="Spread Net Value expanding in your favor as NIFTY consolidates above 24,900 VWAP support.",
+            what_triggers_exit="Exit spread if Net Value drops below ₹40.00 (Max Loss Cap) or reaches Target ₹150.00.",
         )

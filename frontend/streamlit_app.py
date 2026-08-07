@@ -1,4 +1,4 @@
-"""QuantFlow v16.0 — AI Parallel Co-Pilot & Live Market Scanner Workstation."""
+"""QuantFlow v16.0 — AI Parallel Co-Pilot & Defined-Risk Spread Scanner Workstation."""
 
 import sys
 from pathlib import Path
@@ -79,6 +79,7 @@ from app.risk.portfolio_dashboard import SensibullPortfolioDashboard, SensibullP
 from app.risk.portfolio_risk import PortfolioGreeks, PortfolioRiskEngine, PortfolioRiskMetrics
 from app.risk.real_margin_engine import MarginBreakdown, RealMarginEngine
 from app.simulation.replay_engine import MarketReplayEngine, ReplayState
+from app.strategies.option_spreads import MultiLegOptionSpread, OptionLeg, OptionSpreadEngine
 from app.strategies.registry import StrategyRegistry
 from app.system.health_monitor import AutonomousHealthMonitor, SystemHealthMetrics
 from app.trade_management.auto_exit_manager import AutoExitConfig, AutoExitManager, TradeManagerDecision
@@ -99,7 +100,7 @@ from app.trading_desk.session_summary import SessionSummary, SessionSummaryGener
 from app.trading_desk.telegram_notifier import TelegramNotifier
 
 st.set_page_config(
-    page_title="QuantFlow — AI Co-Pilot & Real-Time Market Scanner",
+    page_title="QuantFlow — AI Defined-Risk Spreads & Co-Pilot",
     page_icon="⚡",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -193,10 +194,10 @@ st.markdown(
     """
     <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid #30363d; padding-bottom: 10px; margin-bottom: 16px;">
         <div>
-            <span class="sensibull-brand">⚡ QUANTFLOW</span> &nbsp;<span style="color:#8b949e;">/ Real-Time AI Co-Pilot & Market Scanner</span>
+            <span class="sensibull-brand">⚡ QUANTFLOW</span> &nbsp;<span style="color:#8b949e;">/ Defined-Risk Option Spreads Co-Pilot</span>
         </div>
         <div>
-            <span style="background-color:#238636; color:white; padding:4px 10px; border-radius:4px; font-size:12px; font-weight:bold;">● Live Parallel Scanning</span>
+            <span style="background-color:#238636; color:white; padding:4px 10px; border-radius:4px; font-size:12px; font-weight:bold;">● Defined-Risk Protection Active</span>
         </div>
     </div>
     """,
@@ -204,12 +205,12 @@ st.markdown(
 )
 
 st.sidebar.title("⚡ QuantFlow Workstation")
-st.sidebar.caption("AI Co-Pilot & Scanner v16.0")
+st.sidebar.caption("Defined-Risk Spreads & Scanner v16.0")
 
 nav = st.sidebar.radio(
     "Workstation Views",
     [
-        "🧠 AI Parallel Co-Pilot & Live Scanner",
+        "🧠 AI Defined-Risk Spreads & Co-Pilot",
         "📊 Institutional Positions (Sensibull Drafts)",
         "⚡ Live MTM Workstation (Kite Style)",
         "🔍 Live Validation Panel (QuantFlow vs Kite)",
@@ -228,8 +229,8 @@ nav = st.sidebar.radio(
 )
 
 
-if nav == "🧠 AI Parallel Co-Pilot & Live Scanner":
-    st.header("🧠 Parallel AI Co-Pilot: Live Market Scanner & Entry/Exit Guidance")
+if nav == "🧠 AI Defined-Risk Spreads & Co-Pilot":
+    st.header("🧠 Defined-Risk Option Spreads Co-Pilot (Capped Downside Loss)")
 
     # 1. PARALLEL SYMBOL SCANNER GRID
     st.subheader("🌐 Real-Time Market Symbols Scanner Grid")
@@ -245,7 +246,7 @@ if nav == "🧠 AI Parallel Co-Pilot & Live Scanner":
                 <b>NIFTY 50</b><br/>
                 <span style="font-size:18px; font-weight:bold;">₹{sp_nifty:,.2f}</span><br/>
                 <span class="pnl-positive">+0.15%</span><br/><br/>
-                <span style="background-color:#238636; color:white; padding:2px 8px; border-radius:4px; font-size:11px; font-weight:bold;">BUY_CE (84%)</span>
+                <span style="background-color:#238636; color:white; padding:2px 8px; border-radius:4px; font-size:11px; font-weight:bold;">BULL_CALL_SPREAD (84%)</span>
             </div>
             """,
             unsafe_allow_html=True,
@@ -257,7 +258,7 @@ if nav == "🧠 AI Parallel Co-Pilot & Live Scanner":
                 <b>BANKNIFTY</b><br/>
                 <span style="font-size:18px; font-weight:bold;">₹52,480.50</span><br/>
                 <span class="pnl-positive">+0.32%</span><br/><br/>
-                <span style="background-color:#238636; color:white; padding:2px 8px; border-radius:4px; font-size:11px; font-weight:bold;">BUY_CE (78%)</span>
+                <span style="background-color:#238636; color:white; padding:2px 8px; border-radius:4px; font-size:11px; font-weight:bold;">BULL_CALL_SPREAD (78%)</span>
             </div>
             """,
             unsafe_allow_html=True,
@@ -269,7 +270,7 @@ if nav == "🧠 AI Parallel Co-Pilot & Live Scanner":
                 <b>FINNIFTY</b><br/>
                 <span style="font-size:18px; font-weight:bold;">₹23,120.00</span><br/>
                 <span class="pnl-negative">-0.05%</span><br/><br/>
-                <span style="background-color:#d29922; color:white; padding:2px 8px; border-radius:4px; font-size:11px; font-weight:bold;">WAIT (62%)</span>
+                <span style="background-color:#d29922; color:white; padding:2px 8px; border-radius:4px; font-size:11px; font-weight:bold;">IRON_CONDOR (62%)</span>
             </div>
             """,
             unsafe_allow_html=True,
@@ -281,7 +282,7 @@ if nav == "🧠 AI Parallel Co-Pilot & Live Scanner":
                 <b>MIDCPNIFTY</b><br/>
                 <span style="font-size:18px; font-weight:bold;">₹13,050.40</span><br/>
                 <span class="pnl-positive">+0.45%</span><br/><br/>
-                <span style="background-color:#238636; color:white; padding:2px 8px; border-radius:4px; font-size:11px; font-weight:bold;">BUY_CE (81%)</span>
+                <span style="background-color:#238636; color:white; padding:2px 8px; border-radius:4px; font-size:11px; font-weight:bold;">BULL_CALL_SPREAD (81%)</span>
             </div>
             """,
             unsafe_allow_html=True,
@@ -293,7 +294,7 @@ if nav == "🧠 AI Parallel Co-Pilot & Live Scanner":
                 <b>SENSEX</b><br/>
                 <span style="font-size:18px; font-weight:bold;">₹81,420.00</span><br/>
                 <span class="pnl-positive">+0.22%</span><br/><br/>
-                <span style="background-color:#238636; color:white; padding:2px 8px; border-radius:4px; font-size:11px; font-weight:bold;">BUY_CE (75%)</span>
+                <span style="background-color:#238636; color:white; padding:2px 8px; border-radius:4px; font-size:11px; font-weight:bold;">BULL_CALL_SPREAD (75%)</span>
             </div>
             """,
             unsafe_allow_html=True,
@@ -301,58 +302,72 @@ if nav == "🧠 AI Parallel Co-Pilot & Live Scanner":
 
     st.markdown("---")
 
-    # 2. REAL-TIME AI ENTRY GUIDANCE & EXIT GUIDANCE
+    # 2. DEFINED-RISK SPREAD ENTRY GUIDANCE
     c_entry_g, c_exit_g = st.columns(2)
 
     with c_entry_g:
-        st.subheader("🎯 Real-Time AI Entry Guidance (Where to Enter)")
+        st.subheader("🎯 Real-Time Defined-Risk Spread Guidance (Capped Loss)")
         entry_guidance: RealtimeEntryGuidance = copilot_scanner.scan_symbol_for_entry("NIFTY", sp_nifty)
+        spread = entry_guidance.spread_details
 
         st.markdown(
             f"""
             <div class="copilot-card">
-                <h3 style="color:#58a6ff;"><b>RECOMMENDED ENTRY: {entry_guidance.action} {entry_guidance.option_strike}</b></h3>
+                <h3 style="color:#58a6ff;"><b>RECOMMENDED STRATEGY: {entry_guidance.action}</b></h3>
                 <p><b>Spot Price:</b> ₹{entry_guidance.spot_price:,.2f} &nbsp;&nbsp;|&nbsp;&nbsp; <b>AI Confidence:</b> {entry_guidance.ai_confidence:.1f}%</p>
                 <hr style="border: 0.5px solid #30363d;"/>
-                <p>📍 <b>Recommended Entry Price:</b> <span style="font-size:16px; font-weight:bold; color:#3fb950;">₹{entry_guidance.entry_price:.2f}</span></p>
-                <p>🛑 <b>Stop Loss:</b> <span style="font-size:15px; font-weight:bold; color:#f85149;">₹{entry_guidance.stop_loss:.2f}</span></p>
-                <p>🎯 <b>Target 1 (Partial Booking 50%):</b> ₹{entry_guidance.target_1:.2f}</p>
-                <p>🎯 <b>Target 2 (Main Target):</b> ₹{entry_guidance.target_2:.2f}</p>
-                <p>🎯 <b>Target 3 (Runner Target):</b> ₹{entry_guidance.target_3:.2f}</p>
-                <p>⚖️ <b>Risk:Reward:</b> {entry_guidance.risk_reward_ratio} &nbsp;&nbsp;|&nbsp;&nbsp; <b>Win Probability:</b> {entry_guidance.win_probability:.1f}%</p>
+                <p>🔹 <b>Leg 1 (Buy):</b> {spread.legs[0].symbol} @ ₹{spread.legs[0].entry_price:.2f}</p>
+                <p>🔹 <b>Leg 2 (Sell Hedge):</b> {spread.legs[1].symbol} @ ₹{spread.legs[1].entry_price:.2f}</p>
+                <hr style="border: 0.5px solid #30363d;"/>
+                <p>📍 <b>Net Debit:</b> ₹{spread.net_debit:.2f} per unit &nbsp;&nbsp;|&nbsp;&nbsp; <b>Margin Required:</b> ₹{spread.margin_required:,.2f}</p>
+                <p>🛑 <b>MAX DOWNSIDE LOSS (CAPPED):</b> <span style="font-size:16px; font-weight:bold; color:#f85149;">-₹{spread.max_loss:,.2f}</span></p>
+                <p>🎯 <b>MAX UPSIDE PROFIT:</b> <span style="font-size:16px; font-weight:bold; color:#3fb950;">+₹{spread.max_profit:,.2f}</span></p>
+                <p>⚖️ <b>Risk:Reward:</b> {spread.risk_reward_ratio} &nbsp;&nbsp;|&nbsp;&nbsp; <b>Win Probability:</b> {spread.win_probability:.1f}%</p>
                 <p>💡 <b>AI Rationale:</b> {entry_guidance.entry_reasoning}</p>
             </div>
             """,
             unsafe_allow_html=True,
         )
 
-        if st.button("🤖 Auto-Execute Recommended AI Paper Trade Now", **button_kwargs):
-            exec_c = RealisticBroker.calculate_execution("BUY", entry_guidance.entry_price, 130)
-            new_pos = {
+        if st.button("⚡ Execute Defined-Risk Multi-Leg Spread Order Now", **button_kwargs):
+            # Execute Leg 1 (Buy)
+            p1 = {
                 "Select": "☑",
                 "Side": "[B] Buy",
-                "Instrument": entry_guidance.option_strike,
-                "Qty": 130,
-                "Avg Price": f"₹{exec_c.executed_price:.2f}",
-                "LTP": f"₹{exec_c.executed_price:.2f}",
+                "Instrument": spread.legs[0].symbol,
+                "Qty": spread.legs[0].quantity,
+                "Avg Price": f"₹{spread.legs[0].entry_price:.2f}",
+                "LTP": f"₹{spread.legs[0].entry_price:.2f}",
                 "Total P&L": "₹0.00",
                 "Unbooked P&L": "₹0.00",
                 "Booked P&L": "₹0.00",
             }
-            st.session_state["live_ai_trades"].append(new_pos)
-            st.success(f"🚀 AI Co-Pilot Executed Paper Trade: BUY 130 Qty {entry_guidance.option_strike} @ ₹{exec_c.executed_price:.2f}")
+            # Execute Leg 2 (Sell Hedge)
+            p2 = {
+                "Select": "☑",
+                "Side": "[S] Sell",
+                "Instrument": spread.legs[1].symbol,
+                "Qty": spread.legs[1].quantity,
+                "Avg Price": f"₹{spread.legs[1].entry_price:.2f}",
+                "LTP": f"₹{spread.legs[1].entry_price:.2f}",
+                "Total P&L": "₹0.00",
+                "Unbooked P&L": "₹0.00",
+                "Booked P&L": "₹0.00",
+            }
+            st.session_state["live_ai_trades"].extend([p1, p2])
+            st.success(f"🚀 AI Executed Defined-Risk Bull Call Spread: {spread.legs[0].symbol} + {spread.legs[1].symbol} (Max Loss Capped: ₹{spread.max_loss:,.0f})")
             st.rerun()
 
     with c_exit_g:
-        st.subheader("🛡️ Real-Time AI Exit Guidance (Where to Exit)")
+        st.subheader("🛡️ Real-Time Spread Exit Monitoring")
         exit_guidance: RealtimeExitGuidance = copilot_scanner.monitor_position_for_exit("TRD_201", 145.00)
 
         st.markdown(
             f"""
             <div class="copilot-card">
-                <h3 style="color:#d29922;"><b>ACTIVE POSITION: {exit_guidance.instrument}</b></h3>
-                <p><b>Current Price:</b> ₹{exit_guidance.current_price:.2f} (Entry: ₹{exit_guidance.entry_price:.2f})</p>
-                <p><b>Live MTM PnL:</b> <span class="pnl-positive">+₹{exit_guidance.unrealized_pnl:,.2f}</span> &nbsp;&nbsp;|&nbsp;&nbsp; <b>Target Progress:</b> {exit_guidance.target_progress_pct:.0f}%</p>
+                <h3 style="color:#d29922;"><b>ACTIVE SPREAD: {exit_guidance.instrument}</b></h3>
+                <p><b>Net Value:</b> ₹{exit_guidance.current_price:.2f} (Entry Net Debit: ₹{exit_guidance.entry_price:.2f})</p>
+                <p><b>Live MTM PnL:</b> <span class="pnl-positive">+₹{exit_guidance.unrealized_pnl:,.2f}</span> &nbsp;&nbsp;|&nbsp;&nbsp; <b>Progress:</b> {exit_guidance.target_progress_pct:.0f}%</p>
                 <hr style="border: 0.5px solid #30363d;"/>
                 <p><b>Recommended Action:</b> <span style="color:#58a6ff; font-weight:bold;">{exit_guidance.recommended_action}</span></p>
                 <p>💬 <b>Why Still Holding?</b> {exit_guidance.why_holding}</p>
@@ -362,7 +377,7 @@ if nav == "🧠 AI Parallel Co-Pilot & Live Scanner":
             unsafe_allow_html=True,
         )
 
-        if st.button("🚪 Execute AI Recommended Exit Now", **button_kwargs):
+        if st.button("🚪 Close Multi-Leg Spread at Market Price", **button_kwargs):
             for trade in st.session_state["live_ai_trades"]:
                 if trade["Qty"] != 0:
                     try:
@@ -373,7 +388,7 @@ if nav == "🧠 AI Parallel Co-Pilot & Live Scanner":
                         trade["Side"] = "[-] Closed"
                     except Exception:
                         pass
-            st.success("🚪 Closed positions based on AI Exit Guidance!")
+            st.success("🚪 Closed option spread legs at live market prices!")
             st.rerun()
 
 elif nav == "📊 Institutional Positions (Sensibull Drafts)":
@@ -427,33 +442,38 @@ elif nav == "📊 Institutional Positions (Sensibull Drafts)":
             st.success(f"🔄 Market Prices Synced! NIFTY Spot: ₹{spot_sync:,.2f}")
             st.rerun()
 
-        # 🤖 Trigger Real-Time AI Trade Button
-        if st.button("🤖 Trigger Real-Time AI Trade", **button_kwargs):
+        # 🤖 Trigger Real-Time AI Defined-Risk Spread Trade Button
+        if st.button("🤖 Trigger Real-Time AI Defined-Risk Spread", **button_kwargs):
             n_tick = ws_manager.latest_tick("NIFTY")
             spot_p = n_tick.price if n_tick else 24914.81
-            candle_now = Candle(datetime.now(), spot_p - 5.0, spot_p + 15.0, spot_p - 10.0, spot_p, 250000)
-            candle_now.symbol = "NIFTY"
-            dates_n = pd.date_range("2024-01-01", periods=50, freq="D")
-            df_n = pd.DataFrame({"open": spot_p - 10, "high": spot_p + 25, "low": spot_p - 20, "close": spot_p, "volume": 250000}, index=dates_n)
+            spread = OptionSpreadEngine.construct_bull_call_spread(spot=spot_p)
 
-            cons = decision_mgr.evaluate_consensus(candle_now, df_n)
-            side_act = cons.final_signal if cons.final_signal in ["BUY", "SELL"] else "BUY"
-            exec_c = RealisticBroker.calculate_execution(side_act, 120.00, 130)
-
-            strike_rounded = int(round(spot_p / 50.0) * 50)
-            new_pos = {
+            # Leg 1 (Buy)
+            p1 = {
                 "Select": "☑",
-                "Side": f"[{side_act[0]}] {side_act.capitalize()}",
-                "Instrument": f"28th {now_dt.strftime('%b')} {strike_rounded} CE",
-                "Qty": 130 if side_act == "BUY" else -130,
-                "Avg Price": f"₹{exec_c.executed_price:.2f}",
-                "LTP": f"₹{exec_c.executed_price + 15.50:.2f}",
-                "Total P&L": f"+₹{15.50 * 130:,.2f}",
-                "Unbooked P&L": f"+₹{15.50 * 130:,.2f}",
+                "Side": "[B] Buy",
+                "Instrument": spread.legs[0].symbol,
+                "Qty": spread.legs[0].quantity,
+                "Avg Price": f"₹{spread.legs[0].entry_price:.2f}",
+                "LTP": f"₹{spread.legs[0].entry_price + 10.0:.2f}",
+                "Total P&L": f"+₹{10.0 * spread.legs[0].quantity:,.2f}",
+                "Unbooked P&L": f"+₹{10.0 * spread.legs[0].quantity:,.2f}",
                 "Booked P&L": "₹0.00",
             }
-            st.session_state["live_ai_trades"].append(new_pos)
-            st.success(f"🤖 AI Executed Real-Time Paper Trade: {side_act} 130 units @ ₹{exec_c.executed_price:.2f} for {new_pos['Instrument']}")
+            # Leg 2 (Sell Hedge)
+            p2 = {
+                "Select": "☑",
+                "Side": "[S] Sell",
+                "Instrument": spread.legs[1].symbol,
+                "Qty": spread.legs[1].quantity,
+                "Avg Price": f"₹{spread.legs[1].entry_price:.2f}",
+                "LTP": f"₹{spread.legs[1].entry_price - 5.0:.2f}",
+                "Total P&L": f"+₹{5.0 * abs(spread.legs[1].quantity):,.2f}",
+                "Unbooked P&L": f"+₹{5.0 * abs(spread.legs[1].quantity):,.2f}",
+                "Booked P&L": "₹0.00",
+            }
+            st.session_state["live_ai_trades"].extend([p1, p2])
+            st.success(f"🤖 AI Executed Defined-Risk Bull Call Spread: {spread.legs[0].symbol} + {spread.legs[1].symbol} (Max Loss Capped: ₹{spread.max_loss:,.0f})")
             st.rerun()
 
     # RIGHT MAIN AREA (Matching Sensibull Draft Portfolios Table & Actions)
@@ -461,9 +481,9 @@ elif nav == "📊 Institutional Positions (Sensibull Drafts)":
         st.markdown(
             """
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                <div style="font-size:15px; font-weight:bold;">Portfolios > AI Autonomous Strategy</div>
+                <div style="font-size:15px; font-weight:bold;">Portfolios > AI Defined-Risk Strategy</div>
                 <div>
-                    <span style="color:#3fb950; font-weight:bold; font-size:13px;">● Live Exchange Sync</span>
+                    <span style="color:#3fb950; font-weight:bold; font-size:13px;">● Defined-Risk Protection Active</span>
                 </div>
             </div>
             """,
@@ -524,28 +544,41 @@ elif nav == "📊 Institutional Positions (Sensibull Drafts)":
                 st.success(f"🚪 Closed {closed_count} open positions at live exchange market prices!")
                 st.rerun()
 
-            with c_act2.popover("+ Add Orders"):
-                st.markdown("<b>Add Custom Paper Order</b>", unsafe_allow_html=True)
-                add_strike = st.number_input("Strike Price", value=24900, step=50)
+            with c_act2.popover("+ Add Spread Order"):
+                st.markdown("<b>Add Custom Defined-Risk Spread</b>", unsafe_allow_html=True)
+                add_strike = st.number_input("Buy Leg Strike", value=24900, step=50)
+                add_hedge_strike = st.number_input("Sell Hedge Strike", value=25100, step=50)
                 add_type = st.selectbox("Option Type", ["CE", "PE"])
-                add_side = st.selectbox("Side", ["BUY", "SELL"])
                 add_lots = st.number_input("Lots (1 Lot = 65 Qty)", value=2, min_value=1)
 
-                if st.button("Submit Order", key="submit_custom_order"):
-                    exec_cost = RealisticBroker.calculate_execution(add_side, 125.00, add_lots * 65)
-                    c_pos = {
+                if st.button("Submit Spread Order", key="submit_custom_order"):
+                    exec_cost = RealisticBroker.calculate_execution("BUY", 120.00, add_lots * 65)
+                    exec_cost_sell = RealisticBroker.calculate_execution("SELL", 45.00, add_lots * 65)
+
+                    c_pos1 = {
                         "Select": "☑",
-                        "Side": f"[{add_side[0]}] {add_side.capitalize()}",
+                        "Side": "[B] Buy",
                         "Instrument": f"28th {now_dt.strftime('%b')} {add_strike} {add_type}",
-                        "Qty": add_lots * 65 if add_side == "BUY" else -add_lots * 65,
+                        "Qty": add_lots * 65,
                         "Avg Price": f"₹{exec_cost.executed_price:.2f}",
                         "LTP": f"₹{exec_cost.executed_price:.2f}",
                         "Total P&L": "₹0.00",
                         "Unbooked P&L": "₹0.00",
                         "Booked P&L": "₹0.00",
                     }
-                    st.session_state["live_ai_trades"].append(c_pos)
-                    st.success(f"✅ Executed Paper Order: {add_side} {add_lots*65} Qty {c_pos['Instrument']}")
+                    c_pos2 = {
+                        "Select": "☑",
+                        "Side": "[S] Sell",
+                        "Instrument": f"28th {now_dt.strftime('%b')} {add_hedge_strike} {add_type}",
+                        "Qty": -add_lots * 65,
+                        "Avg Price": f"₹{exec_cost_sell.executed_price:.2f}",
+                        "LTP": f"₹{exec_cost_sell.executed_price:.2f}",
+                        "Total P&L": "₹0.00",
+                        "Unbooked P&L": "₹0.00",
+                        "Booked P&L": "₹0.00",
+                    }
+                    st.session_state["live_ai_trades"].extend([c_pos1, c_pos2])
+                    st.success(f"✅ Executed Multi-Leg Spread Order: {c_pos1['Instrument']} + {c_pos2['Instrument']}")
                     st.rerun()
 
             with c_act3.popover("✏️ Edit Order"):
@@ -568,7 +601,7 @@ elif nav == "📊 Institutional Positions (Sensibull Drafts)":
 
         with t_greeks:
             st.subheader("📊 Aggregated Strategy Greeks")
-            st.write("**Strategy Delta:** +0.62 | **Strategy Gamma:** +0.014 | **Strategy Theta:** -₹18.50 | **Strategy Vega:** +₹9.40")
+            st.write("**Strategy Delta:** +0.30 | **Strategy Gamma:** +0.008 | **Strategy Theta:** -₹8.50 | **Strategy Vega:** +₹4.20")
 
 elif nav == "⚡ Live MTM Workstation (Kite Style)":
     st.header("⚡ Live Mark-To-Market (MTM) Portfolio Workstation")
