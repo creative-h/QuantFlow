@@ -124,12 +124,17 @@ if "pipeline" not in st.session_state:
 
 pipeline: ExecutionPipeline = st.session_state["pipeline"]
 
+# Dynamic Expiry String (e.g. "28th Aug 2026")
+now_dt = datetime.now()
+curr_month_str = now_dt.strftime("%b %Y")
+expiry_label = f"28th {curr_month_str}"
+
 if "live_ai_trades" not in st.session_state:
     st.session_state["live_ai_trades"] = [
-        {"Select": "☐", "Side": "[-] Closed", "Instrument": "28th Jul 24050 CE", "Qty": 0, "Avg Price": "₹0.00", "LTP": "₹0.25", "Total P&L": "+₹6,451.00", "Unbooked P&L": "₹0.00", "Booked P&L": "+₹6,451.00"},
-        {"Select": "☑", "Side": "[B] Buy", "Instrument": "28th Jul 24250 CE", "Qty": 260, "Avg Price": "₹218.50", "LTP": "₹245.00", "Total P&L": "+₹6,890.00", "Unbooked P&L": "+₹6,890.00", "Booked P&L": "₹0.00"},
-        {"Select": "☐", "Side": "[-] Closed", "Instrument": "28th Jul 24350 CE", "Qty": 0, "Avg Price": "₹0.00", "LTP": "₹0.25", "Total P&L": "-₹3,458.00", "Unbooked P&L": "₹0.00", "Booked P&L": "-₹3,458.00"},
-        {"Select": "☑", "Side": "[S] Sell", "Instrument": "28th Jul 24550 CE", "Qty": -260, "Avg Price": "₹90.30", "LTP": "₹75.00", "Total P&L": "+₹3,978.00", "Unbooked P&L": "+₹3,978.00", "Booked P&L": "₹0.00"},
+        {"Select": "☐", "Side": "[-] Closed", "Instrument": f"28th {now_dt.strftime('%b')} 24500 CE", "Qty": 0, "Avg Price": "₹0.00", "LTP": "₹0.25", "Total P&L": "+₹6,451.00", "Unbooked P&L": "₹0.00", "Booked P&L": "+₹6,451.00"},
+        {"Select": "☑", "Side": "[B] Buy", "Instrument": f"28th {now_dt.strftime('%b')} 24900 CE", "Qty": 260, "Avg Price": "₹118.50", "LTP": "₹145.00", "Total P&L": "+₹6,890.00", "Unbooked P&L": "+₹6,890.00", "Booked P&L": "₹0.00"},
+        {"Select": "☐", "Side": "[-] Closed", "Instrument": f"28th {now_dt.strftime('%b')} 24950 CE", "Qty": 0, "Avg Price": "₹0.00", "LTP": "₹0.25", "Total P&L": "-₹3,458.00", "Unbooked P&L": "₹0.00", "Booked P&L": "-₹3,458.00"},
+        {"Select": "☑", "Side": "[S] Sell", "Instrument": f"28th {now_dt.strftime('%b')} 25100 CE", "Qty": -260, "Avg Price": "₹90.30", "LTP": "₹75.00", "Total P&L": "+₹3,978.00", "Unbooked P&L": "+₹3,978.00", "Booked P&L": "₹0.00"},
     ]
 
 live_price_engine = LiveOptionPriceEngine.get_instance()
@@ -175,8 +180,8 @@ st.markdown(
 )
 
 # Fetch MTM Header Metrics
-mtm_pos1 = MTMEngine.calculate_position_mtm("TRD_201", "28th Jul 24250 CE", 260, 218.50, 245.00)
-mtm_pos2 = MTMEngine.calculate_position_mtm("TRD_202", "28th Jul 24550 CE", -260, 90.30, 75.00)
+mtm_pos1 = MTMEngine.calculate_position_mtm("TRD_201", f"28th {now_dt.strftime('%b')} 24900 CE", 260, 118.50, 145.00)
+mtm_pos2 = MTMEngine.calculate_position_mtm("TRD_202", f"28th {now_dt.strftime('%b')} 25100 CE", -260, 90.30, 75.00)
 mtm_header: PortfolioMTMHeader = MTMEngine.get_portfolio_mtm_header([mtm_pos1, mtm_pos2])
 dq_report: DataQualityReport = data_quality_engine.get_quality_report()
 
@@ -269,9 +274,9 @@ if nav == "📊 Institutional Positions (Sensibull Drafts)":
 
         st.checkbox("Show closed positions", value=True)
         st.markdown("<b>Select Strategies:</b>", unsafe_allow_html=True)
-        st.checkbox("✓ 28 July (4 of 4 Positions)  +10,868", value=True)
-        st.checkbox("✓ 14th July (2 of 2 Positions)  -4,482", value=True)
-        st.checkbox("✓ 7th July expiry (2 of 2 Positions)  -2,532", value=True)
+        st.checkbox(f"✓ 28th {now_dt.strftime('%b')} Expiry (4 of 4 Positions)  +10,868", value=True)
+        st.checkbox(f"✓ 21st {now_dt.strftime('%b')} Expiry (2 of 2 Positions)  -4,482", value=True)
+        st.checkbox(f"✓ 14th {now_dt.strftime('%b')} Expiry (2 of 2 Positions)  -2,532", value=True)
 
         st.markdown("---")
         st.subheader("⚡ Live AI Paper Trader Loop")
@@ -288,11 +293,12 @@ if nav == "📊 Institutional Positions (Sensibull Drafts)":
             side_act = cons.final_signal if cons.final_signal in ["BUY", "SELL"] else "BUY"
             exec_c = RealisticBroker.calculate_execution(side_act, 120.00, 130)
 
-            # Add new live position to session state
+            # Add new live position to session state with current month expiry label
+            strike_rounded = int(round(spot_p / 50.0) * 50)
             new_pos = {
                 "Select": "☑",
                 "Side": f"[{side_act[0]}] {side_act.capitalize()}",
-                "Instrument": f"28th Jul {int(round(spot_p, -2))} CE",
+                "Instrument": f"28th {now_dt.strftime('%b')} {strike_rounded} CE",
                 "Qty": 130 if side_act == "BUY" else -130,
                 "Avg Price": f"₹{exec_c.executed_price:.2f}",
                 "LTP": f"₹{exec_c.executed_price + 15.50:.2f}",
@@ -301,7 +307,7 @@ if nav == "📊 Institutional Positions (Sensibull Drafts)":
                 "Booked P&L": "₹0.00",
             }
             st.session_state["live_ai_trades"].append(new_pos)
-            st.success(f"🤖 AI Executed Real-Time Paper Trade: {side_act} 130 units @ ₹{exec_c.executed_price:.2f} (Confidence: {cons.confidence:.1f}%)")
+            st.success(f"🤖 AI Executed Real-Time Paper Trade: {side_act} 130 units @ ₹{exec_c.executed_price:.2f} for {new_pos['Instrument']} (Confidence: {cons.confidence:.1f}%)")
 
     # RIGHT MAIN AREA (Matching Sensibull Draft Portfolios Table & Actions)
     with c_main_side:
@@ -323,7 +329,7 @@ if nav == "📊 Institutional Positions (Sensibull Drafts)":
             <div class="sensibull-panel">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
                     <div>
-                        <span style="font-size:18px; font-weight:bold; color:#58a6ff;">📅 28 July Expiry</span>
+                        <span style="font-size:18px; font-weight:bold; color:#58a6ff;">📅 28th {now_dt.strftime('%b')} {now_dt.year} Expiry</span>
                         <span style="font-size:12px; color:#8b949e; margin-left:10px;">{len(st.session_state['live_ai_trades'])} Positions</span>
                     </div>
                     <div>
