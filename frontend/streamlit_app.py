@@ -285,14 +285,15 @@ if nav == "📊 Institutional Positions (Sensibull Drafts)":
             df_n = pd.DataFrame({"open": spot_p - 10, "high": spot_p + 25, "low": spot_p - 20, "close": spot_p, "volume": 250000}, index=dates_n)
 
             cons = decision_mgr.evaluate_consensus(candle_now, df_n)
-            exec_c = RealisticBroker.calculate_execution("BUY", 120.00, 130)
+            side_act = cons.final_signal if cons.final_signal in ["BUY", "SELL"] else "BUY"
+            exec_c = RealisticBroker.calculate_execution(side_act, 120.00, 130)
 
             # Add new live position to session state
             new_pos = {
                 "Select": "☑",
-                "Side": f"[{exec_c.side[0]}] {exec_c.side.capitalize()}",
+                "Side": f"[{side_act[0]}] {side_act.capitalize()}",
                 "Instrument": f"28th Jul {int(round(spot_p, -2))} CE",
-                "Qty": 130,
+                "Qty": 130 if side_act == "BUY" else -130,
                 "Avg Price": f"₹{exec_c.executed_price:.2f}",
                 "LTP": f"₹{exec_c.executed_price + 15.50:.2f}",
                 "Total P&L": f"+₹{15.50 * 130:,.2f}",
@@ -300,7 +301,7 @@ if nav == "📊 Institutional Positions (Sensibull Drafts)":
                 "Booked P&L": "₹0.00",
             }
             st.session_state["live_ai_trades"].append(new_pos)
-            st.success(f"🤖 AI Executed Real-Time Paper Trade: {exec_c.side} 130 units @ ₹{exec_c.executed_price:.2f} (Confidence: {cons.confidence:.1f}%)")
+            st.success(f"🤖 AI Executed Real-Time Paper Trade: {side_act} 130 units @ ₹{exec_c.executed_price:.2f} (Confidence: {cons.confidence:.1f}%)")
 
     # RIGHT MAIN AREA (Matching Sensibull Draft Portfolios Table & Actions)
     with c_main_side:
