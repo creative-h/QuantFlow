@@ -308,7 +308,9 @@ if nav == "🧠 AI Defined-Risk Spreads & Co-Pilot":
     with c_entry_g:
         st.subheader("🎯 Real-Time Defined-Risk Spread Guidance (Capped Loss)")
         entry_guidance: RealtimeEntryGuidance = copilot_scanner.scan_symbol_for_entry("NIFTY", sp_nifty)
-        spread = entry_guidance.spread_details
+        spread: Optional[MultiLegOptionSpread] = getattr(entry_guidance, "spread_details", None)
+        if spread is None:
+            spread = OptionSpreadEngine.construct_bull_call_spread(spot=sp_nifty)
 
         st.markdown(
             f"""
@@ -330,7 +332,6 @@ if nav == "🧠 AI Defined-Risk Spreads & Co-Pilot":
         )
 
         if st.button("⚡ Execute Defined-Risk Multi-Leg Spread Order Now", **button_kwargs):
-            # Execute Leg 1 (Buy)
             p1 = {
                 "Select": "☑",
                 "Side": "[B] Buy",
@@ -342,7 +343,6 @@ if nav == "🧠 AI Defined-Risk Spreads & Co-Pilot":
                 "Unbooked P&L": "₹0.00",
                 "Booked P&L": "₹0.00",
             }
-            # Execute Leg 2 (Sell Hedge)
             p2 = {
                 "Select": "☑",
                 "Side": "[S] Sell",
