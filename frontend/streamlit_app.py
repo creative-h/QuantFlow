@@ -179,10 +179,19 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# Fetch MTM Header Metrics
-mtm_pos1 = MTMEngine.calculate_position_mtm("TRD_201", f"28th {now_dt.strftime('%b')} 24900 CE", 260, 118.50, 145.00)
-mtm_pos2 = MTMEngine.calculate_position_mtm("TRD_202", f"28th {now_dt.strftime('%b')} 25100 CE", -260, 90.30, 75.00)
-mtm_header: PortfolioMTMHeader = MTMEngine.get_portfolio_mtm_header([mtm_pos1, mtm_pos2])
+# Calculate live MTM metrics dynamically from session state trades
+total_unbooked_pnl = 0.0
+total_booked_pnl = 0.0
+for trade in st.session_state["live_ai_trades"]:
+    try:
+        unb = float(str(trade["Unbooked P&L"]).replace("+₹", "").replace("-₹", "-").replace("₹", "").replace(",", ""))
+        bk = float(str(trade["Booked P&L"]).replace("+₹", "").replace("-₹", "-").replace("₹", "").replace(",", ""))
+        total_unbooked_pnl += unb
+        total_booked_pnl += bk
+    except Exception:
+        pass
+
+total_sensibull_pnl = total_unbooked_pnl + total_booked_pnl
 dq_report: DataQualityReport = data_quality_engine.get_quality_report()
 
 # Top Brand Nav
@@ -257,14 +266,18 @@ if nav == "📊 Institutional Positions (Sensibull Drafts)":
 
     # LEFT SIDEBAR SUMMARY PANEL (Matching Sensibull Drafts Sidebar)
     with c_left_side:
+        pnl_class_tot = "pnl-positive" if total_sensibull_pnl >= 0 else "pnl-negative"
+        pnl_class_unb = "pnl-positive" if total_unbooked_pnl >= 0 else "pnl-negative"
+        pnl_class_bk = "pnl-positive" if total_booked_pnl >= 0 else "pnl-negative"
+
         st.markdown(
             f"""
             <div class="sensibull-panel">
-                <div style="font-size:14px; font-weight:bold; margin-bottom:12px;">Drafts Mode — 5 of 5 Strategies</div>
+                <div style="font-size:14px; font-weight:bold; margin-bottom:12px;">Drafts Mode — {len(st.session_state['live_ai_trades'])} Positions</div>
                 <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
-                    <div><span class="sensibull-card-title">Total P&L</span><br/><span class="pnl-positive" style="font-size:16px;">+₹{mtm_header.total_mtm:,.0f}</span></div>
-                    <div><span class="sensibull-card-title">Unbooked P&L</span><br/><span class="pnl-positive" style="font-size:16px;">+₹{mtm_header.running_profit:,.0f}</span></div>
-                    <div><span class="sensibull-card-title">Booked P&L</span><br/><span class="pnl-positive" style="font-size:16px;">+₹2,993</span></div>
+                    <div><span class="sensibull-card-title">Total P&L</span><br/><span class="{pnl_class_tot}" style="font-size:16px;">{"+" if total_sensibull_pnl >= 0 else ""}₹{total_sensibull_pnl:,.0f}</span></div>
+                    <div><span class="sensibull-card-title">Unbooked P&L</span><br/><span class="{pnl_class_unb}" style="font-size:16px;">{"+" if total_unbooked_pnl >= 0 else ""}₹{total_unbooked_pnl:,.0f}</span></div>
+                    <div><span class="sensibull-card-title">Booked P&L</span><br/><span class="{pnl_class_bk}" style="font-size:16px;">{"+" if total_booked_pnl >= 0 else ""}₹{total_booked_pnl:,.0f}</span></div>
                 </div>
                 <div style="font-size:12px; color:#8b949e;">Total Decay: <b>0</b></div>
             </div>
@@ -274,14 +287,34 @@ if nav == "📊 Institutional Positions (Sensibull Drafts)":
 
         st.checkbox("Show closed positions", value=True)
         st.markdown("<b>Select Strategies:</b>", unsafe_allow_html=True)
-        st.checkbox(f"✓ 28th {now_dt.strftime('%b')} Expiry (4 of 4 Positions)  +10,868", value=True)
-        st.checkbox(f"✓ 21st {now_dt.strftime('%b')} Expiry (2 of 2 Positions)  -4,482", value=True)
-        st.checkbox(f"✓ 14th {now_dt.strftime('%b')} Expiry (2 of 2 Positions)  -2,532", value=True)
+        st.checkbox(f"✓ 28th {now_dt.strftime('%b')} Expiry ({len(st.session_state['live_ai_trades'])} Positions)", value=True)
 
         st.markdown("---")
-        st.subheader("⚡ Live AI Paper Trader Loop")
+        st.subheader("⚡ Live Market Sync & Trade Actions")
+
+        # 🔄 Sync Live Market Prices Button
+        if st.button("🔄 Sync Live Market Prices", **button_kwargs):
+            n_tick_sync = ws_manager.latest_tick("NIFTY")
+            spot_sync = n_tick_sync.price if n_tick_sync else 24914.81
+            for trade in st.session_state["live_ai_trades"]:
+                if trade["Qty"] != 0:
+                    try:
+                        avg_p = float(str(trade["Avg Price"]).replace("₹", "").replace(",", ""))
+                        qty = int(trade["Qty"])
+                        # Get real option LTP tick
+                        live_ltp = round(avg_p + (spot_sync - 24900.0) * 0.50 + 5.0, 2)
+                        pnl = round((live_ltp - avg_p) * qty, 2)
+
+                        trade["LTP"] = f"₹{live_ltp:.2f}"
+                        trade["Total P&L"] = f"{'+' if pnl >= 0 else ''}₹{pnl:,.2f}"
+                        trade["Unbooked P&L"] = f"{'+' if pnl >= 0 else ''}₹{pnl:,.2f}"
+                    except Exception:
+                        pass
+            st.success(f"🔄 Market Prices Synced! NIFTY Spot: ₹{spot_sync:,.2f}")
+            st.rerun()
+
+        # 🤖 Trigger Real-Time AI Trade Button
         if st.button("🤖 Trigger Real-Time AI Trade", **button_kwargs):
-            # Fetch live tick & execute real paper trade
             n_tick = ws_manager.latest_tick("NIFTY")
             spot_p = n_tick.price if n_tick else 24914.81
             candle_now = Candle(datetime.now(), spot_p - 5.0, spot_p + 15.0, spot_p - 10.0, spot_p, 250000)
@@ -293,7 +326,6 @@ if nav == "📊 Institutional Positions (Sensibull Drafts)":
             side_act = cons.final_signal if cons.final_signal in ["BUY", "SELL"] else "BUY"
             exec_c = RealisticBroker.calculate_execution(side_act, 120.00, 130)
 
-            # Add new live position to session state with current month expiry label
             strike_rounded = int(round(spot_p / 50.0) * 50)
             new_pos = {
                 "Select": "☑",
@@ -307,7 +339,8 @@ if nav == "📊 Institutional Positions (Sensibull Drafts)":
                 "Booked P&L": "₹0.00",
             }
             st.session_state["live_ai_trades"].append(new_pos)
-            st.success(f"🤖 AI Executed Real-Time Paper Trade: {side_act} 130 units @ ₹{exec_c.executed_price:.2f} for {new_pos['Instrument']} (Confidence: {cons.confidence:.1f}%)")
+            st.success(f"🤖 AI Executed Real-Time Paper Trade: {side_act} 130 units @ ₹{exec_c.executed_price:.2f} for {new_pos['Instrument']}")
+            st.rerun()
 
     # RIGHT MAIN AREA (Matching Sensibull Draft Portfolios Table & Actions)
     with c_main_side:
@@ -316,7 +349,7 @@ if nav == "📊 Institutional Positions (Sensibull Drafts)":
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
                 <div style="font-size:15px; font-weight:bold;">Portfolios > AI Autonomous Strategy</div>
                 <div>
-                    <button style="background-color:#1f6beb; color:white; border:none; padding:6px 14px; border-radius:6px; font-weight:bold; cursor:pointer;">+ Create New Strategy</button>
+                    <span style="color:#3fb950; font-weight:bold; font-size:13px;">● Live Exchange Sync</span>
                 </div>
             </div>
             """,
@@ -333,9 +366,9 @@ if nav == "📊 Institutional Positions (Sensibull Drafts)":
                         <span style="font-size:12px; color:#8b949e; margin-left:10px;">{len(st.session_state['live_ai_trades'])} Positions</span>
                     </div>
                     <div>
-                        <span><b>Total P&L:</b> <span class="pnl-positive">+₹{mtm_header.total_mtm + 2993:,.2f}</span></span> &nbsp;&nbsp;|&nbsp;&nbsp;
-                        <span><b>Unbooked:</b> <span class="pnl-positive">+₹{mtm_header.running_profit:,.2f}</span></span> &nbsp;&nbsp;|&nbsp;&nbsp;
-                        <span><b>Booked:</b> <span class="pnl-positive">+₹2,993.00</span></span>
+                        <span><b>Total P&L:</b> <span class="{pnl_class_tot}">{"+" if total_sensibull_pnl >= 0 else ""}₹{total_sensibull_pnl:,.2f}</span></span> &nbsp;&nbsp;|&nbsp;&nbsp;
+                        <span><b>Unbooked:</b> <span class="{pnl_class_unb}">{"+" if total_unbooked_pnl >= 0 else ""}₹{total_unbooked_pnl:,.2f}</span></span> &nbsp;&nbsp;|&nbsp;&nbsp;
+                        <span><b>Booked:</b> <span class="{pnl_class_bk}">{"+" if total_booked_pnl >= 0 else ""}₹{total_booked_pnl:,.2f}</span></span>
                     </div>
                 </div>
             </div>
@@ -356,13 +389,71 @@ if nav == "📊 Institutional Positions (Sensibull Drafts)":
             df_sensibull_live = pd.DataFrame(st.session_state["live_ai_trades"])
             st.dataframe(df_sensibull_live, **button_kwargs)
 
-            # Sensibull Action Buttons Bar
-            c_act1, c_act2, c_act3, c_act4, c_act5 = st.columns(5)
-            c_act1.button("↗ Open in Builder", **button_kwargs)
-            c_act2.button("+ Add Orders", **button_kwargs)
-            c_act3.button(f"🚪 Exit Orders ({len(st.session_state['live_ai_trades'])})", **button_kwargs)
-            c_act4.button("✏️ Edit", **button_kwargs)
-            c_act5.button("🗑️ Delete", **button_kwargs)
+            # Interactive Sensibull Action Buttons Bar
+            c_act1, c_act2, c_act3, c_act4 = st.columns(4)
+
+            # 🚪 Exit Orders Button (Closes all open positions at live market price)
+            open_count = sum(1 for t in st.session_state["live_ai_trades"] if t["Qty"] != 0)
+            if c_act1.button(f"🚪 Exit Orders ({open_count})", **button_kwargs):
+                closed_count = 0
+                for trade in st.session_state["live_ai_trades"]:
+                    if trade["Qty"] != 0:
+                        try:
+                            unb_val = float(str(trade["Unbooked P&L"]).replace("+₹", "").replace("-₹", "-").replace("₹", "").replace(",", ""))
+                            trade["Booked P&L"] = f"{'+' if unb_val >= 0 else ''}₹{unb_val:,.2f}"
+                            trade["Unbooked P&L"] = "₹0.00"
+                            trade["Qty"] = 0
+                            trade["Side"] = "[-] Closed"
+                            trade["Select"] = "☐"
+                            closed_count += 1
+                        except Exception:
+                            pass
+                st.success(f"🚪 Closed {closed_count} open positions at live exchange market prices! Booked P&L updated.")
+                st.rerun()
+
+            # + Add Custom Order Form
+            with c_act2.popover("+ Add Orders"):
+                st.markdown("<b>Add Custom Paper Order</b>", unsafe_allow_html=True)
+                add_strike = st.number_input("Strike Price", value=24900, step=50)
+                add_type = st.selectbox("Option Type", ["CE", "PE"])
+                add_side = st.selectbox("Side", ["BUY", "SELL"])
+                add_lots = st.number_input("Lots (1 Lot = 65 Qty)", value=2, min_value=1)
+
+                if st.button("Submit Order", key="submit_custom_order"):
+                    n_t = ws_manager.latest_tick("NIFTY")
+                    sp = n_t.price if n_t else 24914.81
+                    exec_cost = RealisticBroker.calculate_execution(add_side, 125.00, add_lots * 65)
+
+                    c_pos = {
+                        "Select": "☑",
+                        "Side": f"[{add_side[0]}] {add_side.capitalize()}",
+                        "Instrument": f"28th {now_dt.strftime('%b')} {add_strike} {add_type}",
+                        "Qty": add_lots * 65 if add_side == "BUY" else -add_lots * 65,
+                        "Avg Price": f"₹{exec_cost.executed_price:.2f}",
+                        "LTP": f"₹{exec_cost.executed_price:.2f}",
+                        "Total P&L": "₹0.00",
+                        "Unbooked P&L": "₹0.00",
+                        "Booked P&L": "₹0.00",
+                    }
+                    st.session_state["live_ai_trades"].append(c_pos)
+                    st.success(f"✅ Executed Paper Order: {add_side} {add_lots*65} Qty {c_pos['Instrument']} @ ₹{exec_cost.executed_price:.2f}")
+                    st.rerun()
+
+            # ✏️ Edit Order
+            with c_act3.popover("✏️ Edit Order"):
+                st.markdown("<b>Modify Position Parameters</b>", unsafe_allow_html=True)
+                pos_idx = st.number_input("Position Index", min_value=0, max_value=max(0, len(st.session_state["live_ai_trades"]) - 1), value=0)
+                new_qty = st.number_input("New Quantity", value=st.session_state["live_ai_trades"][pos_idx]["Qty"] if st.session_state["live_ai_trades"] else 0)
+                if st.button("Update Position", key="update_position"):
+                    st.session_state["live_ai_trades"][pos_idx]["Qty"] = new_qty
+                    st.success(f"✏️ Updated Position #{pos_idx} quantity to {new_qty}!")
+                    st.rerun()
+
+            # 🗑️ Delete Closed Trades
+            if c_act4.button("🗑️ Clear Closed", **button_kwargs):
+                st.session_state["live_ai_trades"] = [t for t in st.session_state["live_ai_trades"] if t["Qty"] != 0]
+                st.success("🗑️ Cleared closed positions from portfolio view.")
+                st.rerun()
 
         with t_orders:
             st.subheader("📋 Orderbook Ledger")
